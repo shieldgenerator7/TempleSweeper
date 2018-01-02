@@ -19,6 +19,11 @@ public class LevelTile : MonoBehaviour
     public TileType tileType = TileType.EMPTY;
     public int indexX, indexY;//its index in the grid
 
+    /// <summary>
+    /// When flagged, a tile cannot be revealed
+    /// </summary>
+    public bool flagged = false;
+
     private bool revealed = false;
 
     /// <summary>
@@ -47,5 +52,11 @@ public class LevelTile : MonoBehaviour
     public bool hasRevealed()
     {
         return revealed;
+    }
+
+    public void flag(bool isFlagged)
+    {
+        flagged = isFlagged;
+        GetComponentInChildren<FlagDisplayer>().showFlag(flagged);
     }
 }

@@ -168,7 +168,7 @@ public class LevelManager : MonoBehaviour
     public void processTapGesture(Vector2 tapPos)
     {
         LevelTile lt = getTile(tapPos);
-        if (lt != null)
+        if (lt != null && !lt.flagged)
         {
             if (!anyRevealed)
             {
@@ -178,13 +178,20 @@ public class LevelManager : MonoBehaviour
             revealTile(lt);
         }
     }
+    public void processFlagGesture(Vector2 flagPos)
+    {
+        LevelTile lt = getTile(flagPos);
+        if (lt != null)
+        {
+            lt.flag(!lt.flagged);
+        }
+    }
 
     private void revealTile(LevelTile lt)
     {
-        if (!lt.hasRevealed())
+        if (!lt.hasRevealed() && !lt.flagged)
         {
             lt.reveal();
-            Debug.Log("Revealing recursively: (" + lt.indexX + ", " + lt.indexY + ")");
             //Check to make sure surrounding tiles are empty
             for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
             {

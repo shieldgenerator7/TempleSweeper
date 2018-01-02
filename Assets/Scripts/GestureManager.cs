@@ -18,5 +18,9 @@ public class GestureManager : MonoBehaviour {
         {
             lm.processTapGesture(cam.ScreenToWorldPoint(Input.mousePosition));
         }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            lm.processFlagGesture(cam.ScreenToWorldPoint(Input.mousePosition));
+        }
 	}
 }
