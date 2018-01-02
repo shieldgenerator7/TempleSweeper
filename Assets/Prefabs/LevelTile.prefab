@@ -52,6 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb180873d6373448b70768f82d0a07e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  emptySprite: {fileID: 21300000, guid: 9875660e5a6bcd7419847dad49a64694, type: 3}
+  trapSprite: {fileID: 21300000, guid: c039a9afaff8fa640be06559c3b47257, type: 3}
+  treasureSprite: {fileID: 21300000, guid: 4bdc4e86be637bf49b21f7bc5f24e6c4, type: 3}
   tileType: 0
 --- !u!212 &212337775958750672
 SpriteRenderer:

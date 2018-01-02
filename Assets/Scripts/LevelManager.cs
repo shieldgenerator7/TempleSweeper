@@ -12,6 +12,8 @@ public class LevelManager : MonoBehaviour
     public int treasureCount = 10;//how many treasures there are
     public GameObject[,] tileMap;//the map of tiles
 
+    private bool anyRevealed = false;//true if any tile has been revealed
+
     private static LevelManager instance;
 
     // Use this for initialization
@@ -54,12 +56,12 @@ public class LevelManager : MonoBehaviour
 
     private static int getXIndex(Vector2 pos)
     {
-        return (int)Mathf.Ceil(pos.x) + instance.tileWidth / 2;
+        return ((int)pos.x + instance.tileWidth / 2)-1;
     }
 
     private static int getYIndex(Vector2 pos)
     {
-        return (int)Mathf.Ceil(pos.y) + instance.tileHeight / 2;
+        return (int)pos.y + instance.tileHeight / 2;
     }
 
     public static int getDisplaySortingOrder(Vector2 pos)
@@ -96,6 +98,8 @@ public class LevelManager : MonoBehaviour
                 go.transform.parent = transform;
             }
         }
+        //Zoom camera out to fit whole board
+        Camera.main.orthographicSize = tileHeight/2;
     }
 
     /// <summary>
@@ -108,7 +112,7 @@ public class LevelManager : MonoBehaviour
     {
         int itaX = getXIndex(posToAvoid);
         int itaY = getYIndex(posToAvoid);
-        generateObject(itaX, itaY, radiusToAvoid, mineCount, LevelTile.TileType.MINE);
+        generateObject(itaX, itaY, radiusToAvoid, mineCount, LevelTile.TileType.TRAP);
         generateObject(itaX, itaY, radiusToAvoid, treasureCount, LevelTile.TileType.TREASURE);
     }
 
@@ -151,6 +155,20 @@ public class LevelManager : MonoBehaviour
             {
                 prefabMap[xi, yi] = prefab;
             }
+        }
+    }
+
+    public void processTapGesture(Vector2 tapPos)
+    {
+        LevelTile lt = getTile(tapPos);
+        if (lt != null)
+        {
+            if (!anyRevealed)
+            {
+                generateLevelPostTap(tapPos, 1);
+                anyRevealed = true;
+            }
+            lt.reveal();
         }
     }
 
