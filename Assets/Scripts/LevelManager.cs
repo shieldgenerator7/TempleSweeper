@@ -56,12 +56,12 @@ public class LevelManager : MonoBehaviour
 
     private static int getXIndex(Vector2 pos)
     {
-        return ((int)pos.x + instance.tileWidth / 2)-1;
+        return Mathf.RoundToInt(pos.x + instance.tileWidth / 2);
     }
 
     private static int getYIndex(Vector2 pos)
     {
-        return (int)pos.y + instance.tileHeight / 2;
+        return Mathf.RoundToInt(pos.y + instance.tileHeight / 2);
     }
 
     public static int getDisplaySortingOrder(Vector2 pos)
