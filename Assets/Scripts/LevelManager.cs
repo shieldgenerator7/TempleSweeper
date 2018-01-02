@@ -31,6 +31,7 @@ public class LevelManager : MonoBehaviour
         }
         //Initialization stuff
         generateLevel(tileWidth, tileHeight);
+        updateOrthographicSize();
     }
 
     // Update is called once per frame
@@ -229,7 +230,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="tileType"></param>
     /// <param name="notTheType">True to get the amount that is NOT the given type</param>
     /// <returns></returns>
-    public static int getAdjacentCount(LevelTile lt, LevelTile.TileType tileType, bool notTheType=false)
+    public static int getAdjacentCount(LevelTile lt, LevelTile.TileType tileType, bool notTheType = false)
     {
         int count = 0;
         for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
@@ -252,8 +253,21 @@ public class LevelManager : MonoBehaviour
         return count;
     }
 
-    //Legacy
+    public void updateOrthographicSize()
+    {
+        while (true)//loop until broken out of
+        {
+            Vector2 screenSizeWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height))
+                - Camera.main.ScreenToWorldPoint(Vector2.zero);
+            if (screenSizeWorld.x > tileWidth && screenSizeWorld.y > tileHeight)
+            {
+                break;//all good hear
+            }
+            Camera.main.orthographicSize++;
+        }
+    }
 
+    //Legacy generation methods
     private void generateRiver(GameObject prefab, GameObject[,] prefabMap, int width, int height, int startY)
     {
         int currentY = startY;
