@@ -43,8 +43,7 @@ public class LevelManager : MonoBehaviour
     {
         int xIndex = getXIndex(pos);
         int yIndex = getYIndex(pos);
-        if (xIndex >= 0 && xIndex < instance.tileMap.Length
-            && yIndex >= 0 && yIndex < instance.tileMap.GetLength(1))
+        if (inBounds(xIndex, yIndex))
         {
             return instance.tileMap[xIndex, yIndex].GetComponent<LevelTile>();
         }
@@ -83,6 +82,12 @@ public class LevelManager : MonoBehaviour
             && pos.y < instance.tileHeight / 2 * 0.99f;
     }
 
+    public static bool inBounds(int ix, int iy)
+    {
+        return ix >= 0 && ix < instance.tileMap.GetLength(0)
+            && iy >= 0 && iy < instance.tileMap.GetLength(1);
+    }
+
     private void generateLevel(int width, int height)
     {
         GameObject[,] tiles = new GameObject[width, height];
@@ -95,11 +100,13 @@ public class LevelManager : MonoBehaviour
                 GameObject go = GameObject.Instantiate(tiles[xi, yi]);
                 go.transform.position = new Vector2(xi - width / 2, yi - height / 2);
                 tileMap[xi, yi] = go;
+                go.GetComponent<LevelTile>().indexX = xi;
+                go.GetComponent<LevelTile>().indexY = yi;
                 go.transform.parent = transform;
             }
         }
         //Zoom camera out to fit whole board
-        Camera.main.orthographicSize = tileHeight/2;
+        Camera.main.orthographicSize = tileHeight / 2;
     }
 
     /// <summary>
@@ -168,7 +175,42 @@ public class LevelManager : MonoBehaviour
                 generateLevelPostTap(tapPos, 1);
                 anyRevealed = true;
             }
+            revealTile(lt);
+        }
+    }
+
+    private void revealTile(LevelTile lt)
+    {
+        if (!lt.hasRevealed())
+        {
             lt.reveal();
+            Debug.Log("Revealing recursively: (" + lt.indexX + ", " + lt.indexY + ")");
+            //Check to make sure surrounding tiles are empty
+            for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+            {
+                for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+                {
+                    if (inBounds(i, j))
+                    {
+                        if (tileMap[i, j].GetComponent<LevelTile>().tileType != LevelTile.TileType.EMPTY)
+                        {
+                            //break out of the method
+                            return;
+                        }
+                    }
+                }
+            }
+            //Reveal surrounding tiles
+            for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+            {
+                for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+                {
+                    if (inBounds(i, j))
+                    {
+                        revealTile(tileMap[i, j].GetComponent<LevelTile>());
+                    }
+                }
+            }
         }
     }
 

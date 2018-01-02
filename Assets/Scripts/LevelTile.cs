@@ -17,12 +17,16 @@ public class LevelTile : MonoBehaviour
     };
 
     public TileType tileType = TileType.EMPTY;
+    public int indexX, indexY;//its index in the grid
+
+    private bool revealed = false;
 
     /// <summary>
     /// Reveals the tile type of this tile
     /// </summary>
     public void reveal()
     {
+        revealed = true;
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         switch (tileType)
         {
@@ -33,5 +37,13 @@ public class LevelTile : MonoBehaviour
             case TileType.TREASURE:
                 sr.sprite = treasureSprite; break;
         }
+    }
+    /// <summary>
+    /// Whether this tile has revealed
+    /// </summary>
+    /// <returns></returns>
+    public bool hasRevealed()
+    {
+        return revealed;
     }
 }
