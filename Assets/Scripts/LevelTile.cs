@@ -31,7 +31,9 @@ public class LevelTile : MonoBehaviour
         switch (tileType)
         {
             case TileType.EMPTY:
-                sr.sprite = emptySprite; break;
+                sr.sprite = emptySprite;
+                GetComponentInChildren<NumberDisplayer>().displayNumber(this);
+                break;
             case TileType.TRAP:
                 sr.sprite = trapSprite; break;
             case TileType.TREASURE:

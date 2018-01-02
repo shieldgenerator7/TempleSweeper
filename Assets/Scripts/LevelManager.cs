@@ -214,6 +214,37 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns the number of tiles of the given type are surrounding the given tile,
+    /// not including the tile itself
+    /// </summary>
+    /// <param name="lt"></param>
+    /// <param name="tileType"></param>
+    /// <param name="notTheType">True to get the amount that is NOT the given type</param>
+    /// <returns></returns>
+    public static int getAdjacentCount(LevelTile lt, LevelTile.TileType tileType, bool notTheType=false)
+    {
+        int count = 0;
+        for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+        {
+            for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+            {
+                if (inBounds(i, j))
+                {
+                    if (i != lt.indexX || j != lt.indexY)
+                    {
+                        if ((instance.tileMap[i, j].GetComponent<LevelTile>().tileType == tileType)
+                            != notTheType)
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     //Legacy
 
     private void generateRiver(GameObject prefab, GameObject[,] prefabMap, int width, int height, int startY)
