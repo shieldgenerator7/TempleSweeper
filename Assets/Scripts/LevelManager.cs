@@ -182,7 +182,7 @@ public class LevelManager : MonoBehaviour
     public void processFlagGesture(Vector2 flagPos)
     {
         LevelTile lt = getTile(flagPos);
-        if (lt != null)
+        if (lt != null && !lt.hasRevealed())
         {
             lt.flag(!lt.flagged);
         }
