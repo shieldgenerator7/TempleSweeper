@@ -12,6 +12,8 @@ public class LevelManager : MonoBehaviour
     public int treasureCount = 10;//how many treasures there are
     public GameObject[,] tileMap;//the map of tiles
 
+    public PlayerCharacter playerCharacter;
+
     private bool anyRevealed = false;//true if any tile has been revealed
 
     private static LevelManager instance;
@@ -34,10 +36,18 @@ public class LevelManager : MonoBehaviour
         updateOrthographicSize();
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void reset()
     {
-
+        if (instance.tileMap != null)
+        {
+            foreach (GameObject go in instance.tileMap)
+            {
+                Destroy(go);
+            }
+        }
+        instance.generateLevel(instance.tileWidth, instance.tileHeight);
+        instance.anyRevealed = false;
+        instance.playerCharacter.reset();
     }
 
     public static LevelTile getTile(Vector2 pos)
@@ -106,8 +116,6 @@ public class LevelManager : MonoBehaviour
                 go.transform.parent = transform;
             }
         }
-        //Zoom camera out to fit whole board
-        Camera.main.orthographicSize = tileHeight / 2;
     }
 
     /// <summary>
@@ -168,23 +176,44 @@ public class LevelManager : MonoBehaviour
 
     public void processTapGesture(Vector2 tapPos)
     {
-        LevelTile lt = getTile(tapPos);
-        if (lt != null && !lt.flagged)
+        if (playerCharacter.alive())
         {
-            if (!anyRevealed)
+            LevelTile lt = getTile(tapPos);
+            if (lt != null && !lt.flagged)
             {
-                generateLevelPostTap(tapPos, 1);
-                anyRevealed = true;
+                if (!anyRevealed)
+                {
+                    generateLevelPostTap(tapPos, 1);
+                    anyRevealed = true;
+                }
+                revealTile(lt);
+                if (lt.tileType == LevelTile.TileType.TRAP)
+                {
+                    if (!playerCharacter.takeHit())
+                    {
+                        revealBoard();
+                    }
+                }
             }
-            revealTile(lt);
+        }
+        else
+        {
+            reset();
         }
     }
     public void processFlagGesture(Vector2 flagPos)
     {
-        LevelTile lt = getTile(flagPos);
-        if (lt != null && !lt.hasRevealed())
+        if (playerCharacter.alive())
         {
-            lt.flag(!lt.flagged);
+            LevelTile lt = getTile(flagPos);
+            if (lt != null && !lt.hasRevealed())
+            {
+                lt.flag(!lt.flagged);
+            }
+        }
+        else
+        {
+            reset();
         }
     }
 
@@ -217,6 +246,25 @@ public class LevelManager : MonoBehaviour
                     {
                         revealTile(tileMap[i, j].GetComponent<LevelTile>());
                     }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reveals the important tiles of the board, namely the treasures
+    /// </summary>
+    private void revealBoard()
+    {
+        foreach (GameObject go in tileMap)
+        {
+            LevelTile lt = go.GetComponent<LevelTile>();
+            if (!lt.hasRevealed())
+            {
+                if (lt.tileType == LevelTile.TileType.TREASURE
+                    || (lt.tileType != LevelTile.TileType.TRAP && lt.flagged))
+                {
+                    lt.reveal();
                 }
             }
         }
@@ -266,6 +314,8 @@ public class LevelManager : MonoBehaviour
             Camera.main.orthographicSize++;
         }
     }
+
+    //Score
 
     //Legacy generation methods
     private void generateRiver(GameObject prefab, GameObject[,] prefabMap, int width, int height, int startY)
