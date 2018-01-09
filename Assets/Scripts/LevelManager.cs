@@ -142,7 +142,7 @@ public class LevelManager : MonoBehaviour
                 int ix = Random.Range(0, tileWidth);
                 int iy = Random.Range(0, tileHeight);
                 if (Mathf.Abs(itaX - ix) > radiusToAvoid
-                    && Mathf.Abs(itaY - iy) > radiusToAvoid)
+                    || Mathf.Abs(itaY - iy) > radiusToAvoid)
                 {
                     LevelTile lt = tileMap[ix, iy].GetComponent<LevelTile>();
                     if (lt.tileType == LevelTile.TileType.EMPTY)
