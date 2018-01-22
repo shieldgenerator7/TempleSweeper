@@ -81,11 +81,6 @@ public class CameraController : MonoBehaviour
         {
             zoomStartTime = startZoomScale = 0.0f;
         }
-
-        //Make sure player is still in view
-        float width = Vector3.Distance(cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, 0)), cam.ScreenToWorldPoint(new Vector3(0, 0)));
-        float height = Vector3.Distance(cam.ScreenToWorldPoint(new Vector3(0, cam.pixelHeight)), cam.ScreenToWorldPoint(new Vector3(0, 0)));
-        float radius = Mathf.Min(width, height) / 2;
     }
 
     public void setScalePoint(int scalePointIndex)

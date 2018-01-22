@@ -223,6 +223,7 @@ public class LevelManager : MonoBehaviour
         {
             usedFirstHoldFrame = true;
             processFlagGesture(holdPos);
+            Handheld.Vibrate();
         }
         if (finished)
         {

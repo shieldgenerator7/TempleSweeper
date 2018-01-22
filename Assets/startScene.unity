@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoomSpeed: 0.5
-  firstScale: 7
+  firstScale: 5
 --- !u!1 &1469628417
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 1409219351}
   dragThreshold: 50
-  holdThreshold: 0.1
+  holdThreshold: 0.2
   orthoZoomSpeed: 0.5
   tapCount: 0
   cameraDragInProgress: 0
