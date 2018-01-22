@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GestureManager : MonoBehaviour
 {//2018-01-22: copied from Stonicorn.GestureManager
-    
+
     public Camera cam;
     private CameraController cmaController;
 
@@ -237,12 +237,8 @@ public class GestureManager : MonoBehaviour
                     //Check to make sure Merky doesn't get dragged off camera
                     Vector3 delta = cam.ScreenToWorldPoint(origMP) - cam.ScreenToWorldPoint(curMP);
                     Vector3 newPos = origCP + delta;
-                    Vector3 playerUIpos = cam.WorldToViewportPoint((new Vector3(cam.transform.position.x, cam.transform.position.y) - newPos));
-                    if (playerUIpos.x >= 0 && playerUIpos.x <= 1 && playerUIpos.y >= 0 && playerUIpos.y <= 1)
-                    {
-                        //Move the camera
-                        cam.transform.position = newPos;
-                    }
+                    //Move the camera
+                    cam.transform.position = newPos;
                 }
                 else if (isHoldGesture)
                 {
