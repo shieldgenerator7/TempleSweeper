@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     private bool anyRevealed = false;//true if any tile has been revealed
 
     private static LevelManager instance;
+    private bool usedFirstHoldFrame;
 
     // Use this for initialization
     void Start()
@@ -214,6 +215,18 @@ public class LevelManager : MonoBehaviour
         else
         {
             reset();
+        }
+    }
+    public void processHoldGesture(Vector2 holdPos, bool finished)
+    {
+        if (!usedFirstHoldFrame)
+        {
+            usedFirstHoldFrame = true;
+            processFlagGesture(holdPos);
+        }
+        if (finished)
+        {
+            usedFirstHoldFrame = false;
         }
     }
 
