@@ -36,8 +36,17 @@ public class LevelManager : MonoBehaviour
         generateLevel(tileWidth, tileHeight);
         updateOrthographicSize();
     }
-
-    public static void reset()
+    public bool checkReset()
+    {
+        bool gameOver = false;
+        gameOver = !playerCharacter.alive();
+        if (gameOver)
+        {
+            reset();
+        }
+        return gameOver;
+    }
+    public void reset()
     {
         if (instance.tileMap != null)
         {
@@ -177,44 +186,38 @@ public class LevelManager : MonoBehaviour
 
     public void processTapGesture(Vector2 tapPos)
     {
-        if (playerCharacter.alive())
+        if (checkReset())
         {
-            LevelTile lt = getTile(tapPos);
-            if (lt != null && !lt.flagged)
+            return;
+        }
+        LevelTile lt = getTile(tapPos);
+        if (lt != null && !lt.flagged)
+        {
+            if (!anyRevealed)
             {
-                if (!anyRevealed)
+                generateLevelPostTap(tapPos, 1);
+                anyRevealed = true;
+            }
+            revealTile(lt);
+            if (lt.tileType == LevelTile.TileType.TRAP)
+            {
+                if (!playerCharacter.takeHit())
                 {
-                    generateLevelPostTap(tapPos, 1);
-                    anyRevealed = true;
-                }
-                revealTile(lt);
-                if (lt.tileType == LevelTile.TileType.TRAP)
-                {
-                    if (!playerCharacter.takeHit())
-                    {
-                        revealBoard();
-                    }
+                    revealBoard();
                 }
             }
-        }
-        else
-        {
-            reset();
         }
     }
     public void processFlagGesture(Vector2 flagPos)
     {
-        if (playerCharacter.alive())
+        if (checkReset())
         {
-            LevelTile lt = getTile(flagPos);
-            if (lt != null && !lt.hasRevealed())
-            {
-                lt.flag(!lt.flagged);
-            }
+            return;
         }
-        else
+        LevelTile lt = getTile(flagPos);
+        if (lt != null && !lt.hasRevealed())
         {
-            reset();
+            lt.flag(!lt.flagged);
         }
     }
     public void processHoldGesture(Vector2 holdPos, bool finished)
