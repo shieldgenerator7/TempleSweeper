@@ -12,6 +12,8 @@ public class ItemDisplayer : MonoBehaviour
     private float scaleIncreaseRate;
     private float scalingStartTime = 0;
 
+    public LevelTile levelTile;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,8 @@ public class ItemDisplayer : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = 10;
         //Register with Level Manager
         LevelManager.FoundItem = this;
+        //Get level tile
+        levelTile = GetComponentInParent<LevelTile>();
     }
 
     // Update is called once per frame
@@ -42,7 +46,7 @@ public class ItemDisplayer : MonoBehaviour
     public void retire()
     {
         transform.localScale = originalSize;
-        GetComponent<NumberDisplayer>().displayNumber(GetComponentInParent<LevelTile>());
+        GetComponent<NumberDisplayer>().displayNumber(levelTile);
         Destroy(this);
     }
 }

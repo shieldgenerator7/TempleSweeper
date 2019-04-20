@@ -199,9 +199,11 @@ public class LevelManager : MonoBehaviour
         }
         if (foundItem)
         {
+            recalculateNumbers();
+            LevelTile foundLT = foundItem.levelTile;
+            revealSurroundingTiles(foundLT, true);
             foundItem.retire();
             foundItem = null;
-            recalculateNumbers();
             return;
         }
         LevelTile lt = getTile(tapPos);
@@ -275,15 +277,24 @@ public class LevelManager : MonoBehaviour
                     }
                 }
             }
+            //If all surrounding tiles are empty,
             //Reveal surrounding tiles
-            for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+            revealSurroundingTiles(lt);
+        }
+    }
+    void revealSurroundingTiles(LevelTile lt, bool checkIfEmptyFirst = false)
+    {
+        //Reveal surrounding tiles
+        for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+        {
+            for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
             {
-                for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+                if (inBounds(i, j))
                 {
-                    if (inBounds(i, j))
-                    {
-                        revealTile(tileMap[i, j].GetComponent<LevelTile>());
-                    }
+                    bool reveal = !checkIfEmptyFirst || tileMap[i, j].GetComponent<LevelTile>().tileType == LevelTile.TileType.EMPTY;
+                    if (reveal) {
+            revealTile(tileMap[i, j].GetComponent<LevelTile>());
+        }
                 }
             }
         }
