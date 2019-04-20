@@ -35,4 +35,14 @@ public class ItemDisplayer : MonoBehaviour
             );
         transform.localScale = originalSize * currentScale;
     }
+
+    /// <summary>
+    /// Makes this content display a number of how many items are around it, instead of showing an item
+    /// </summary>
+    public void retire()
+    {
+        transform.localScale = originalSize;
+        GetComponent<NumberDisplayer>().displayNumber(GetComponentInParent<LevelTile>());
+        Destroy(this);
+    }
 }

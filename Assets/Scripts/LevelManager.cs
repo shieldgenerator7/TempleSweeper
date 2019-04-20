@@ -199,7 +199,7 @@ public class LevelManager : MonoBehaviour
         }
         if (foundItem)
         {
-            Destroy(foundItem.gameObject);
+            foundItem.retire();
             foundItem = null;
             recalculateNumbers();
             return;
