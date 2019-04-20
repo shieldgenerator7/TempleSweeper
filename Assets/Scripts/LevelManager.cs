@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
     public bool checkReset()
     {
         bool gameOver = false;
-        gameOver = !playerCharacter.alive();
+        gameOver = !playerCharacter.alive() || playerCharacter.goalAchieved();
         if (gameOver)
         {
             reset();
@@ -202,6 +202,13 @@ public class LevelManager : MonoBehaviour
             if (lt.tileType == LevelTile.TileType.TRAP)
             {
                 if (!playerCharacter.takeHit())
+                {
+                    revealBoard();
+                }
+            }
+            if (lt.tileType == LevelTile.TileType.TREASURE)
+            {
+                if (playerCharacter.findTrophy())
                 {
                     revealBoard();
                 }

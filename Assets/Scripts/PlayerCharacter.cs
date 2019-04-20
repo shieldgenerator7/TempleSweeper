@@ -7,6 +7,9 @@ public class PlayerCharacter : MonoBehaviour {
     public int health = 3;
     public int startHealth = 3;
 
+    public int trophiesFound = 0;
+    public int goalTrophyCount = 10;
+
     private void Start()
     {
         reset();
@@ -25,8 +28,18 @@ public class PlayerCharacter : MonoBehaviour {
     {
         return health > 0;
     }
+    public bool findTrophy()
+    {
+        trophiesFound++;
+        return goalAchieved();
+    }
+    public bool goalAchieved()
+    {
+        return trophiesFound >= goalTrophyCount;
+    }
     public void reset()
     {
         health = startHealth;
+        trophiesFound = 0;
     }
 }
