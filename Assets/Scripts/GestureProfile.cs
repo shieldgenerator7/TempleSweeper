@@ -24,11 +24,7 @@ public class GestureProfile
     /// Called when the GestureManager switches off this profile to a different one
     /// </summary>
     public virtual void deactivate() { }
-
-    public virtual void processTapGesture(GameObject go)
-    {
-        //levelManager.processTapGesture(go);
-    }
+    
     public virtual void processTapGesture(Vector3 curMPWorld)
     {
         levelManager.processTapGesture(curMPWorld);
