@@ -5,7 +5,8 @@ using UnityEngine;
 public class LevelTile : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelTile
 
-    public Sprite emptySprite;
+    public GameObject cover;
+    public SpriteRenderer contentsSR;
     public Sprite trapSprite;
     public Sprite treasureSprite;
 
@@ -32,17 +33,18 @@ public class LevelTile : MonoBehaviour
     public void reveal()
     {
         revealed = true;
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        //Destroy the cover
+        Destroy(cover);
+        //Show the contents
         switch (tileType)
         {
             case TileType.EMPTY:
-                sr.sprite = emptySprite;
                 GetComponentInChildren<NumberDisplayer>().displayNumber(this);
                 break;
             case TileType.TRAP:
-                sr.sprite = trapSprite; break;
+                contentsSR.sprite = trapSprite; break;
             case TileType.TREASURE:
-                sr.sprite = treasureSprite; break;
+                contentsSR.sprite = treasureSprite; break;
         }
     }
     /// <summary>
