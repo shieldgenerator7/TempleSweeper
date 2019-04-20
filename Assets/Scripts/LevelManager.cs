@@ -19,6 +19,13 @@ public class LevelManager : MonoBehaviour
     private static LevelManager instance;
     private bool usedFirstHoldFrame;
 
+    private ItemDisplayer foundItem;
+    public static ItemDisplayer FoundItem
+    {
+        get { return instance.foundItem; }
+        set { instance.foundItem = value; }
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -190,6 +197,13 @@ public class LevelManager : MonoBehaviour
         {
             return;
         }
+        if (foundItem)
+        {
+            Destroy(foundItem.gameObject);
+            foundItem = null;
+            recalculateNumbers();
+            return;
+        }
         LevelTile lt = getTile(tapPos);
         if (lt != null && !lt.flagged)
         {
@@ -291,6 +305,17 @@ public class LevelManager : MonoBehaviour
                     lt.reveal();
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Tells all the counter sprites to update after the board changes
+    /// </summary>
+    void recalculateNumbers()
+    {
+        foreach (NumberDisplayer nd in FindObjectsOfType<NumberDisplayer>())
+        {
+            nd.displayNumber();
         }
     }
 

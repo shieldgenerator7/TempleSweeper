@@ -8,16 +8,26 @@ public class NumberDisplayer : MonoBehaviour
     public Color treasureColor = Color.yellow;
     public Color trapColor = Color.black;
 
-    public void displayNumber(LevelTile lt)
+    private LevelTile levelTile;
+
+    public void displayNumber(LevelTile parent)
     {
-        int itemCount = LevelManager.getAdjacentCount(lt, LevelTile.TileType.EMPTY, true);
+        levelTile = parent;
+        displayNumber();
+    }
+    public void displayNumber() { 
+        if (levelTile == null)
+        {
+            return;
+        }
+        int itemCount = LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.EMPTY, true);
         if (itemCount == 0)
         {
             Destroy(gameObject);
             return;
         }
         displayNumber(itemCount);
-        if (LevelManager.getAdjacentCount(lt, LevelTile.TileType.TREASURE) > 0)
+        if (LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.TREASURE) > 0)
         {
             GetComponent<SpriteRenderer>().color = treasureColor;
         }

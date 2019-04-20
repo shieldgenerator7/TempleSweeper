@@ -42,9 +42,15 @@ public class LevelTile : MonoBehaviour
                 GetComponentInChildren<NumberDisplayer>().displayNumber(this);
                 break;
             case TileType.TRAP:
-                contentsSR.sprite = trapSprite; break;
+                contentsSR.sprite = trapSprite;
+                contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                tileType = TileType.EMPTY;
+                break;
             case TileType.TREASURE:
-                contentsSR.sprite = treasureSprite; break;
+                contentsSR.sprite = treasureSprite;
+                contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                tileType = TileType.EMPTY;
+                break;
         }
     }
     /// <summary>
