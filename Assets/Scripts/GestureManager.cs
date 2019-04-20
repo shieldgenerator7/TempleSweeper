@@ -46,13 +46,6 @@ public class GestureManager : MonoBehaviour
     private bool isHoldGesture = false;
     public const float holdTimeScale = 0.5f;//how fast time moves during a hold gesture (1 = normal, 0.5 = half speed, 2 = double speed)
     public const float holdTimeScaleRecip = 1 / holdTimeScale;
-    public float holdThresholdScale = 1.0f;//the amount to multiply the holdThreshold by
-    //Cheats
-    public const bool CHEATS_ALLOWED = true;//whether or not cheats are allowed (turned off for final version)
-    private int cheatTaps = 0;//how many taps have been put in for the cheat
-    private float cheatTapsTime = 0f;//the time at which the cheat taps will expire
-    private int cheatTapsThreshold = 3;//how many taps it takes to activate cheats
-    public bool cheatsEnabled = false;//whether or not the cheats are enabled
 
 
     // Use this for initialization
@@ -199,17 +192,6 @@ public class GestureManager : MonoBehaviour
                     isDrag = false;
                     isTapGesture = true;
                     isHoldGesture = false;
-                    if (CHEATS_ALLOWED && curMP.x < 20 && curMP.y < 20)
-                    {
-                        cheatTaps++;
-                        cheatTapsTime = Time.time + 1;//give one more second to enter taps
-                        if (cheatTaps >= cheatTapsThreshold)
-                        {
-                            cheatsEnabled = !cheatsEnabled;
-                            cheatTaps = 0;
-                            cheatTapsTime = 0;
-                        }
-                    }
                 }
             }
             else if (clickState == ClickState.InProgress)
@@ -223,7 +205,7 @@ public class GestureManager : MonoBehaviour
                         cameraDragInProgress = true;
                     }
                 }
-                if (holdTime > holdThreshold * holdThresholdScale)
+                if (holdTime > holdThreshold)
                 {
                     if (!isDrag)
                     {
@@ -257,12 +239,8 @@ public class GestureManager : MonoBehaviour
                 else if (isTapGesture)
                 {
                     tapCount++;
-                    adjustHoldThreshold(holdTime, false);
                     currentGP.processTapGesture(curMPWorld);
-                    if (tapGesture != null)
-                    {
-                        tapGesture();
-                    }
+                    tapGesture?.Invoke();
                 }
 
                 //Set all flags = false
@@ -340,50 +318,6 @@ public class GestureManager : MonoBehaviour
         {
             Application.Quit();
         }
-        //
-        //Cheats
-        //
-        if (cheatTapsTime <= Time.time)
-        {
-            //Reset cheat taps
-            cheatTaps = 0;
-        }
-    }
-
-    /// <summary>
-    /// Accepts the given holdTime as not a hold but a tap and adjusts holdThresholdScale
-    /// Used by outside classes to indicate that a tap gesture was incorrectly classified as a hold gesture
-    /// </summary>
-    /// <param name="holdTime"></param>
-    public void adjustHoldThreshold(float holdTime)
-    {
-        adjustHoldThreshold(holdTime, true);
-    }
-    /// <summary>
-    /// Used by the GestureManager to adapt hold threshold even when gestures are being classified correctly
-    /// Expects tapCount to never be 0 when called directly from GestureManager
-    /// </summary>
-    /// <param name="holdTime"></param>
-    /// <param name="incrementTapCount"></param>
-    private void adjustHoldThreshold(float holdTime, bool incrementTapCount)
-    {
-        if (incrementTapCount)
-        {
-            tapCount++;
-        }
-        holdThresholdScale = (holdThresholdScale * (tapCount - 1) + (holdTime / holdThreshold)) / tapCount;
-        if (holdThresholdScale < 1)
-        {
-            holdThresholdScale = 1.0f;//keep it from going lower than the default holdThreshold
-        }
-    }
-    /// <summary>
-    /// Returns the absolute hold threshold, including its scale
-    /// </summary>
-    /// <returns></returns>
-    public float getHoldThreshold()
-    {
-        return holdThreshold * holdThresholdScale;
     }
     /// <summary>
     /// Switches the gesture profile to the profile with the given name
