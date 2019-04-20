@@ -10,7 +10,13 @@ public class NumberDisplayer : MonoBehaviour
 
     public void displayNumber(LevelTile lt)
     {
-        displayNumber(LevelManager.getAdjacentCount(lt, LevelTile.TileType.EMPTY, true));
+        int itemCount = LevelManager.getAdjacentCount(lt, LevelTile.TileType.EMPTY, true);
+        if (itemCount == 0)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        displayNumber(itemCount);
         if (LevelManager.getAdjacentCount(lt, LevelTile.TileType.TREASURE) > 0)
         {
             GetComponent<SpriteRenderer>().color = treasureColor;
