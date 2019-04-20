@@ -6,7 +6,6 @@ public class GestureProfile
     
     protected Camera cam;
     protected CameraController cmaController;
-    protected GameManager gm;
     protected GestureManager gestureManager;
     protected LevelManager levelManager;
 
@@ -14,7 +13,6 @@ public class GestureProfile
     {
         cam = Camera.main;
         cmaController = cam.GetComponent<CameraController>();
-        gm = GameObject.FindObjectOfType<GameManager>();
         gestureManager = GameObject.FindObjectOfType<GestureManager>();
         levelManager = GameObject.FindObjectOfType<LevelManager>();
     }

@@ -68,8 +68,7 @@ Temporary Items
 .apdisk
 *.csproj
 *.sln
-.vs/Stoned/v14/.suo
-.vs/Stoned/v14/.suo
+.vs
 Assets/UnityTestTools.meta
 Assets/Sounds/ForceTeleport.mp3
 Assets/Sounds/forceteleport_data.meta
