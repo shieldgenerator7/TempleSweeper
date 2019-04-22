@@ -20,10 +20,20 @@ public class PlayerCharacter : MonoBehaviour
     }
     public int startHealth = 3;
 
-    public int trophiesFound = 0;
+    private int trophiesFound = 0;
+    public int TrophiesFound
+    {
+        get { return trophiesFound; }
+        set
+        {
+            trophiesFound = Mathf.Clamp(value, 0, goalTrophyCount);
+            treasureBar.updateDisplay(trophiesFound);
+        }
+    }
     public int goalTrophyCount = 10;
 
     public DisplayBar healthBar;
+    public DisplayBar treasureBar;
 
     private void Start()
     {
@@ -45,7 +55,7 @@ public class PlayerCharacter : MonoBehaviour
     }
     public bool findTrophy()
     {
-        trophiesFound++;
+        TrophiesFound++;
         return goalAchieved();
     }
     public bool goalAchieved()
@@ -55,6 +65,6 @@ public class PlayerCharacter : MonoBehaviour
     public void reset()
     {
         Health = startHealth;
-        trophiesFound = 0;
+        TrophiesFound = 0;
     }
 }
