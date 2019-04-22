@@ -6,15 +6,12 @@ using UnityEngine.UI;
 public class DisplayBar : MonoBehaviour
 {
     public Image seed;
-    public string statTag;
     public Vector2 spacing = Vector2.zero;
+
+    private List<Image> barIcons = new List<Image>();
 
     private void Start()
     {
-        if (statTag == null || statTag == "")
-        {
-            statTag = seed.tag;
-        }
         if (spacing == Vector2.zero)
         {
             spacing.x = seed.rectTransform.rect.width;
@@ -28,21 +25,38 @@ public class DisplayBar : MonoBehaviour
     /// <param name="stat"></param>
     public void updateDisplay(int statValue)
     {
-        //Remove previous display objects
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag(statTag))
-        {
-            Destroy(go);
+        //Clear the bar if the stat is zero
+        if (statValue <= 0) {
+            foreach (Image icon in barIcons)
+            {
+                Destroy(icon.gameObject);
+            }
+            barIcons.Clear();
+            return;
         }
-        //Create new ones to refresh the health bar
+        //Create new ones to get up to the stat
         seed.gameObject.SetActive(true);
-        for (int i = 0; i < statValue; i++)
+        while (statValue > barIcons.Count)
         {
             GameObject displayBarSegment = Instantiate(seed.gameObject);
-            displayBarSegment.GetComponent<Image>().rectTransform.position =
-                (Vector2)seed.rectTransform.position + (spacing * i);
-            displayBarSegment.transform.SetParent(seed.transform.parent);
+            barIcons.Add(displayBarSegment.GetComponent<Image>());
         }
         seed.gameObject.SetActive(false);
+        //Remove excess ones
+        while (statValue < barIcons.Count)
+        {
+            Destroy(barIcons[0].gameObject);
+            barIcons.RemoveAt(0);
+        }
+        //Position all the icons
+        int i = 0;
+        foreach (Image icon in barIcons)
+        {
+            icon.rectTransform.position =
+                (Vector2)seed.rectTransform.position + (spacing * i);
+            icon.transform.SetParent(seed.transform.parent);
+            i++;
+        }
     }
 
 }

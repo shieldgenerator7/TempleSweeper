@@ -499,7 +499,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: {fileID: 2062776162}
-  statTag: 
   spacing: {x: 0, y: 0}
 --- !u!1 &2062776160
 GameObject:
@@ -514,7 +513,7 @@ GameObject:
   - component: {fileID: 2062776162}
   m_Layer: 5
   m_Name: 1up
-  m_TagString: HealthBar
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
