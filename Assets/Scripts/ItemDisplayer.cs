@@ -54,6 +54,7 @@ public class ItemDisplayer : MonoBehaviour
     {
         transform.localScale = originalSize;
         GetComponent<NumberDisplayer>().displayNumber(levelTile);
+        GetComponentInParent<LevelTile>().tileType = LevelTile.TileType.EMPTY;
         Destroy(this);
     }
 }

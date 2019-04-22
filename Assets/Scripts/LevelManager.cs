@@ -325,14 +325,17 @@ public class LevelManager : MonoBehaviour
         {
             recalculateNumbers();
             LevelTile foundLT = foundItem.levelTile;
-            //Reveal the found LT
-            revealTile(foundLT, true);
-            //Reveal the tiles around the found LT
-            foreach (LevelTile levelTile in getSurroundingTiles(foundLT))
+            if (foundLT.tileType != LevelTile.TileType.MAP)
             {
-                if (levelTile.Revealed)
+                //Reveal the found LT
+                revealTile(foundLT, true);
+                //Reveal the tiles around the found LT
+                foreach (LevelTile levelTile in getSurroundingTiles(foundLT))
                 {
-                    revealTile(levelTile, true);
+                    if (levelTile.Revealed)
+                    {
+                        revealTile(levelTile, true);
+                    }
                 }
             }
             foundItem.retire();
@@ -365,15 +368,6 @@ public class LevelManager : MonoBehaviour
                     shouldRevealBoard = true;
                 }
             }
-            if (lt.tileType == LevelTile.TileType.MAP)
-            {
-                //if it's already been revealed
-                //but not activated yet
-                if (lt.Revealed && !lt.Activated)
-                {
-                    lt.Activated = true;
-                }
-            }
             if (isItem)
             {
                 lt.Revealed = true;
@@ -385,6 +379,15 @@ public class LevelManager : MonoBehaviour
             else
             {
                 revealTile(lt);
+            }
+            if (lt.tileType == LevelTile.TileType.MAP)
+            {
+                //if it's already been revealed
+                //but not activated yet
+                if (lt.Revealed && !lt.Activated)
+                {
+                    lt.Activated = true;
+                }
             }
         }
     }
