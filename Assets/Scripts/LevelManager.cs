@@ -214,20 +214,25 @@ public class LevelManager : MonoBehaviour
                 generateLevelPostTap(tapPos, 1);
                 anyRevealed = true;
             }
-            revealTile(lt);
+            bool shouldRevealBoard = false;
             if (lt.tileType == LevelTile.TileType.TRAP)
             {
                 if (!playerCharacter.takeHit())
                 {
-                    revealBoard();
+                    shouldRevealBoard = true;
                 }
             }
             if (lt.tileType == LevelTile.TileType.TREASURE)
             {
                 if (playerCharacter.findTrophy())
                 {
-                    revealBoard();
+                    shouldRevealBoard = true;
                 }
+            }
+            revealTile(lt);
+            if (shouldRevealBoard)
+            {
+                revealBoard();
             }
         }
     }
@@ -292,9 +297,10 @@ public class LevelManager : MonoBehaviour
                 if (inBounds(i, j))
                 {
                     bool reveal = !checkIfEmptyFirst || tileMap[i, j].GetComponent<LevelTile>().tileType == LevelTile.TileType.EMPTY;
-                    if (reveal) {
-            revealTile(tileMap[i, j].GetComponent<LevelTile>());
-        }
+                    if (reveal)
+                    {
+                        revealTile(tileMap[i, j].GetComponent<LevelTile>());
+                    }
                 }
             }
         }
