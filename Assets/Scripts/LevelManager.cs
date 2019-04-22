@@ -268,40 +268,20 @@ public class LevelManager : MonoBehaviour
         {
             lt.reveal();
             //Check to make sure surrounding tiles are empty
-            for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+            foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
-                for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+                if (levelTile.tileType != LevelTile.TileType.EMPTY)
                 {
-                    if (inBounds(i, j))
-                    {
-                        if (tileMap[i, j].GetComponent<LevelTile>().tileType != LevelTile.TileType.EMPTY)
-                        {
-                            //break out of the method
-                            return;
-                        }
-                    }
+                    //break out of the method
+                    return;
                 }
             }
             //If all surrounding tiles are empty,
             //Reveal surrounding tiles
-            revealSurroundingTiles(lt);
-        }
-    }
-    void revealSurroundingTiles(LevelTile lt, bool checkIfEmptyFirst = false)
-    {
-        //Reveal surrounding tiles
-        for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
-        {
-            for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+            //Reveal surrounding tiles
+            foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
-                if (inBounds(i, j))
-                {
-                    bool reveal = !checkIfEmptyFirst || tileMap[i, j].GetComponent<LevelTile>().tileType == LevelTile.TileType.EMPTY;
-                    if (reveal)
-                    {
-                        revealTile(tileMap[i, j].GetComponent<LevelTile>());
-                    }
-                }
+                revealTile(levelTile);
             }
         }
     }
@@ -347,6 +327,26 @@ public class LevelManager : MonoBehaviour
     public static int getAdjacentCount(LevelTile lt, LevelTile.TileType tileType, bool notTheType = false)
     {
         int count = 0;
+        foreach (LevelTile levelTile in getSurroundingTiles(lt))
+        {
+            if ((levelTile.tileType == tileType)
+                != notTheType)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /// <summary>
+    /// Returns a list of all 8 tiles that surround the given tile. 
+    /// Note that tiles on the edge have less than 8 surrounding tiles.
+    /// </summary>
+    /// <param name="lt"></param>
+    /// <returns></returns>
+    static List<LevelTile> getSurroundingTiles(LevelTile lt)
+    {
+        List<LevelTile> surroundingTiles = new List<LevelTile>();
         for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
         {
             for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
@@ -355,16 +355,12 @@ public class LevelManager : MonoBehaviour
                 {
                     if (i != lt.indexX || j != lt.indexY)
                     {
-                        if ((instance.tileMap[i, j].GetComponent<LevelTile>().tileType == tileType)
-                            != notTheType)
-                        {
-                            count++;
-                        }
+                        surroundingTiles.Add(instance.tileMap[i, j].GetComponent<LevelTile>());
                     }
                 }
             }
         }
-        return count;
+        return surroundingTiles;
     }
 
     public void updateOrthographicSize()
