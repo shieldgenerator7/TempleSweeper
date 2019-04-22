@@ -23,48 +23,50 @@ public class LevelTile : MonoBehaviour
     /// <summary>
     /// When flagged, a tile cannot be revealed
     /// </summary>
-    public bool flagged = false;
-
-    private bool revealed = false;
-
-    /// <summary>
-    /// Reveals the tile type of this tile
-    /// </summary>
-    public void reveal()
+    private bool flagged = false;
+    public bool Flagged
     {
-        revealed = true;
-        //Destroy the cover
-        Destroy(cover);
-        //Show the contents
-        switch (tileType)
+        get { return flagged; }
+        set
         {
-            case TileType.EMPTY:
-                GetComponentInChildren<NumberDisplayer>().displayNumber(this);
-                break;
-            case TileType.TRAP:
-                contentsSR.sprite = trapSprite;
-                contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                tileType = TileType.EMPTY;
-                break;
-            case TileType.TREASURE:
-                contentsSR.sprite = treasureSprite;
-                contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                tileType = TileType.EMPTY;
-                break;
+            flagged = value;
+            GetComponentInChildren<FlagDisplayer>().showFlag(flagged);
         }
     }
-    /// <summary>
-    /// Whether this tile has revealed
-    /// </summary>
-    /// <returns></returns>
-    public bool hasRevealed()
-    {
-        return revealed;
-    }
 
-    public void flag(bool isFlagged)
+    private bool revealed = false;
+    public bool Revealed
     {
-        flagged = isFlagged;
-        GetComponentInChildren<FlagDisplayer>().showFlag(flagged);
+        get { return revealed; }
+        set
+        {
+            revealed = value;
+            if (revealed)
+            {
+                //Destroy the cover
+                Destroy(cover);
+                //Show the contents
+                switch (tileType)
+                {
+                    case TileType.EMPTY:
+                        GetComponentInChildren<NumberDisplayer>().displayNumber(this);
+                        break;
+                    case TileType.TRAP:
+                        contentsSR.sprite = trapSprite;
+                        contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                        tileType = TileType.EMPTY;
+                        break;
+                    case TileType.TREASURE:
+                        contentsSR.sprite = treasureSprite;
+                        contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                        tileType = TileType.EMPTY;
+                        break;
+                }
+            }
+            else
+            {
+                throw new System.InvalidOperationException("Cannot unreveal tile!");
+            }
+        }
     }
 }

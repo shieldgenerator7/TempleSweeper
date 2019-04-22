@@ -207,7 +207,7 @@ public class LevelManager : MonoBehaviour
             //Reveal the tiles around the found LT
             foreach (LevelTile levelTile in getSurroundingTiles(foundLT))
             {
-                if (levelTile.hasRevealed())
+                if (levelTile.Revealed)
                 {
                     revealTile(levelTile, true);
                 }
@@ -217,7 +217,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         LevelTile lt = getTile(tapPos);
-        if (lt != null && !lt.flagged)
+        if (lt != null && !lt.Flagged)
         {
             if (!anyRevealed)
             {
@@ -253,9 +253,9 @@ public class LevelManager : MonoBehaviour
             return;
         }
         LevelTile lt = getTile(flagPos);
-        if (lt != null && !lt.hasRevealed())
+        if (lt != null && !lt.Revealed)
         {
-            lt.flag(!lt.flagged);
+            lt.Flagged = !lt.Flagged;
         }
     }
     public void processHoldGesture(Vector2 holdPos, bool finished)
@@ -266,7 +266,7 @@ public class LevelManager : MonoBehaviour
             usedFirstHoldFrame = true;
             processFlagGesture(holdPos);
             Vibration.Vibrate(75);
-            if (lt.hasRevealed())
+            if (lt.Revealed)
             {
                 frame.SetActive(true);
             }
@@ -281,9 +281,9 @@ public class LevelManager : MonoBehaviour
 
     private void revealTile(LevelTile lt, bool forceReveal = false)
     {
-        if ((!lt.hasRevealed() || forceReveal) && !lt.flagged)
+        if ((!lt.Revealed || forceReveal) && !lt.Flagged)
         {
-            lt.reveal();
+            lt.Revealed = true;
             //Check to make sure surrounding tiles are empty
             foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
@@ -311,12 +311,12 @@ public class LevelManager : MonoBehaviour
         foreach (GameObject go in tileMap)
         {
             LevelTile lt = go.GetComponent<LevelTile>();
-            if (!lt.hasRevealed())
+            if (!lt.Revealed)
             {
                 if (lt.tileType == LevelTile.TileType.TREASURE
-                    || (lt.tileType != LevelTile.TileType.TRAP && lt.flagged))
+                    || (lt.tileType != LevelTile.TileType.TRAP && lt.Flagged))
                 {
-                    lt.reveal();
+                    lt.Revealed = true;
                 }
             }
         }
