@@ -406,6 +406,11 @@ public class LevelManager : MonoBehaviour
     public void processHoldGesture(Vector2 holdPos, bool finished)
     {
         LevelTile lt = getTile(holdPos);
+        if (!lt)
+        {
+            //don't process empty spaces
+            return;
+        }
         if (!usedFirstHoldFrame)
         {
             usedFirstHoldFrame = true;
