@@ -502,6 +502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: {fileID: 2062776162}
   spacing: {x: 0, y: 0}
+  direction: 1
 --- !u!114 &1469628421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,7 +516,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: {fileID: 1852100505}
-  spacing: {x: -50, y: 0}
+  spacing: {x: 0, y: 0}
+  direction: 0
 --- !u!1 &1852100503
 GameObject:
   m_ObjectHideFlags: 0

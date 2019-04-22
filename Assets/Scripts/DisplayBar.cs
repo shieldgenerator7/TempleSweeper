@@ -6,19 +6,44 @@ using UnityEngine.UI;
 public class DisplayBar : MonoBehaviour
 {
     public Image seed;
-    public Vector2 spacing = Vector2.zero;
-
-    private List<Image> barIcons = new List<Image>();
-
-    private void Start()
+    [SerializeField]
+    private Vector2 spacing = Vector2.zero;
+    public Vector2 Spacing
     {
-        if (spacing == Vector2.zero)
+        get
         {
-            spacing.x = seed.rectTransform.rect.width;
-            spacing.y = 0;
+            if (spacing == Vector2.zero)
+            {
+                switch (direction)
+                {
+                    case Direction.LEFT:
+                        spacing.x = -seed.rectTransform.rect.width;
+                        break;
+                    case Direction.RIGHT:
+                        spacing.x = seed.rectTransform.rect.width;
+                        break;
+                    case Direction.UP:
+                        spacing.y = seed.rectTransform.rect.height;
+                        break;
+                    case Direction.DOWN:
+                        spacing.y = -seed.rectTransform.rect.height;
+                        break;
+                }
+            }
+            return spacing;
         }
     }
+    public enum Direction
+    {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    }
+    public Direction direction;
 
+    private List<Image> barIcons = new List<Image>();
+    
     /// <summary>
     /// Updates the display to the stat value
     /// </summary>
@@ -26,7 +51,8 @@ public class DisplayBar : MonoBehaviour
     public void updateDisplay(int statValue)
     {
         //Clear the bar if the stat is zero
-        if (statValue <= 0) {
+        if (statValue <= 0)
+        {
             foreach (Image icon in barIcons)
             {
                 Destroy(icon.gameObject);
@@ -53,7 +79,7 @@ public class DisplayBar : MonoBehaviour
         foreach (Image icon in barIcons)
         {
             icon.rectTransform.position =
-                (Vector2)seed.rectTransform.position + (spacing * i);
+                (Vector2)seed.rectTransform.position + (Spacing * i);
             icon.transform.SetParent(seed.transform.parent);
             i++;
         }
