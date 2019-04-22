@@ -25,6 +25,8 @@ public class LevelManager : MonoBehaviour
 
     public PlayerCharacter playerCharacter;
     public GameObject frame;
+    public GameObject startSpot;
+    public GameObject theSpot;
 
     private bool anyRevealed = false;//true if any tile has been revealed
 
@@ -77,6 +79,9 @@ public class LevelManager : MonoBehaviour
         instance.generateLevel(instance.tileWidth / 2, instance.tileHeight / 2);
         instance.anyRevealed = false;
         instance.playerCharacter.reset();
+
+        startSpot.SetActive(false);
+        theSpot.SetActive(false);
     }
 
     public static LevelTile getTile(Vector2 pos)
@@ -181,6 +186,8 @@ public class LevelManager : MonoBehaviour
         generateObject(itaX, itaY, radiusToAvoid, treasureCount, LevelTile.TileType.TREASURE);
         generateObject(itaX, itaY, radiusToAvoid, mapCount, LevelTile.TileType.MAP);
         generateMapPath(itaX, itaY);
+        startSpot.SetActive(true);
+        startSpot.transform.position = getWorldPos(itaX,itaY);
     }
 
     /// <summary>    /// 
@@ -318,6 +325,11 @@ public class LevelManager : MonoBehaviour
         line.GetComponent<SpriteRenderer>().size = new Vector2((startPos - endPos).magnitude, 1);
         instance.drawnLines.Add(line);
         instance.mapLineSegmentRevealedCount++;
+        if (instance.mapLineSegmentRevealedCount == instance.mapCount)
+        {
+            instance.theSpot.SetActive(true);
+            instance.theSpot.transform.position = endPos;
+        }
     }
 
     private void generateFill(GameObject prefab, GameObject[,] prefabMap, int width, int height)
