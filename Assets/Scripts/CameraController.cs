@@ -144,6 +144,11 @@ public class CameraController : MonoBehaviour
         targetPosition = transform.position;
     }
 
+    public bool AutoMoving
+    {
+        get { return targetPosition != transform.position; }
+    }
+
     public void checkForAutomovement(Vector3 worldPos)
     {
         Vector2 screenPos = cam.WorldToScreenPoint(worldPos);

@@ -27,6 +27,11 @@ public class GestureProfile
 
     public virtual void processTapGesture(Vector3 curMPWorld)
     {
+        if (cmaController.AutoMoving)
+        {
+            cmaController.pinpoint();
+            return;
+        }
         levelManager.processTapGesture(curMPWorld);
         cmaController.checkForAutomovement(curMPWorld);
     }
