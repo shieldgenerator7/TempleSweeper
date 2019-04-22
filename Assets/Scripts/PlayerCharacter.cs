@@ -34,6 +34,7 @@ public class PlayerCharacter : MonoBehaviour
 
     public DisplayBar healthBar;
     public DisplayBar treasureBar;
+    public DisplayBar crateBar;
 
     private void Start()
     {
@@ -66,5 +67,6 @@ public class PlayerCharacter : MonoBehaviour
     {
         Health = startHealth;
         TrophiesFound = 0;
+        crateBar.updateDisplay(goalTrophyCount);
     }
 }
