@@ -7,13 +7,15 @@ public class CameraController : MonoBehaviour
 
     public float zoomSpeed = 0.5f;//how long it takes to fully change to a new zoom level
     public float firstScale = 3.0f;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float autoMoveThreshold = 0.2f;//what percentage of half the screen a tap needs to be in to auto-move the screen
+    public float moveSpeed = 3;//how fast it moves when automoving
     private float scale = 1;//scale used to determine orthographicSize, independent of (landscape or portrait) orientation
     private Camera cam;
     private GestureManager gm;
     private float zoomStartTime = 0.0f;//when the zoom last started
     private float startZoomScale;//the orthographicsize at the start and end of a zoom
+    private Vector3 targetPosition;
 
     private int prevScreenWidth;
     private int prevScreenHeight;
@@ -45,6 +47,7 @@ public class CameraController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         gm = FindObjectOfType<GestureManager>();
+        pinpoint();
         scale = cam.orthographicSize;
         //Initialize ScalePoints
         scalePoints.Add(new ScalePoint(1, false));
@@ -68,6 +71,10 @@ public class CameraController : MonoBehaviour
         if (zoomStartTime != 0)
         {
             zoomToScalePoint();
+        }
+        if (transform.position != targetPosition)
+        {
+            transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
     }
 
@@ -129,6 +136,14 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Tells the camera to stay in its new position
+    /// </summary>
+    public void pinpoint()
+    {
+        targetPosition = transform.position;
+    }
+
     public void checkForAutomovement(Vector3 worldPos)
     {
         Vector2 screenPos = cam.WorldToScreenPoint(worldPos);
@@ -148,7 +163,9 @@ public class CameraController : MonoBehaviour
         {
             //Auto-move the camera
             worldPos.z = transform.position.z;
-            transform.position = worldPos;
+            targetPosition = worldPos;
+            //Then Update() will update the camera's position each frame
+            //for a smooth move effect
         }
     }
 

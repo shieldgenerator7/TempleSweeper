@@ -221,6 +221,7 @@ public class GestureManager : MonoBehaviour
                     Vector3 newPos = origCP + delta;
                     //Move the camera
                     cam.transform.position = newPos;
+                    cmaController.pinpoint();
                 }
                 else if (isHoldGesture)
                 {
@@ -231,6 +232,7 @@ public class GestureManager : MonoBehaviour
             {
                 if (isDrag)
                 {
+                    cmaController.pinpoint();
                 }
                 else if (isHoldGesture)
                 {

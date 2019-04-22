@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GestureProfile
 {//2018-01-22: copied from Stonicorn.GestureProfile
-    
+
     protected Camera cam;
     protected CameraController cmaController;
     protected GestureManager gestureManager;
@@ -24,7 +24,7 @@ public class GestureProfile
     /// Called when the GestureManager switches off this profile to a different one
     /// </summary>
     public virtual void deactivate() { }
-    
+
     public virtual void processTapGesture(Vector3 curMPWorld)
     {
         levelManager.processTapGesture(curMPWorld);
@@ -33,6 +33,10 @@ public class GestureProfile
     public virtual void processHoldGesture(Vector3 curMPWorld, float holdTime, bool finished)
     {
         levelManager.processHoldGesture(curMPWorld, finished);
+        if (finished)
+        {
+            cmaController.checkForAutomovement(curMPWorld);
+        }
     }
     public void processDragGesture()
     {
@@ -40,6 +44,6 @@ public class GestureProfile
     }
     public virtual void processPinchGesture(int adjustment)
     {
-        cmaController.adjustScalePoint(adjustment);        
+        cmaController.adjustScalePoint(adjustment);
     }
 }
