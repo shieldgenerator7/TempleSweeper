@@ -201,7 +201,16 @@ public class LevelManager : MonoBehaviour
         {
             recalculateNumbers();
             LevelTile foundLT = foundItem.levelTile;
-            revealSurroundingTiles(foundLT, true);
+            //Reveal the found LT
+            revealTile(foundLT, true);
+            //Reveal the tiles around the found LT
+            foreach (LevelTile levelTile in getSurroundingTiles(foundLT))
+            {
+                if (levelTile.hasRevealed())
+                {
+                    revealTile(levelTile, true);
+                }
+            }
             foundItem.retire();
             foundItem = null;
             return;
@@ -262,9 +271,9 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void revealTile(LevelTile lt)
+    private void revealTile(LevelTile lt, bool forceReveal = false)
     {
-        if (!lt.hasRevealed() && !lt.flagged)
+        if ((!lt.hasRevealed() || forceReveal) && !lt.flagged)
         {
             lt.reveal();
             //Check to make sure surrounding tiles are empty
