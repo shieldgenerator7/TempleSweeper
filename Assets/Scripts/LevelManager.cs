@@ -285,7 +285,7 @@ public class LevelManager : MonoBehaviour
                 for (int i = 0; i < mapPath.Count - 1; i++)
                 {
                     Vector2 point = mapPath[i];
-                    if (point != theSpot)
+                    if (point == theSpot)
                     {
                         noOverlap = false;
                         break;
@@ -299,14 +299,13 @@ public class LevelManager : MonoBehaviour
                 else
                 {
                     //Continue through to the next random iteration
-                    //continue;
+                    continue;
                 }
             }
             else
             {
-                //continue;
+                continue;
             }
-            break;
         }
     }
     public static void drawNextMapSegment()
