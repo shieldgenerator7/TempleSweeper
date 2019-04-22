@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     public GameObject[,] tileMap;//the map of tiles
 
     public PlayerCharacter playerCharacter;
+    public GameObject frame;
 
     private bool anyRevealed = false;//true if any tile has been revealed
 
@@ -259,15 +260,22 @@ public class LevelManager : MonoBehaviour
     }
     public void processHoldGesture(Vector2 holdPos, bool finished)
     {
+        LevelTile lt = getTile(holdPos);
         if (!usedFirstHoldFrame)
         {
             usedFirstHoldFrame = true;
             processFlagGesture(holdPos);
             Vibration.Vibrate(75);
+            if (lt.hasRevealed())
+            {
+                frame.SetActive(true);
+            }
         }
+        frame.transform.position = lt.transform.position;
         if (finished)
         {
             usedFirstHoldFrame = false;
+            frame.SetActive(false);
         }
     }
 
