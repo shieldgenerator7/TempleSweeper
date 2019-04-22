@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
 
     public float zoomSpeed = 0.5f;//how long it takes to fully change to a new zoom level
     public float firstScale = 3.0f;
+    [Range(0,1)]
+    public float autoMoveThreshold = 0.2f;//what percentage of half the screen a tap needs to be in to auto-move the screen
     private float scale = 1;//scale used to determine orthographicSize, independent of (landscape or portrait) orientation
     private Camera cam;
     private GestureManager gm;
@@ -124,6 +126,29 @@ public class CameraController : MonoBehaviour
         else
         {//landscape orientation
             cam.orthographicSize = scale;
+        }
+    }
+
+    public void checkForAutomovement(Vector3 worldPos)
+    {
+        Vector2 screenPos = cam.WorldToScreenPoint(worldPos);
+        //Make the threshold an even thickness all the way around
+        float threshold = Mathf.Min(Screen.width * autoMoveThreshold, Screen.height * autoMoveThreshold);
+        //Convert the position to the same corner
+        if (screenPos.x > Screen.width / 2)
+        {
+            screenPos.x -= (screenPos.x - Screen.width / 2) * 2;
+        }
+        if (screenPos.y > Screen.height / 2)
+        {
+            screenPos.y -= (screenPos.y - Screen.height / 2) * 2;
+        }
+        //If the position is on the edge of the screen,
+        if (screenPos.x < threshold || screenPos.y < threshold)
+        {
+            //Auto-move the camera
+            worldPos.z = transform.position.z;
+            transform.position = worldPos;
         }
     }
 

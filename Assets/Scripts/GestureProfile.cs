@@ -28,6 +28,7 @@ public class GestureProfile
     public virtual void processTapGesture(Vector3 curMPWorld)
     {
         levelManager.processTapGesture(curMPWorld);
+        cmaController.checkForAutomovement(curMPWorld);
     }
     public virtual void processHoldGesture(Vector3 curMPWorld, float holdTime, bool finished)
     {
