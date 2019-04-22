@@ -155,6 +155,8 @@ MonoBehaviour:
   tileWidth: 60
   mineCount: 89
   treasureCount: 10
+  maxLandDistance: 1
+  fillInSideCount: 5
   playerCharacter: {fileID: 1469628418}
   frame: {fileID: 875580688}
 --- !u!4 &544433180

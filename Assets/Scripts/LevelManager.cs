@@ -10,6 +10,10 @@ public class LevelManager : MonoBehaviour
     public int tileWidth = 30;//how many tiles from top to bottom
     public int mineCount = 89;//how many mines there are
     public int treasureCount = 10;//how many treasures there are
+    [Range(1, 10)]
+    public int maxLandDistance = 1;//how far a placed land can be from the nearest land
+    [Range(1, 8)]
+    public int fillInSideCount = 6;//how many surrounding tiles are required to fill in a hole
     public GameObject[,] tileMap;//the map of tiles
 
     public PlayerCharacter playerCharacter;
@@ -204,13 +208,12 @@ public class LevelManager : MonoBehaviour
     {
         Vector2 min, max;
         min = max = new Vector2(gridWidth, gridHeight);
-        int landCount = gridWidth * gridHeight;
+        int landAmount = gridWidth * gridHeight;
         GameObject[,] map = new GameObject[gridWidth * 2, gridHeight * 2];
         //Place the first one
         map[(int)min.x, (int)min.y] = prefab;
         //Place the rest of them
-        int maxRange = 2;//how far a placed land can be from the nearest land
-        for (int i = 0; i < landCount - 1; i++)
+        for (int i = 0; i < landAmount - 1; i++)
         {
             bool placed = false;
             while (!placed)
@@ -225,7 +228,7 @@ public class LevelManager : MonoBehaviour
                     if (map[randX, randY] == null)
                     {
                         //And it's next to another land,                    
-                        if (containsLand(map, randX, randY, maxRange))
+                        if (containsLand(map, randX, randY, maxLandDistance))
                         {
                             //Place it here
                             map[randX, randY] = prefab;
@@ -240,6 +243,24 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
+        //Fill in holes
+        for (int x = (int)min.x; x <= max.x; x++)
+        {
+            for (int y = (int)min.y; y <= max.y; y++)
+            {
+                //If it's an empty spot,
+                if (map[x, y] == null)
+                {
+                    //And it's surrounded on most sides
+                    if (landCount(map, x, y, 1) > fillInSideCount)
+                    {
+                        //Fill it in
+                        map[x, y] = prefab;
+                    }
+                }
+            }
+        }
+        //Return the map
         return map;
     }
     /// <summary>
@@ -251,6 +272,19 @@ public class LevelManager : MonoBehaviour
     /// <param name="range"></param>
     private bool containsLand(GameObject[,] tiles, int posX, int posY, int range)
     {
+        return landCount(tiles, posX, posY, range) > 0;
+    }
+    /// <summary>
+    /// Called in generateIslands()
+    /// </summary>
+    /// <param name="tiles"></param>
+    /// <param name="posX"></param>
+    /// <param name="posY"></param>
+    /// <param name="range"></param>
+    /// <returns></returns>
+    private int landCount(GameObject[,] tiles, int posX, int posY, int range)
+    {
+        int count = 0;
         for (int x = posX - range; x <= posX + range; x++)
         {
             for (int y = posY - range; y <= posY + range; y++)
@@ -259,12 +293,12 @@ public class LevelManager : MonoBehaviour
                 {
                     if (tiles[x, y] != null)
                     {
-                        return true;
+                        count++;
                     }
                 }
             }
         }
-        return false;
+        return count;
     }
     /// <summary>
     /// Called in generateIslands()
@@ -407,8 +441,8 @@ public class LevelManager : MonoBehaviour
     {
         foreach (GameObject go in tileMap)
         {
-            LevelTile lt = go.GetComponent<LevelTile>();
-            if (!lt.Revealed)
+            LevelTile lt = go?.GetComponent<LevelTile>();
+            if (lt && !lt.Revealed)
             {
                 if (lt.tileType == LevelTile.TileType.TREASURE
                     || lt.tileType == LevelTile.TileType.TRAP)
@@ -470,7 +504,8 @@ public class LevelManager : MonoBehaviour
                     if (i != lt.indexX || j != lt.indexY)
                     {
                         GameObject tile = instance.tileMap[i, j];
-                        if (tile != null) {
+                        if (tile != null)
+                        {
                             surroundingTiles.Add(tile.GetComponent<LevelTile>());
                         }
                     }
