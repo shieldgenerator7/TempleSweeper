@@ -17,6 +17,13 @@ public class ItemDisplayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Check to make sure the player is still alive
+        if (FindObjectOfType<PlayerCharacter>().gameEnded())
+        {
+            Destroy(this);
+            return;
+        }
+        //Initialize variables
         originalSize = transform.localScale;
         currentScale = 1;
         scaleIncreaseRate = displayScale / scaleIncreaseDuration;

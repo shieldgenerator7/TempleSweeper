@@ -324,7 +324,7 @@ public class LevelManager : MonoBehaviour
             if (!lt.Revealed)
             {
                 if (lt.tileType == LevelTile.TileType.TREASURE
-                    || (lt.tileType != LevelTile.TileType.TRAP && lt.Flagged))
+                    || lt.tileType == LevelTile.TileType.TRAP)
                 {
                     lt.Revealed = true;
                 }
