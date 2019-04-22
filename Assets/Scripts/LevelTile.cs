@@ -9,12 +9,14 @@ public class LevelTile : MonoBehaviour
     public SpriteRenderer contentsSR;
     public Sprite trapSprite;
     public Sprite treasureSprite;
+    public Sprite mapSprite;
 
     public enum TileType
     {
         EMPTY,
         TRAP,
-        TREASURE
+        TREASURE,
+        MAP
     };
 
     public TileType tileType = TileType.EMPTY;
@@ -61,12 +63,48 @@ public class LevelTile : MonoBehaviour
                         contentsSR.gameObject.AddComponent<ItemDisplayer>();
                         tileType = TileType.EMPTY;
                         break;
+                    case TileType.MAP:
+                        contentsSR.sprite = mapSprite;
+                        break;
                 }
             }
             else
             {
                 throw new System.InvalidOperationException("Cannot unreveal tile!");
             }
+        }
+    }
+
+    private bool activated = false;
+    public bool Activated
+    {
+        get { return activated; }
+        set
+        {
+            activated = value;
+            if (activated)
+            {
+                if (tileType != TileType.MAP)
+                {
+                    throw new System.InvalidOperationException("Cannot activate non-map tile! tile type: " + tileType);
+                }
+                FindObjectOfType<PlayerCharacter>().MapFoundCount++;
+                contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                tileType = TileType.EMPTY;
+            }
+            else
+            {
+                throw new System.InvalidOperationException("Cannot unactivate tile!");
+            }
+        }
+    }
+
+    public bool Empty
+    {
+        get
+        {
+            return tileType == TileType.EMPTY
+              || tileType == TileType.MAP;
         }
     }
 }

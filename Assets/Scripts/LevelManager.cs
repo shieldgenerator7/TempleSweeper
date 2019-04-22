@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     public int tileWidth = 30;//how many tiles from top to bottom
     public int mineCount = 89;//how many mines there are
     public int treasureCount = 10;//how many treasures there are
+    public int mapCount = 10;//how many map fragments there are
     [Range(1, 10)]
     public int maxLandDistance = 1;//how far a placed land can be from the nearest land
     [Range(1, 8)]
@@ -160,6 +161,7 @@ public class LevelManager : MonoBehaviour
         int itaY = getYIndex(posToAvoid);
         generateObject(itaX, itaY, radiusToAvoid, mineCount, LevelTile.TileType.TRAP);
         generateObject(itaX, itaY, radiusToAvoid, treasureCount, LevelTile.TileType.TREASURE);
+        generateObject(itaX, itaY, radiusToAvoid, mapCount, LevelTile.TileType.MAP);
     }
 
     /// <summary>    /// 
@@ -363,6 +365,15 @@ public class LevelManager : MonoBehaviour
                     shouldRevealBoard = true;
                 }
             }
+            if (lt.tileType == LevelTile.TileType.MAP)
+            {
+                //if it's already been revealed
+                //but not activated yet
+                if (lt.Revealed && !lt.Activated)
+                {
+                    lt.Activated = true;
+                }
+            }
             if (isItem)
             {
                 lt.Revealed = true;
@@ -418,7 +429,7 @@ public class LevelManager : MonoBehaviour
             //Check to make sure surrounding tiles are empty
             foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
-                if (levelTile.tileType != LevelTile.TileType.EMPTY)
+                if (!levelTile.Empty)
                 {
                     //break out of the method
                     return;

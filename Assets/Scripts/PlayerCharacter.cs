@@ -32,9 +32,22 @@ public class PlayerCharacter : MonoBehaviour
     }
     public int goalTrophyCount = 10;
 
+    public int goalMapCount = 10;
+    private int mapFoundCount = 0;
+    public int MapFoundCount
+    {
+        get { return mapFoundCount; }
+        set
+        {
+            mapFoundCount = Mathf.Clamp(value, 0, goalMapCount);
+            mapBar.updateDisplay(mapFoundCount);
+        }
+    }
+
     public DisplayBar healthBar;
     public DisplayBar treasureBar;
     public DisplayBar crateBar;
+    public DisplayBar mapBar;
 
     private void Start()
     {
@@ -72,5 +85,6 @@ public class PlayerCharacter : MonoBehaviour
         Health = startHealth;
         TrophiesFound = 0;
         crateBar.updateDisplay(goalTrophyCount);
+        MapFoundCount = 0;
     }
 }
