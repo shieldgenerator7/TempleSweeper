@@ -110,8 +110,8 @@ public class LevelManager : MonoBehaviour
     private static Vector2 getWorldPos(int ix, int iy)
     {
         Vector2 pos = Vector2.zero;
-        pos.x = ix - instance.tileWidth/2;
-        pos.y = iy - instance.tileHeight/2;
+        pos.x = ix - instance.tileWidth / 2;
+        pos.y = iy - instance.tileHeight / 2;
         return pos;
     }
 
@@ -218,25 +218,28 @@ public class LevelManager : MonoBehaviour
     {
         mapLineSegmentRevealedCount = 0;
         //Clear old path objects
-        foreach(GameObject go in drawnLines)
+        foreach (GameObject go in drawnLines)
         {
             Destroy(go);
         }
         drawnLines.Clear();
         drawnLines = new List<GameObject>();
+        int curX = beginX;
+        int curY = beginY;
+        int prevX = curX - 1;//set to one less to avoid infinite loop
+        int prevY = curY - 1;
         //Make new path
         while (true)
         {
+            curX = beginX;
+            curY = beginY;
             mapPath = new List<Vector2>();
-            int curX = beginX;
-            int curY = beginY;
             mapPath.Add(new Vector2(curX, curY));
             for (int i = 0; i < mapCount; i++)
             {
                 int newX = curX;
                 int newY = curY;
-                while ((newX == curX && newY == curY)
-                    || !inBounds(newX, newY))
+                while (true)
                 {
                     newX = curX;
                     newY = curY;
@@ -251,7 +254,20 @@ public class LevelManager : MonoBehaviour
                     {
                         newY += randDist;
                     }
+                    //Check to see if this new point is valid
+                    if (
+                        (newX != prevX && newY != prevY)
+                        && (newX != curX || newY != curY)
+                        && inBounds(newX, newY)
+                    )
+                    {
+                        //This point is good,
+                        //break
+                        break;
+                    }
                 }
+                prevX = curX;
+                prevY = curY;
                 curX = newX;
                 curY = newY;
                 mapPath.Add(new Vector2(curX, curY));
@@ -280,6 +296,15 @@ public class LevelManager : MonoBehaviour
                     //Break out of the while loop
                     break;
                 }
+                else
+                {
+                    //Continue through to the next random iteration
+                    //continue;
+                }
+            }
+            else
+            {
+                //continue;
             }
             break;
         }

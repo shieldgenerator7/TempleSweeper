@@ -158,8 +158,8 @@ MonoBehaviour:
   mineCount: 89
   treasureCount: 10
   mapCount: 10
-  mapLineDistMin: 1
-  mapLineDistMax: 1
+  mapLineDistMin: 2
+  mapLineDistMax: 5
   maxLandDistance: 1
   fillInSideCount: 5
   playerCharacter: {fileID: 1469628418}
