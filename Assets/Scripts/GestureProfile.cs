@@ -37,6 +37,11 @@ public class GestureProfile
     }
     public virtual void processHoldGesture(Vector3 curMPWorld, float holdTime, bool finished)
     {
+        if (cmaController.AutoMoving)
+        {
+            cmaController.pinpoint();
+            return;
+        }
         levelManager.processHoldGesture(curMPWorld, finished);
         if (finished)
         {
