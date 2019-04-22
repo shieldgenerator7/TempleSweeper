@@ -41,7 +41,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         //Initialization stuff
-        generateLevel(tileWidth, tileHeight);
+        generateLevel(tileWidth / 2, tileHeight / 2);
         updateOrthographicSize();
     }
     public bool checkReset()
@@ -63,7 +63,7 @@ public class LevelManager : MonoBehaviour
                 Destroy(go);
             }
         }
-        instance.generateLevel(instance.tileWidth, instance.tileHeight);
+        instance.generateLevel(instance.tileWidth / 2, instance.tileHeight / 2);
         instance.anyRevealed = false;
         instance.playerCharacter.reset();
     }
@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour
         int yIndex = getYIndex(pos);
         if (inBounds(xIndex, yIndex))
         {
-            return instance.tileMap[xIndex, yIndex].GetComponent<LevelTile>();
+            return instance.tileMap[xIndex, yIndex]?.GetComponent<LevelTile>();
         }
         else
         {
@@ -119,14 +119,22 @@ public class LevelManager : MonoBehaviour
 
     private void generateLevel(int width, int height)
     {
-        GameObject[,] tiles = new GameObject[width, height];
-        generateFill(levelTilePrefab, tiles, width, height);
+        GameObject[,] tiles = generateIsland(levelTilePrefab, width, height);
+        width *= 2;
+        height *= 2;
+        //generateFill(levelTilePrefab, tiles, width, height);
         tileMap = new GameObject[width, height];
         for (int xi = 0; xi < width; xi++)
         {
             for (int yi = 0; yi < height; yi++)
             {
-                GameObject go = GameObject.Instantiate(tiles[xi, yi]);
+                GameObject prefab = tiles[xi, yi];
+                if (prefab == null)
+                {
+                    //skip empty space
+                    continue;
+                }
+                GameObject go = GameObject.Instantiate(prefab);
                 go.transform.position = new Vector2(xi - width / 2, yi - height / 2);
                 tileMap[xi, yi] = go;
                 go.GetComponent<LevelTile>().indexX = xi;
@@ -170,8 +178,8 @@ public class LevelManager : MonoBehaviour
                 if (Mathf.Abs(itaX - ix) > radiusToAvoid
                     || Mathf.Abs(itaY - iy) > radiusToAvoid)
                 {
-                    LevelTile lt = tileMap[ix, iy].GetComponent<LevelTile>();
-                    if (lt.tileType == LevelTile.TileType.EMPTY)
+                    LevelTile lt = tileMap[ix, iy]?.GetComponent<LevelTile>();
+                    if (lt && lt.tileType == LevelTile.TileType.EMPTY)
                     {
                         lt.tileType = tileType;
                         break;//break the while loop
@@ -190,6 +198,85 @@ public class LevelManager : MonoBehaviour
                 prefabMap[xi, yi] = prefab;
             }
         }
+    }
+
+    private GameObject[,] generateIsland(GameObject prefab, int gridWidth, int gridHeight)
+    {
+        Vector2 min, max;
+        min = max = new Vector2(gridWidth, gridHeight);
+        int landCount = gridWidth * gridHeight;
+        GameObject[,] map = new GameObject[gridWidth * 2, gridHeight * 2];
+        //Place the first one
+        map[(int)min.x, (int)min.y] = prefab;
+        //Place the rest of them
+        int maxRange = 2;//how far a placed land can be from the nearest land
+        for (int i = 0; i < landCount - 1; i++)
+        {
+            bool placed = false;
+            while (!placed)
+            {
+                //Randomize new position
+                int randX = Random.Range((int)min.x - 1, (int)max.x + 2);
+                int randY = Random.Range((int)min.y - 1, (int)max.y + 2);
+                //If the position is valid,
+                if (inBounds(map, randX, randY))
+                {
+                    //If the spot is empty,
+                    if (map[randX, randY] == null)
+                    {
+                        //And it's next to another land,                    
+                        if (containsLand(map, randX, randY, maxRange))
+                        {
+                            //Place it here
+                            map[randX, randY] = prefab;
+                            placed = true;
+                            //Update min and max
+                            min.x = Mathf.Min(randX, min.x);
+                            min.y = Mathf.Min(randY, min.y);
+                            max.x = Mathf.Max(randX, max.x);
+                            max.y = Mathf.Max(randY, max.y);
+                        }
+                    }
+                }
+            }
+        }
+        return map;
+    }
+    /// <summary>
+    /// Called in generateIslands()
+    /// </summary>
+    /// <param name="tiles"></param>
+    /// <param name="posX"></param>
+    /// <param name="posY"></param>
+    /// <param name="range"></param>
+    private bool containsLand(GameObject[,] tiles, int posX, int posY, int range)
+    {
+        for (int x = posX - range; x <= posX + range; x++)
+        {
+            for (int y = posY - range; y <= posY + range; y++)
+            {
+                if (inBounds(tiles, x, y))
+                {
+                    if (tiles[x, y] != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    /// <summary>
+    /// Called in generateIslands()
+    /// </summary>
+    /// <param name="tiles"></param>
+    /// <param name="posX"></param>
+    /// <param name="posY"></param>
+    /// <returns></returns>
+    private bool inBounds(GameObject[,] tiles, int posX, int posY)
+    {
+        return posX >= 0 && posX < tiles.GetLength(0)
+            && posY >= 0 && posY < tiles.GetLength(1);
     }
 
     public void processTapGesture(Vector2 tapPos)
@@ -382,7 +469,10 @@ public class LevelManager : MonoBehaviour
                 {
                     if (i != lt.indexX || j != lt.indexY)
                     {
-                        surroundingTiles.Add(instance.tileMap[i, j].GetComponent<LevelTile>());
+                        GameObject tile = instance.tileMap[i, j];
+                        if (tile != null) {
+                            surroundingTiles.Add(tile.GetComponent<LevelTile>());
+                        }
                     }
                 }
             }

@@ -151,8 +151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelTilePrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f,
     type: 3}
-  tileHeight: 16
-  tileWidth: 30
+  tileHeight: 32
+  tileWidth: 60
   mineCount: 89
   treasureCount: 10
   playerCharacter: {fileID: 1469628418}
@@ -441,6 +441,7 @@ MonoBehaviour:
   zoomSpeed: 0.5
   firstScale: 5
   autoMoveThreshold: 0.15
+  moveSpeed: 3
 --- !u!1 &1469628417
 GameObject:
   m_ObjectHideFlags: 0
