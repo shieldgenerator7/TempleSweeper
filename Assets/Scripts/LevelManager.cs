@@ -6,16 +6,22 @@ public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
 
     public GameObject levelTilePrefab;
+    public GameObject linePrefab;
     public int tileHeight = 16;//how many tiles across
     public int tileWidth = 30;//how many tiles from top to bottom
     public int mineCount = 89;//how many mines there are
     public int treasureCount = 10;//how many treasures there are
     public int mapCount = 10;//how many map fragments there are
+    public int mapLineDistMin = 3;
+    public int mapLineDistMax = 5;
     [Range(1, 10)]
     public int maxLandDistance = 1;//how far a placed land can be from the nearest land
     [Range(1, 8)]
     public int fillInSideCount = 6;//how many surrounding tiles are required to fill in a hole
     public GameObject[,] tileMap;//the map of tiles
+    private List<Vector2> mapPath;
+    private int mapLineSegmentRevealedCount = 0;
+    private List<GameObject> drawnLines = new List<GameObject>();
 
     public PlayerCharacter playerCharacter;
     public GameObject frame;
@@ -97,6 +103,18 @@ public class LevelManager : MonoBehaviour
         return Mathf.RoundToInt(pos.y + instance.tileHeight / 2);
     }
 
+    private static Vector2 getWorldPos(Vector2 iv)
+    {
+        return getWorldPos((int)iv.x, (int)iv.y);
+    }
+    private static Vector2 getWorldPos(int ix, int iy)
+    {
+        Vector2 pos = Vector2.zero;
+        pos.x = ix - instance.tileWidth/2;
+        pos.y = iy - instance.tileHeight/2;
+        return pos;
+    }
+
     public static int getDisplaySortingOrder(Vector2 pos)
     {
         return (int)((instance.tileHeight / 2 - pos.y) * 100);
@@ -162,6 +180,7 @@ public class LevelManager : MonoBehaviour
         generateObject(itaX, itaY, radiusToAvoid, mineCount, LevelTile.TileType.TRAP);
         generateObject(itaX, itaY, radiusToAvoid, treasureCount, LevelTile.TileType.TREASURE);
         generateObject(itaX, itaY, radiusToAvoid, mapCount, LevelTile.TileType.MAP);
+        generateMapPath(itaX, itaY);
     }
 
     /// <summary>    /// 
@@ -193,6 +212,88 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void generateMapPath(int beginX, int beginY)
+    {
+        mapLineSegmentRevealedCount = 0;
+        //Clear old path objects
+        foreach(GameObject go in drawnLines)
+        {
+            Destroy(go);
+        }
+        drawnLines.Clear();
+        drawnLines = new List<GameObject>();
+        //Make new path
+        while (true)
+        {
+            mapPath = new List<Vector2>();
+            int curX = beginX;
+            int curY = beginY;
+            mapPath.Add(new Vector2(curX, curY));
+            for (int i = 0; i < mapCount; i++)
+            {
+                int newX = curX;
+                int newY = curY;
+                while ((newX == curX && newY == curY)
+                    || !inBounds(newX, newY))
+                {
+                    newX = curX;
+                    newY = curY;
+                    int randBool = Random.Range(0, 2);
+                    int randDist = Random.Range(mapLineDistMin, mapLineDistMax + 1);
+                    randDist *= (Random.Range(0, 2) == 1) ? 1 : -1;
+                    if (randBool == 1)
+                    {
+                        newX += randDist;
+                    }
+                    else
+                    {
+                        newY += randDist;
+                    }
+                }
+                curX = newX;
+                curY = newY;
+                mapPath.Add(new Vector2(curX, curY));
+            }
+            //Test to see if it's acceptable
+            Vector2 theSpot = mapPath[mapPath.Count - 1];
+            LevelTile spotTile = tileMap[(int)theSpot.x, (int)theSpot.y]?.GetComponent<LevelTile>();
+            //If the spot is on land
+            if (spotTile != null
+                //And the spot is not a treasure, mine, or map fragment
+                && spotTile.tileType == LevelTile.TileType.EMPTY)
+            {
+                bool noOverlap = true;
+                //Check to make sure the spot is not on another point of the line
+                for (int i = 0; i < mapPath.Count - 1; i++)
+                {
+                    Vector2 point = mapPath[i];
+                    if (point != theSpot)
+                    {
+                        noOverlap = false;
+                        break;
+                    }
+                }
+                if (noOverlap)
+                {
+                    //Break out of the while loop
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    public static void drawNextMapSegment()
+    {
+        GameObject line = Instantiate(instance.linePrefab);
+        Vector2 startPos = getWorldPos(instance.mapPath[instance.mapLineSegmentRevealedCount]);
+        Vector2 endPos = getWorldPos(instance.mapPath[instance.mapLineSegmentRevealedCount + 1]);
+        line.transform.position = startPos;
+        line.transform.right = (endPos - startPos);
+        line.GetComponent<SpriteRenderer>().size = new Vector2((startPos - endPos).magnitude, 1);
+        instance.drawnLines.Add(line);
+        instance.mapLineSegmentRevealedCount++;
     }
 
     private void generateFill(GameObject prefab, GameObject[,] prefabMap, int width, int height)
@@ -464,7 +565,8 @@ public class LevelManager : MonoBehaviour
             if (lt && !lt.Revealed)
             {
                 if (lt.tileType == LevelTile.TileType.TREASURE
-                    || lt.tileType == LevelTile.TileType.TRAP)
+                    || lt.tileType == LevelTile.TileType.TRAP
+                    || lt.tileType == LevelTile.TileType.MAP)
                 {
                     lt.Revealed = true;
                 }

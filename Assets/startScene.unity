@@ -151,11 +151,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelTilePrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f,
     type: 3}
+  linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
+    type: 3}
   tileHeight: 32
   tileWidth: 60
   mineCount: 89
   treasureCount: 10
   mapCount: 10
+  mapLineDistMin: 1
+  mapLineDistMax: 1
   maxLandDistance: 1
   fillInSideCount: 5
   playerCharacter: {fileID: 1469628418}
