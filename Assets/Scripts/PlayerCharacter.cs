@@ -14,21 +14,8 @@ public class PlayerCharacter : MonoBehaviour
         {
             //Set the new health value
             health = Mathf.Clamp(value, 0, startHealth);
-            //Remove previous display objects
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("HealthBar"))
-            {
-                Destroy(go);
-            }
-            //Create new ones to refresh the health bar
-            healthImage.gameObject.SetActive(true);
-            for (int i = 0; i < health; i++)
-            {
-                GameObject healthBar = Instantiate(healthImage.gameObject);
-                healthBar.GetComponent<Image>().rectTransform.position =
-                    (Vector2)healthImage.rectTransform.position + (healthBarImageSpacing * i);
-                healthBar.transform.parent = healthImage.transform.parent;
-            }
-            healthImage.gameObject.SetActive(false);
+            //Update health bar
+            healthBar.updateDisplay(health);
         }
     }
     public int startHealth = 3;
@@ -36,8 +23,7 @@ public class PlayerCharacter : MonoBehaviour
     public int trophiesFound = 0;
     public int goalTrophyCount = 10;
 
-    public Image healthImage;
-    public Vector2 healthBarImageSpacing;
+    public DisplayBar healthBar;
 
     private void Start()
     {
