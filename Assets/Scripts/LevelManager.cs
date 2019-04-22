@@ -224,9 +224,11 @@ public class LevelManager : MonoBehaviour
                 generateLevelPostTap(tapPos, 1);
                 anyRevealed = true;
             }
+            bool isItem = false;
             bool shouldRevealBoard = false;
             if (lt.tileType == LevelTile.TileType.TRAP)
             {
+                isItem = true;
                 if (!playerCharacter.takeHit())
                 {
                     shouldRevealBoard = true;
@@ -234,15 +236,23 @@ public class LevelManager : MonoBehaviour
             }
             if (lt.tileType == LevelTile.TileType.TREASURE)
             {
+                isItem = true;
                 if (playerCharacter.findTrophy())
                 {
                     shouldRevealBoard = true;
                 }
             }
-            revealTile(lt);
-            if (shouldRevealBoard)
+            if (isItem)
             {
-                revealBoard();
+                lt.Revealed = true;
+                if (shouldRevealBoard)
+                {
+                    revealBoard();
+                }
+            }
+            else
+            {
+                revealTile(lt);
             }
         }
     }
