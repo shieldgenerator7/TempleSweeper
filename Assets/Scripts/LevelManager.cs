@@ -268,9 +268,23 @@ public class LevelManager : MonoBehaviour
                         && inBounds(newX, newY)
                     )
                     {
-                        //This point is good,
-                        //break
-                        break;
+                        bool noOverlap = true;
+                        Vector2 newPoint = new Vector2(newX, newY);
+                        //Check to make sure the new point is not on another point of the line
+                        for (int j = 0; j < mapPath.Count; j++)
+                        {
+                            Vector2 point = mapPath[i];
+                            if (point == newPoint)
+                            {
+                                noOverlap = false;
+                                break;
+                            }
+                        }
+                        if (noOverlap)
+                        {
+                            //Break out of the while loop
+                            break;
+                        }
                     }
                 }
                 prevX = curX;
