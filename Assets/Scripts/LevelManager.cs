@@ -187,7 +187,7 @@ public class LevelManager : MonoBehaviour
         generateObject(itaX, itaY, radiusToAvoid, mapCount, LevelTile.TileType.MAP);
         generateMapPath(itaX, itaY);
         startSpot.SetActive(true);
-        startSpot.transform.position = getWorldPos(itaX,itaY);
+        startSpot.transform.position = getWorldPos(itaX, itaY);
     }
 
     /// <summary>    /// 
@@ -268,19 +268,25 @@ public class LevelManager : MonoBehaviour
                         && inBounds(newX, newY)
                     )
                     {
-                        bool noOverlap = true;
-                        Vector2 newPoint = new Vector2(newX, newY);
-                        //Check to make sure the new point is not on another point of the line
+                        bool hallClear = true;
+                        //Check to make sure the new point is
+                        //not in the same column or row as another point of the line
                         for (int j = 0; j < mapPath.Count; j++)
                         {
                             Vector2 point = mapPath[i];
-                            if (point == newPoint)
+                            if (point.x == curX && point.y == curY)
                             {
-                                noOverlap = false;
+                                //Don't test against the current position
+                                continue;
+                            }
+                            //Check to make sure the row and column is clear
+                            if (point.x == newX || point.y == newY)
+                            {
+                                hallClear = false;
                                 break;
                             }
                         }
-                        if (noOverlap)
+                        if (hallClear)
                         {
                             //Break out of the while loop
                             break;

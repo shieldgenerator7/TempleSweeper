@@ -317,7 +317,7 @@ MonoBehaviour:
   treasureCount: 10
   mapCount: 10
   mapLineDistMin: 2
-  mapLineDistMax: 7
+  mapLineDistMax: 9
   maxLandDistance: 1
   fillInSideCount: 5
   playerCharacter: {fileID: 1469628418}
