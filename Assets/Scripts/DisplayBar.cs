@@ -65,7 +65,8 @@ public class DisplayBar : MonoBehaviour
         while (statValue > barIcons.Count)
         {
             GameObject displayBarSegment = Instantiate(seed.gameObject);
-            barIcons.Add(displayBarSegment.GetComponent<Image>());
+            Image icon = displayBarSegment.GetComponent<Image>();
+            barIcons.Add(icon);
         }
         seed.gameObject.SetActive(false);
         //Remove excess ones
@@ -78,9 +79,10 @@ public class DisplayBar : MonoBehaviour
         int i = 0;
         foreach (Image icon in barIcons)
         {
+            icon.transform.SetParent(seed.transform.parent);
             icon.rectTransform.position =
                 (Vector2)seed.rectTransform.position + (Spacing * i);
-            icon.transform.SetParent(seed.transform.parent);
+            icon.rectTransform.localScale = Vector3.one;
             i++;
         }
     }
