@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
-
-    public GameObject levelTilePrefab;
+    
     public GameObject linePrefab;
     public int tileHeight = 16;//how many tiles across
     public int tileWidth = 30;//how many tiles from top to bottom
+    public List<LevelGenerator> levelGenerators;
+    public List<LevelGenerator> postTapLevelGenerators;
     public int mineCount = 89;//how many mines there are
     public int treasureCount = 10;//how many treasures there are
     public int mapCount = 10;//how many map fragments there are
     public int mapLineDistMin = 3;
     public int mapLineDistMax = 5;
-    [Range(1, 10)]
-    public int maxLandDistance = 1;//how far a placed land can be from the nearest land
-    [Range(1, 8)]
-    public int fillInSideCount = 6;//how many surrounding tiles are required to fill in a hole
     public GameObject[,] tileMap;//the map of tiles
     private List<Vector2> mapPath;
     private int mapLineSegmentRevealedCount = 0;
@@ -54,7 +51,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         //Initialization stuff
-        generateLevel(tileWidth / 2, tileHeight / 2);
+        generateLevel(tileWidth, tileHeight);
         updateOrthographicSize();
     }
     public bool checkReset()
@@ -76,7 +73,7 @@ public class LevelManager : MonoBehaviour
                 Destroy(go);
             }
         }
-        instance.generateLevel(instance.tileWidth / 2, instance.tileHeight / 2);
+        instance.generateLevel(instance.tileWidth, instance.tileHeight);
         instance.anyRevealed = false;
         instance.playerCharacter.reset();
 
@@ -147,9 +144,11 @@ public class LevelManager : MonoBehaviour
 
     private void generateLevel(int width, int height)
     {
-        GameObject[,] tiles = generateIsland(levelTilePrefab, width, height);
-        width *= 2;
-        height *= 2;
+        GameObject[,] tiles = new GameObject[width, height];
+        foreach (LevelGenerator lgen in levelGenerators)
+        {
+            lgen.generate(tiles);
+        }
         //generateFill(levelTilePrefab, tiles, width, height);
         tileMap = new GameObject[width, height];
         for (int xi = 0; xi < width; xi++)
@@ -361,116 +360,7 @@ public class LevelManager : MonoBehaviour
                 prefabMap[xi, yi] = prefab;
             }
         }
-    }
-
-    private GameObject[,] generateIsland(GameObject prefab, int gridWidth, int gridHeight)
-    {
-        Vector2 min, max;
-        min = max = new Vector2(gridWidth, gridHeight);
-        int landAmount = gridWidth * gridHeight;
-        GameObject[,] map = new GameObject[gridWidth * 2, gridHeight * 2];
-        //Place the first one
-        map[(int)min.x, (int)min.y] = prefab;
-        //Place the rest of them
-        for (int i = 0; i < landAmount - 1; i++)
-        {
-            bool placed = false;
-            while (!placed)
-            {
-                //Randomize new position
-                int randX = Random.Range((int)min.x - 1, (int)max.x + 2);
-                int randY = Random.Range((int)min.y - 1, (int)max.y + 2);
-                //If the position is valid,
-                if (inBounds(map, randX, randY))
-                {
-                    //If the spot is empty,
-                    if (map[randX, randY] == null)
-                    {
-                        //And it's next to another land,                    
-                        if (containsLand(map, randX, randY, maxLandDistance))
-                        {
-                            //Place it here
-                            map[randX, randY] = prefab;
-                            placed = true;
-                            //Update min and max
-                            min.x = Mathf.Min(randX, min.x);
-                            min.y = Mathf.Min(randY, min.y);
-                            max.x = Mathf.Max(randX, max.x);
-                            max.y = Mathf.Max(randY, max.y);
-                        }
-                    }
-                }
-            }
-        }
-        //Fill in holes
-        for (int x = (int)min.x; x <= max.x; x++)
-        {
-            for (int y = (int)min.y; y <= max.y; y++)
-            {
-                //If it's an empty spot,
-                if (map[x, y] == null)
-                {
-                    //And it's surrounded on most sides
-                    if (landCount(map, x, y, 1) > fillInSideCount)
-                    {
-                        //Fill it in
-                        map[x, y] = prefab;
-                    }
-                }
-            }
-        }
-        //Return the map
-        return map;
-    }
-    /// <summary>
-    /// Called in generateIslands()
-    /// </summary>
-    /// <param name="tiles"></param>
-    /// <param name="posX"></param>
-    /// <param name="posY"></param>
-    /// <param name="range"></param>
-    private bool containsLand(GameObject[,] tiles, int posX, int posY, int range)
-    {
-        return landCount(tiles, posX, posY, range) > 0;
-    }
-    /// <summary>
-    /// Called in generateIslands()
-    /// </summary>
-    /// <param name="tiles"></param>
-    /// <param name="posX"></param>
-    /// <param name="posY"></param>
-    /// <param name="range"></param>
-    /// <returns></returns>
-    private int landCount(GameObject[,] tiles, int posX, int posY, int range)
-    {
-        int count = 0;
-        for (int x = posX - range; x <= posX + range; x++)
-        {
-            for (int y = posY - range; y <= posY + range; y++)
-            {
-                if (inBounds(tiles, x, y))
-                {
-                    if (tiles[x, y] != null)
-                    {
-                        count++;
-                    }
-                }
-            }
-        }
-        return count;
-    }
-    /// <summary>
-    /// Called in generateIslands()
-    /// </summary>
-    /// <param name="tiles"></param>
-    /// <param name="posX"></param>
-    /// <param name="posY"></param>
-    /// <returns></returns>
-    private bool inBounds(GameObject[,] tiles, int posX, int posY)
-    {
-        return posX >= 0 && posX < tiles.GetLength(0)
-            && posY >= 0 && posY < tiles.GetLength(1);
-    }
+    }    
 
     public void processTapGesture(Vector2 tapPos)
     {

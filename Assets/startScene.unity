@@ -288,6 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 544433180}
   - component: {fileID: 544433179}
+  - component: {fileID: 544433181}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -307,19 +308,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6c7c648ce9d434ebf740b1e23244b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelTilePrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f,
-    type: 3}
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   tileHeight: 32
   tileWidth: 60
+  levelGenerators:
+  - {fileID: 544433181}
+  postTapLevelGenerators: []
   mineCount: 89
   treasureCount: 10
   mapCount: 10
   mapLineDistMin: 2
   mapLineDistMax: 9
-  maxLandDistance: 1
-  fillInSideCount: 5
   playerCharacter: {fileID: 1469628418}
   frame: {fileID: 875580688}
   startSpot: {fileID: 277955318}
@@ -338,6 +338,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &544433181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544433178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf08457d33d3cb4eb8f85eab58e3518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landAmount: 480
+  maxLandDistance: 1
+  fillInSideCount: 5
+  landPrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f, type: 3}
 --- !u!1 &774119322
 GameObject:
   m_ObjectHideFlags: 0
