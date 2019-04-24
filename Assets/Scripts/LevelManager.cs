@@ -17,6 +17,18 @@ public class LevelManager : MonoBehaviour
     //
     private GameObject[,] tileMap;//the map of tiles
     private int currentLevelIndex = 0;
+    public int LevelIndex
+    {
+        get { return currentLevelIndex; }
+        set
+        {
+            if (value < 0)
+            {
+                throw new System.ArgumentOutOfRangeException("Value must be greater than 0. value: " + value);
+            }
+            currentLevelIndex = value % levels.Count;
+        }
+    }
     private Level Level
     {
         get { return levels[currentLevelIndex]; }
@@ -72,25 +84,14 @@ public class LevelManager : MonoBehaviour
                 Destroy(go);
             }
         }
-        nextLevel();
+        LevelIndex++;
         generateLevel(Level);
         instance.anyRevealed = false;
         instance.playerCharacter.reset();
 
-        foreach(LevelGenerator lgen in Level.postRevealLevelGenerators)
+        foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.clearGeneratedObjects();
-        }
-    }
-    /// <summary>
-    /// Moves on to the next level
-    /// </summary>
-    private void nextLevel()
-    {
-        currentLevelIndex++;
-        if (currentLevelIndex >= levels.Count)
-        {
-            currentLevelIndex = 0;
         }
     }
 
@@ -200,10 +201,10 @@ public class LevelManager : MonoBehaviour
             lgen.generatePostStart(tileMap, itaX, itaY);
         }
     }
-    
+
     private void generatePostItemReveal(LevelTile.TileType tileType)
     {
-        foreach(LevelGenerator lgen in Level.postRevealLevelGenerators)
+        foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.generatePostReveal(tileMap, tileType);
         }
@@ -255,7 +256,7 @@ public class LevelManager : MonoBehaviour
                 generateLevelPostTap(tapPos);
                 anyRevealed = true;
             }
-            LevelTile.TileType revealedItem =  LevelTile.TileType.EMPTY;
+            LevelTile.TileType revealedItem = LevelTile.TileType.EMPTY;
             bool shouldRevealBoard = false;
             bool prevRevealed = lt.Revealed;
             if (lt.tileType == LevelTile.TileType.TRAP)
