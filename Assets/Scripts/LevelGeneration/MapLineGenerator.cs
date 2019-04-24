@@ -16,7 +16,7 @@ public class MapLineGenerator : LevelGenerator
     private List<Vector2> mapPath;
     private int mapLineSegmentRevealedCount = 0;
     private List<GameObject> drawnLines = new List<GameObject>();
-    
+
     public override void generate(GameObject[,] tileMap)
     {
         throw new System.NotImplementedException();
@@ -139,18 +139,21 @@ public class MapLineGenerator : LevelGenerator
 
     public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
     {
-        GameObject line = Instantiate(linePrefab);
-        Vector2 startPos = LevelManager.getWorldPos(mapPath[mapLineSegmentRevealedCount]);
-        Vector2 endPos = LevelManager.getWorldPos(mapPath[mapLineSegmentRevealedCount + 1]);
-        line.transform.position = startPos;
-        line.transform.right = (endPos - startPos);
-        line.GetComponent<SpriteRenderer>().size = new Vector2((startPos - endPos).magnitude, 1);
-        drawnLines.Add(line);
-        mapLineSegmentRevealedCount++;
-        if (mapLineSegmentRevealedCount == mapGenerator.amount)
+        if (tileType == LevelTile.TileType.MAP)
         {
-            theSpot.SetActive(true);
-            theSpot.transform.position = endPos;
+            GameObject line = Instantiate(linePrefab);
+            Vector2 startPos = LevelManager.getWorldPos(mapPath[mapLineSegmentRevealedCount]);
+            Vector2 endPos = LevelManager.getWorldPos(mapPath[mapLineSegmentRevealedCount + 1]);
+            line.transform.position = startPos;
+            line.transform.right = (endPos - startPos);
+            line.GetComponent<SpriteRenderer>().size = new Vector2((startPos - endPos).magnitude, 1);
+            drawnLines.Add(line);
+            mapLineSegmentRevealedCount++;
+            if (mapLineSegmentRevealedCount == mapGenerator.amount)
+            {
+                theSpot.SetActive(true);
+                theSpot.transform.position = endPos;
+            }
         }
     }
 }
