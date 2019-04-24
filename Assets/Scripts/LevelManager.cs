@@ -5,24 +5,23 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
 
-    [Header("Settings")]
-    public int tileHeight = 16;//how many tiles across
-    public int tileWidth = 30;//how many tiles from top to bottom
-
-    [Header("Level Generators")]
-    public List<LevelGenerator> levelGenerators;
-    public List<LevelGenerator> postStartLevelGenerators;
-    public List<LevelGenerator> postRevealLevelGenerators;
+    [Header("Levels")]
+    public List<Level> levels;
 
     [Header("Objects")]
     public PlayerCharacter playerCharacter;
     public GameObject frame;
 
-
     //
     // Runtime vars
     //
     private GameObject[,] tileMap;//the map of tiles
+    private int currentLevelIndex = 0;
+    private Level Level
+    {
+        get { return levels[currentLevelIndex]; }
+        set { currentLevelIndex = levels.IndexOf(value); }
+    }
 
     private bool anyRevealed = false;//true if any tile has been revealed
 
@@ -51,7 +50,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         //Initialization stuff
-        generateLevel(tileWidth, tileHeight);
+        generateLevel(Level);
         updateOrthographicSize();
     }
     public bool checkReset()
@@ -73,13 +72,25 @@ public class LevelManager : MonoBehaviour
                 Destroy(go);
             }
         }
-        instance.generateLevel(instance.tileWidth, instance.tileHeight);
+        nextLevel();
+        generateLevel(Level);
         instance.anyRevealed = false;
         instance.playerCharacter.reset();
 
-        foreach(LevelGenerator lgen in postRevealLevelGenerators)
+        foreach(LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.clearGeneratedObjects();
+        }
+    }
+    /// <summary>
+    /// Moves on to the next level
+    /// </summary>
+    private void nextLevel()
+    {
+        currentLevelIndex++;
+        if (currentLevelIndex >= levels.Count)
+        {
+            currentLevelIndex = 0;
         }
     }
 
@@ -99,12 +110,12 @@ public class LevelManager : MonoBehaviour
 
     private static int getXIndex(Vector2 pos)
     {
-        return Mathf.RoundToInt(pos.x + instance.tileWidth / 2);
+        return Mathf.RoundToInt(pos.x + instance.Level.gridWidth / 2);
     }
 
     private static int getYIndex(Vector2 pos)
     {
-        return Mathf.RoundToInt(pos.y + instance.tileHeight / 2);
+        return Mathf.RoundToInt(pos.y + instance.Level.gridHeight / 2);
     }
 
     public static Vector2 getWorldPos(Vector2 iv)
@@ -114,28 +125,28 @@ public class LevelManager : MonoBehaviour
     public static Vector2 getWorldPos(int ix, int iy)
     {
         Vector2 pos = Vector2.zero;
-        pos.x = ix - instance.tileWidth / 2;
-        pos.y = iy - instance.tileHeight / 2;
+        pos.x = ix - instance.Level.gridWidth / 2;
+        pos.y = iy - instance.Level.gridHeight / 2;
         return pos;
     }
 
     public static int getDisplaySortingOrder(Vector2 pos)
     {
-        return (int)((instance.tileHeight / 2 - pos.y) * 100);
+        return (int)((instance.Level.gridHeight / 2 - pos.y) * 100);
     }
     public static Vector2 randomPosition()
     {
         return new Vector2(
-            Random.Range(-instance.tileWidth / 2, instance.tileWidth / 2) * 0.9f,
-            Random.Range(-instance.tileHeight / 2, instance.tileHeight / 2) * 0.9f
+            Random.Range(-instance.Level.gridWidth / 2, instance.Level.gridWidth / 2) * 0.9f,
+            Random.Range(-instance.Level.gridHeight / 2, instance.Level.gridHeight / 2) * 0.9f
             );
     }
     public static bool inBounds(Vector2 pos)
     {
-        return pos.x > -instance.tileWidth / 2 * 0.99f
-            && pos.x < instance.tileWidth / 2 * 0.99f
-            && pos.y > -instance.tileHeight / 2 * 0.99f
-            && pos.y < instance.tileHeight / 2 * 0.99f;
+        return pos.x > -instance.Level.gridWidth / 2 * 0.99f
+            && pos.x < instance.Level.gridWidth / 2 * 0.99f
+            && pos.y > -instance.Level.gridHeight / 2 * 0.99f
+            && pos.y < instance.Level.gridHeight / 2 * 0.99f;
     }
 
     public static bool inBounds(int ix, int iy)
@@ -144,10 +155,12 @@ public class LevelManager : MonoBehaviour
             && iy >= 0 && iy < instance.tileMap.GetLength(1);
     }
 
-    private void generateLevel(int width, int height)
+    private void generateLevel(Level level)
     {
+        int width = level.gridWidth;
+        int height = level.gridHeight;
         GameObject[,] tiles = new GameObject[width, height];
-        foreach (LevelGenerator lgen in levelGenerators)
+        foreach (LevelGenerator lgen in level.levelGenerators)
         {
             lgen.generate(tiles);
         }
@@ -182,7 +195,7 @@ public class LevelManager : MonoBehaviour
     {
         int itaX = getXIndex(posToAvoid);
         int itaY = getYIndex(posToAvoid);
-        foreach (LevelGenerator lgen in postStartLevelGenerators)
+        foreach (LevelGenerator lgen in Level.postStartLevelGenerators)
         {
             lgen.generatePostStart(tileMap, itaX, itaY);
         }
@@ -190,7 +203,7 @@ public class LevelManager : MonoBehaviour
     
     private void generatePostItemReveal(LevelTile.TileType tileType)
     {
-        foreach(LevelGenerator lgen in postRevealLevelGenerators)
+        foreach(LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.generatePostReveal(tileMap, tileType);
         }
@@ -436,7 +449,7 @@ public class LevelManager : MonoBehaviour
         {
             Vector2 screenSizeWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height))
                 - Camera.main.ScreenToWorldPoint(Vector2.zero);
-            if (screenSizeWorld.x > tileWidth && screenSizeWorld.y > tileHeight)
+            if (screenSizeWorld.x > Level.gridWidth && screenSizeWorld.y > Level.gridHeight)
             {
                 break;//all good hear
             }
