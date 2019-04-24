@@ -71,12 +71,15 @@ public class LevelManager : MonoBehaviour
         {
             if (tapOnObject(Managers.Start, tapPos))
             {
-                gameOver = true;
-                reset();
+                if (Managers.Start.activeSelf)
+                {
+                    gameOver = true;
+                    reset();
+                }
             }
-            else if (Managers.Player.MapFoundCount == Managers.Player.goalMapCount)
+            else if (tapOnObject(Managers.End, tapPos))
             {
-                if (tapOnObject(Managers.End, tapPos))
+                if (Managers.Player.completedMap())
                 {
                     if (getTile(tapPos).Revealed)
                     {
@@ -282,6 +285,18 @@ public class LevelManager : MonoBehaviour
             }
             foundItem.retire();
             foundItem = null;
+            //Check if goals have been achieved
+            if (Managers.Player.goalAchieved())
+            {
+                //Go to start
+                Managers.Camera.moveTo(Managers.Start);
+            }
+            //Check if map has been completed
+            if (Managers.Player.completedMap())
+            {
+                //Go to start
+                Managers.Camera.moveTo(Managers.End);
+            }
             return;
         }
         if (checkReset(tapPos))

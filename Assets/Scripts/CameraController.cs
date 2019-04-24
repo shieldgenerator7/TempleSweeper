@@ -141,6 +141,16 @@ public class CameraController : MonoBehaviour
         targetPosition = transform.position;
     }
 
+    /// <summary>
+    /// Moves the camera to the given <see langword="GameObject"/>'s position
+    /// </summary>
+    /// <param name="go"></param>
+    public void moveTo(GameObject go)
+    {
+        targetPosition = go.transform.position;
+        targetPosition.z = transform.position.z;
+    }
+
     public bool AutoMoving
     {
         get { return targetPosition != transform.position; }

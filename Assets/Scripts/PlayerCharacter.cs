@@ -76,6 +76,10 @@ public class PlayerCharacter : MonoBehaviour
     {
         return trophiesFound >= goalTrophyCount;
     }
+    public bool completedMap()
+    {
+        return MapFoundCount >= goalMapCount;
+    }
     public void reset()
     {
         Health = startHealth;
