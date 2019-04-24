@@ -43,6 +43,7 @@ public class GestureManager : MonoBehaviour
     private bool isHoldGesture = false;
     public const float holdTimeScale = 0.5f;//how fast time moves during a hold gesture (1 = normal, 0.5 = half speed, 2 = double speed)
     public const float holdTimeScaleRecip = 1 / holdTimeScale;
+    public bool isRightClick = false;
 
 
     // Use this for initialization
@@ -115,6 +116,7 @@ public class GestureManager : MonoBehaviour
             {
                 clickState = ClickState.Began;
                 origMP = Input.mousePosition;
+                isRightClick = false;
             }
             else
             {
@@ -126,11 +128,32 @@ public class GestureManager : MonoBehaviour
         {
             clickState = ClickState.Ended;
         }
+        else if (Input.GetMouseButton(1))
+        {
+            touchCount = 1;
+            if (Input.GetMouseButtonDown(1))
+            {
+                clickState = ClickState.Began;
+                origMP = Input.mousePosition;
+                isRightClick = true;
+            }
+            else
+            {
+                clickState = ClickState.InProgress;
+                curMP = Input.mousePosition;
+            }
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            clickState = ClickState.Ended;
+        }
         else if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
             clickState = ClickState.InProgress;
         }
-        else if (Input.touchCount == 0 && !Input.GetMouseButton(0))
+        else if (Input.touchCount == 0
+            && !Input.GetMouseButton(0)
+            && !Input.GetMouseButton(1))
         {
             touchCount = 0;
             clickState = ClickState.None;
@@ -200,7 +223,8 @@ public class GestureManager : MonoBehaviour
                         cameraDragInProgress = true;
                     }
                 }
-                if (holdTime > holdThreshold)
+                if (holdTime > holdThreshold
+                    || isRightClick)
                 {
                     if (!isDrag)
                     {
