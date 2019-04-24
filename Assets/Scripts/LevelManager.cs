@@ -5,18 +5,12 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
 
-    public GameObject linePrefab;
     public int tileHeight = 16;//how many tiles across
     public int tileWidth = 30;//how many tiles from top to bottom
     public List<LevelGenerator> levelGenerators;
-    public List<LevelGenerator> postTapLevelGenerators;
-    public int mapCount = 10;
-    public int mapLineDistMin = 3;
-    public int mapLineDistMax = 5;
+    public List<LevelGenerator> postStartLevelGenerators;
+    public List<LevelGenerator> postRevealLevelGenerators;
     public GameObject[,] tileMap;//the map of tiles
-    private List<Vector2> mapPath;
-    private int mapLineSegmentRevealedCount = 0;
-    private List<GameObject> drawnLines = new List<GameObject>();
 
     public PlayerCharacter playerCharacter;
     public GameObject frame;
@@ -103,11 +97,11 @@ public class LevelManager : MonoBehaviour
         return Mathf.RoundToInt(pos.y + instance.tileHeight / 2);
     }
 
-    private static Vector2 getWorldPos(Vector2 iv)
+    public static Vector2 getWorldPos(Vector2 iv)
     {
         return getWorldPos((int)iv.x, (int)iv.y);
     }
-    private static Vector2 getWorldPos(int ix, int iy)
+    public static Vector2 getWorldPos(int ix, int iy)
     {
         Vector2 pos = Vector2.zero;
         pos.x = ix - instance.tileWidth / 2;
@@ -178,145 +172,19 @@ public class LevelManager : MonoBehaviour
     {
         int itaX = getXIndex(posToAvoid);
         int itaY = getYIndex(posToAvoid);
-        foreach (LevelGenerator lgen in postTapLevelGenerators)
+        foreach (LevelGenerator lgen in postStartLevelGenerators)
         {
-            lgen.generatePostTap(tileMap, itaX, itaY);
+            lgen.generatePostStart(tileMap, itaX, itaY);
         }
-        generateMapPath(itaX, itaY);
         startSpot.SetActive(true);
         startSpot.transform.position = getWorldPos(itaX, itaY);
     }
-
-
-
-    private void generateMapPath(int beginX, int beginY)
+    
+    private void generatePostItemReveal(LevelTile.TileType tileType)
     {
-        mapLineSegmentRevealedCount = 0;
-        //Clear old path objects
-        foreach (GameObject go in drawnLines)
+        foreach(LevelGenerator lgen in postRevealLevelGenerators)
         {
-            Destroy(go);
-        }
-        drawnLines.Clear();
-        drawnLines = new List<GameObject>();
-        int curX = beginX;
-        int curY = beginY;
-        int prevX = curX - 1;//set to one less to avoid infinite loop
-        int prevY = curY - 1;
-        //Make new path
-        while (true)
-        {
-            curX = beginX;
-            curY = beginY;
-            mapPath = new List<Vector2>();
-            mapPath.Add(new Vector2(curX, curY));
-            for (int i = 0; i < mapCount; i++)
-            {
-                int newX = curX;
-                int newY = curY;
-                while (true)
-                {
-                    newX = curX;
-                    newY = curY;
-                    int randBool = Random.Range(0, 2);
-                    int randDist = Random.Range(mapLineDistMin, mapLineDistMax + 1);
-                    randDist *= (Random.Range(0, 2) == 1) ? 1 : -1;
-                    if (randBool == 1)
-                    {
-                        newX += randDist;
-                    }
-                    else
-                    {
-                        newY += randDist;
-                    }
-                    //Check to see if this new point is valid
-                    if (
-                        (newX != prevX && newY != prevY)
-                        && (newX != curX || newY != curY)
-                        && inBounds(newX, newY)
-                    )
-                    {
-                        bool hallClear = true;
-                        //Check to make sure the new point is
-                        //not in the same column or row as another point of the line
-                        for (int j = 0; j < mapPath.Count; j++)
-                        {
-                            Vector2 point = mapPath[i];
-                            if (point.x == curX && point.y == curY)
-                            {
-                                //Don't test against the current position
-                                continue;
-                            }
-                            //Check to make sure the row and column is clear
-                            if (point.x == newX || point.y == newY)
-                            {
-                                hallClear = false;
-                                break;
-                            }
-                        }
-                        if (hallClear)
-                        {
-                            //Break out of the while loop
-                            break;
-                        }
-                    }
-                }
-                prevX = curX;
-                prevY = curY;
-                curX = newX;
-                curY = newY;
-                mapPath.Add(new Vector2(curX, curY));
-            }
-            //Test to see if it's acceptable
-            Vector2 theSpot = mapPath[mapPath.Count - 1];
-            LevelTile spotTile = tileMap[(int)theSpot.x, (int)theSpot.y]?.GetComponent<LevelTile>();
-            //If the spot is on land
-            if (spotTile != null
-                //And the spot is not a treasure, mine, or map fragment
-                && spotTile.tileType == LevelTile.TileType.EMPTY)
-            {
-                bool noOverlap = true;
-                //Check to make sure the spot is not on another point of the line
-                for (int i = 0; i < mapPath.Count - 1; i++)
-                {
-                    Vector2 point = mapPath[i];
-                    if (point == theSpot)
-                    {
-                        noOverlap = false;
-                        break;
-                    }
-                }
-                if (noOverlap)
-                {
-                    //Break out of the while loop
-                    break;
-                }
-                else
-                {
-                    //Continue through to the next random iteration
-                    continue;
-                }
-            }
-            else
-            {
-                continue;
-            }
-        }
-    }
-    public static void drawNextMapSegment()
-    {
-        GameObject line = Instantiate(instance.linePrefab);
-        Vector2 startPos = getWorldPos(instance.mapPath[instance.mapLineSegmentRevealedCount]);
-        Vector2 endPos = getWorldPos(instance.mapPath[instance.mapLineSegmentRevealedCount + 1]);
-        line.transform.position = startPos;
-        line.transform.right = (endPos - startPos);
-        line.GetComponent<SpriteRenderer>().size = new Vector2((startPos - endPos).magnitude, 1);
-        instance.drawnLines.Add(line);
-        instance.mapLineSegmentRevealedCount++;
-        if (instance.mapLineSegmentRevealedCount == instance.mapCount)
-        {
-            instance.theSpot.SetActive(true);
-            instance.theSpot.transform.position = endPos;
+            lgen.generatePostReveal(tileMap, tileType);
         }
     }
 
@@ -366,11 +234,12 @@ public class LevelManager : MonoBehaviour
                 generateLevelPostTap(tapPos);
                 anyRevealed = true;
             }
-            bool isItem = false;
+            LevelTile.TileType revealedItem =  LevelTile.TileType.EMPTY;
             bool shouldRevealBoard = false;
+            bool prevRevealed = lt.Revealed;
             if (lt.tileType == LevelTile.TileType.TRAP)
             {
-                isItem = true;
+                revealedItem = LevelTile.TileType.TRAP;
                 if (!playerCharacter.takeHit())
                 {
                     shouldRevealBoard = true;
@@ -378,19 +247,20 @@ public class LevelManager : MonoBehaviour
             }
             if (lt.tileType == LevelTile.TileType.TREASURE)
             {
-                isItem = true;
+                revealedItem = LevelTile.TileType.TREASURE;
                 if (playerCharacter.findTrophy())
                 {
                     shouldRevealBoard = true;
                 }
             }
-            if (isItem)
+            if (revealedItem != LevelTile.TileType.EMPTY)
             {
                 lt.Revealed = true;
                 if (shouldRevealBoard)
                 {
                     revealBoard();
                 }
+                generatePostItemReveal(revealedItem);
             }
             else
             {
@@ -400,9 +270,10 @@ public class LevelManager : MonoBehaviour
             {
                 //if it's already been revealed
                 //but not activated yet
-                if (lt.Revealed && !lt.Activated)
+                if (prevRevealed && !lt.Activated)
                 {
                     lt.Activated = true;
+                    generatePostItemReveal(LevelTile.TileType.MAP);
                 }
             }
         }

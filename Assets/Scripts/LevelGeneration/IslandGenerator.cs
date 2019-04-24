@@ -70,7 +70,11 @@ public class IslandGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostTap(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    {
+        throw new System.NotImplementedException();
+    }
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
     {
         throw new System.NotImplementedException();
     }

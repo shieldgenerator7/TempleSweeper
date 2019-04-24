@@ -6,7 +6,9 @@ public abstract class LevelGenerator : MonoBehaviour
 {
     public abstract void generate(GameObject[,] tileMap);
 
-    public abstract void generatePostTap(GameObject[,] tileMap, int posX, int posY);
+    public abstract void generatePostStart(GameObject[,] tileMap, int posX, int posY);
+
+    public abstract void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType);
 
 
 
@@ -66,7 +68,7 @@ public abstract class LevelGenerator : MonoBehaviour
     /// <param name="posX"></param>
     /// <param name="posY"></param>
     /// <returns></returns>
-   protected static bool inBounds(GameObject[,] tileMap, int posX, int posY)
+    protected static bool inBounds(GameObject[,] tileMap, int posX, int posY)
     {
         return posX >= 0 && posX < tileMap.GetLength(0)
             && posY >= 0 && posY < tileMap.GetLength(1);

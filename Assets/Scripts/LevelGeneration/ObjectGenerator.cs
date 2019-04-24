@@ -20,7 +20,7 @@ public class ObjectGenerator : LevelGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostTap(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -40,5 +40,10 @@ public class ObjectGenerator : LevelGenerator
                 }
             }
         }
+    }
+
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -90,7 +90,6 @@ public class LevelTile : MonoBehaviour
                 }
                 FindObjectOfType<PlayerCharacter>().MapFoundCount++;
                 contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                LevelManager.drawNextMapSegment();
             }
             else
             {

@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 544433184}
   - component: {fileID: 544433183}
   - component: {fileID: 544433182}
+  - component: {fileID: 544433185}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -311,19 +312,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6c7c648ce9d434ebf740b1e23244b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
-    type: 3}
   tileHeight: 32
   tileWidth: 60
   levelGenerators:
   - {fileID: 544433181}
-  postTapLevelGenerators:
+  postStartLevelGenerators:
   - {fileID: 544433184}
   - {fileID: 544433183}
   - {fileID: 544433182}
-  mapCount: 10
-  mapLineDistMin: 2
-  mapLineDistMax: 9
+  - {fileID: 544433185}
+  postRevealLevelGenerators:
+  - {fileID: 544433185}
   playerCharacter: {fileID: 1469628418}
   frame: {fileID: 875580688}
   startSpot: {fileID: 277955318}
@@ -403,6 +402,25 @@ MonoBehaviour:
   amount: 89
   radiusToAvoid: 1
   tileType: 1
+--- !u!114 &544433185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544433178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5efc4e23e07f0842a5d8d7dd6dda6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapLineDistMin: 3
+  mapLineDistMax: 5
+  linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
+    type: 3}
+  mapGenerator: {fileID: 544433182}
+  startSpot: {fileID: 0}
+  theSpot: {fileID: 275449122}
 --- !u!1 &774119322
 GameObject:
   m_ObjectHideFlags: 0
