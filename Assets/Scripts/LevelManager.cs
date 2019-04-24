@@ -282,21 +282,25 @@ public class LevelManager : MonoBehaviour
                         revealTile(levelTile, true);
                     }
                 }
+                //Check if goals have been achieved
+                if (Managers.Player.goalAchieved())
+                {
+                    //Go to start
+                    Managers.Camera.moveTo(Managers.Start);
+                }
+            }
+            else
+            {
+                //Check if map has been completed
+                if (Managers.Player.completedMap()
+                    && getTile(Managers.End.transform.position).Revealed)
+                {
+                    //Go to end
+                    Managers.Camera.moveTo(Managers.End);
+                }
             }
             foundItem.retire();
             foundItem = null;
-            //Check if goals have been achieved
-            if (Managers.Player.goalAchieved())
-            {
-                //Go to start
-                Managers.Camera.moveTo(Managers.Start);
-            }
-            //Check if map has been completed
-            if (Managers.Player.completedMap())
-            {
-                //Go to start
-                Managers.Camera.moveTo(Managers.End);
-            }
             return;
         }
         if (checkReset(tapPos))
