@@ -76,10 +76,6 @@ public class PlayerCharacter : MonoBehaviour
     {
         return trophiesFound >= goalTrophyCount;
     }
-    public bool gameEnded()
-    {
-        return !alive() || goalAchieved();
-    }
     public void reset()
     {
         Health = startHealth;

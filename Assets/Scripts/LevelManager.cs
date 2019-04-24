@@ -64,17 +64,36 @@ public class LevelManager : MonoBehaviour
         generateLevel(Level);
         updateOrthographicSize();
     }
-    public bool checkReset()
+    public bool checkReset(Vector2 tapPos)
     {
         bool gameOver = false;
-        gameOver = !Managers.Player.alive() || Managers.Player.goalAchieved();
-        if (gameOver)
+        if (Managers.Player.alive())
         {
+            if (tapOnObject(Managers.Start, tapPos))
+            {
+                gameOver = true;
+                reset();
+            }
+            else if (Managers.Player.MapFoundCount == Managers.Player.goalMapCount)
+            {
+                if (tapOnObject(Managers.End, tapPos))
+                {
+                    if (getTile(tapPos).Revealed)
+                    {
+                        gameOver = true;
+                        reset(false);
+                    }
+                }
+            }
+        }
+        else
+        {
+            gameOver = true;
             reset();
         }
         return gameOver;
     }
-    public void reset()
+    public void reset(bool resetToBeginning = true)
     {
         if (instance.tileMap != null)
         {
@@ -83,15 +102,27 @@ public class LevelManager : MonoBehaviour
                 Destroy(go);
             }
         }
-        LevelIndex++;
-        generateLevel(Level);
-        instance.anyRevealed = false;
-        Managers.Player.reset();
 
+        //Clear extra generated sprites
         foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.clearGeneratedObjects();
         }
+
+        //Move to next level
+        if (resetToBeginning)
+        {
+            LevelIndex = 0;
+        }
+        else
+        {
+            LevelIndex++;
+        }
+        generateLevel(Level);
+
+        //Reset runtime variables
+        instance.anyRevealed = false;
+        Managers.Player.reset();
     }
 
     public static LevelTile getTile(Vector2 pos)
@@ -118,6 +149,11 @@ public class LevelManager : MonoBehaviour
         return Mathf.RoundToInt(pos.y + instance.Level.gridHeight / 2);
     }
 
+    public static Vector2 getGridPos(Vector2 worldPos)
+    {
+        return new Vector2(getXIndex(worldPos), getYIndex(worldPos));
+    }
+
     public static Vector2 getWorldPos(Vector2 iv)
     {
         return getWorldPos((int)iv.x, (int)iv.y);
@@ -128,6 +164,11 @@ public class LevelManager : MonoBehaviour
         pos.x = ix - instance.Level.gridWidth / 2;
         pos.y = iy - instance.Level.gridHeight / 2;
         return pos;
+    }
+
+    public static bool tapOnObject(GameObject go, Vector2 tapPos)
+    {
+        return getGridPos(go.transform.position) == getGridPos(tapPos);
     }
 
     public static int getDisplaySortingOrder(Vector2 pos)
@@ -222,11 +263,7 @@ public class LevelManager : MonoBehaviour
 
     public void processTapGesture(Vector2 tapPos)
     {
-        if (checkReset())
-        {
-            return;
-        }
-        if (foundItem)
+        if (foundItem && Managers.Player.alive())
         {
             recalculateNumbers();
             LevelTile foundLT = foundItem.levelTile;
@@ -245,6 +282,10 @@ public class LevelManager : MonoBehaviour
             }
             foundItem.retire();
             foundItem = null;
+            return;
+        }
+        if (checkReset(tapPos))
+        {
             return;
         }
         LevelTile lt = getTile(tapPos);
@@ -269,10 +310,7 @@ public class LevelManager : MonoBehaviour
             if (lt.tileType == LevelTile.TileType.TREASURE)
             {
                 revealedItem = LevelTile.TileType.TREASURE;
-                if (Managers.Player.findTrophy())
-                {
-                    shouldRevealBoard = true;
-                }
+                Managers.Player.findTrophy();
             }
             if (revealedItem != LevelTile.TileType.EMPTY)
             {
@@ -301,7 +339,7 @@ public class LevelManager : MonoBehaviour
     }
     public void processFlagGesture(Vector2 flagPos)
     {
-        if (checkReset())
+        if (checkReset(flagPos))
         {
             return;
         }
