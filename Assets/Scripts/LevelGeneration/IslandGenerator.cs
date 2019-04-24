@@ -16,10 +16,8 @@ public class IslandGenerator : LevelGenerator
 
     public override void generate(GameObject[,] tileMap)
     {
-        int gridWidth = tileMap.GetLength(0);
-        int gridHeight = tileMap.GetLength(1);
         Vector2 min, max;
-        min = max = new Vector2(gridWidth / 2, gridHeight / 2);
+        min = max = new Vector2(gridWidth(tileMap) / 2, gridHeight(tileMap) / 2);
         //Place the first one
         tileMap[(int)min.x, (int)min.y] = landPrefab;
         //Place the rest of them
@@ -70,5 +68,10 @@ public class IslandGenerator : LevelGenerator
                 }
             }
         }
+    }
+
+    public override void generatePostTap(GameObject[,] tileMap, int posX, int posY)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
-    
+
     public GameObject linePrefab;
     public int tileHeight = 16;//how many tiles across
     public int tileWidth = 30;//how many tiles from top to bottom
     public List<LevelGenerator> levelGenerators;
     public List<LevelGenerator> postTapLevelGenerators;
-    public int mineCount = 89;//how many mines there are
-    public int treasureCount = 10;//how many treasures there are
-    public int mapCount = 10;//how many map fragments there are
+    public int mapCount = 10;
     public int mapLineDistMin = 3;
     public int mapLineDistMax = 5;
     public GameObject[,] tileMap;//the map of tiles
@@ -173,52 +171,23 @@ public class LevelManager : MonoBehaviour
 
     /// <summary>
     /// After the initial reveal, generate the mines and treasures,
-    /// avoiding the "position to avoid" and the tiles within the "radius to avoid"
+    /// avoiding the "position to avoid"
     /// </summary>
     /// <param name="posToAvoid"></param>
-    /// <param name="radiusToAvoid"></param>
-    private void generateLevelPostTap(Vector2 posToAvoid, int radiusToAvoid)
+    private void generateLevelPostTap(Vector2 posToAvoid)
     {
         int itaX = getXIndex(posToAvoid);
         int itaY = getYIndex(posToAvoid);
-        generateObject(itaX, itaY, radiusToAvoid, mineCount, LevelTile.TileType.TRAP);
-        generateObject(itaX, itaY, radiusToAvoid, treasureCount, LevelTile.TileType.TREASURE);
-        generateObject(itaX, itaY, radiusToAvoid, mapCount, LevelTile.TileType.MAP);
+        foreach (LevelGenerator lgen in postTapLevelGenerators)
+        {
+            lgen.generatePostTap(tileMap, itaX, itaY);
+        }
         generateMapPath(itaX, itaY);
         startSpot.SetActive(true);
         startSpot.transform.position = getWorldPos(itaX, itaY);
     }
 
-    /// <summary>    /// 
-    /// Generate the given tileType,
-    /// avoiding the "position to avoid" and the tiles within the "radius to avoid"
-    /// </summary>
-    /// <param name="itaX">Index to Avoid X</param>
-    /// <param name="itaY">Index to Avoid Y</param>
-    /// <param name="radiusToAvoid"></param>
-    /// <param name="amount">How many to generate</param>
-    /// <param name="tileType"></param>
-    public void generateObject(int itaX, int itaY, int radiusToAvoid, int amount, LevelTile.TileType tileType)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            while (true)//loop until broken out of
-            {
-                int ix = Random.Range(0, tileWidth);
-                int iy = Random.Range(0, tileHeight);
-                if (Mathf.Abs(itaX - ix) > radiusToAvoid
-                    || Mathf.Abs(itaY - iy) > radiusToAvoid)
-                {
-                    LevelTile lt = tileMap[ix, iy]?.GetComponent<LevelTile>();
-                    if (lt && lt.tileType == LevelTile.TileType.EMPTY)
-                    {
-                        lt.tileType = tileType;
-                        break;//break the while loop
-                    }
-                }
-            }
-        }
-    }
+
 
     private void generateMapPath(int beginX, int beginY)
     {
@@ -360,7 +329,7 @@ public class LevelManager : MonoBehaviour
                 prefabMap[xi, yi] = prefab;
             }
         }
-    }    
+    }
 
     public void processTapGesture(Vector2 tapPos)
     {
@@ -394,7 +363,7 @@ public class LevelManager : MonoBehaviour
         {
             if (!anyRevealed)
             {
-                generateLevelPostTap(tapPos, 1);
+                generateLevelPostTap(tapPos);
                 anyRevealed = true;
             }
             bool isItem = false;

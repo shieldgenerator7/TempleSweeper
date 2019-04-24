@@ -289,6 +289,9 @@ GameObject:
   - component: {fileID: 544433180}
   - component: {fileID: 544433179}
   - component: {fileID: 544433181}
+  - component: {fileID: 544433184}
+  - component: {fileID: 544433183}
+  - component: {fileID: 544433182}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -314,9 +317,10 @@ MonoBehaviour:
   tileWidth: 60
   levelGenerators:
   - {fileID: 544433181}
-  postTapLevelGenerators: []
-  mineCount: 89
-  treasureCount: 10
+  postTapLevelGenerators:
+  - {fileID: 544433184}
+  - {fileID: 544433183}
+  - {fileID: 544433182}
   mapCount: 10
   mapLineDistMin: 2
   mapLineDistMax: 9
@@ -354,6 +358,51 @@ MonoBehaviour:
   maxLandDistance: 1
   fillInSideCount: 5
   landPrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f, type: 3}
+--- !u!114 &544433182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544433178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 3
+--- !u!114 &544433183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544433178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 2
+--- !u!114 &544433184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544433178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 89
+  radiusToAvoid: 1
+  tileType: 1
 --- !u!1 &774119322
 GameObject:
   m_ObjectHideFlags: 0

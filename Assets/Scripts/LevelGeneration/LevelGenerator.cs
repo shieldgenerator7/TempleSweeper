@@ -6,6 +6,19 @@ public abstract class LevelGenerator : MonoBehaviour
 {
     public abstract void generate(GameObject[,] tileMap);
 
+    public abstract void generatePostTap(GameObject[,] tileMap, int posX, int posY);
+
+
+
+    protected static int gridWidth(GameObject[,] tileMap)
+    {
+        return tileMap.GetLength(0);
+    }
+    protected static int gridHeight(GameObject[,] tileMap)
+    {
+        return tileMap.GetLength(1);
+    }
+
     /// <summary>
     /// Returns true if there is a non-null cell around the given position in the given range
     /// Note: Counts the position itself too
