@@ -325,8 +325,6 @@ MonoBehaviour:
   - {fileID: 544433185}
   playerCharacter: {fileID: 1469628418}
   frame: {fileID: 875580688}
-  startSpot: {fileID: 277955318}
-  theSpot: {fileID: 275449122}
 --- !u!4 &544433180
 Transform:
   m_ObjectHideFlags: 0
@@ -414,12 +412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5efc4e23e07f0842a5d8d7dd6dda6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapLineDistMin: 3
-  mapLineDistMax: 5
+  mapLineDistMin: 2
+  mapLineDistMax: 9
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   mapGenerator: {fileID: 544433182}
-  startSpot: {fileID: 0}
+  startSpot: {fileID: 277955318}
   theSpot: {fileID: 275449122}
 --- !u!1 &774119322
 GameObject:

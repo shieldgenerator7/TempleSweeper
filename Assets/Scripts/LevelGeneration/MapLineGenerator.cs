@@ -135,6 +135,9 @@ public class MapLineGenerator : LevelGenerator
                 continue;
             }
         }
+
+        startSpot.SetActive(true);
+        startSpot.transform.position = LevelManager.getWorldPos(posX, posY);
     }
 
     public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
@@ -155,5 +158,11 @@ public class MapLineGenerator : LevelGenerator
                 theSpot.transform.position = endPos;
             }
         }
+    }
+
+    public override void clearGeneratedObjects()
+    {
+        startSpot.SetActive(false);
+        theSpot.SetActive(false);
     }
 }

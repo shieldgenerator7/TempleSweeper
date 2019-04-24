@@ -5,21 +5,27 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
 
+    [Header("Settings")]
     public int tileHeight = 16;//how many tiles across
     public int tileWidth = 30;//how many tiles from top to bottom
+
+    [Header("Level Generators")]
     public List<LevelGenerator> levelGenerators;
     public List<LevelGenerator> postStartLevelGenerators;
     public List<LevelGenerator> postRevealLevelGenerators;
-    public GameObject[,] tileMap;//the map of tiles
 
+    [Header("Objects")]
     public PlayerCharacter playerCharacter;
     public GameObject frame;
-    public GameObject startSpot;
-    public GameObject theSpot;
+
+
+    //
+    // Runtime vars
+    //
+    private GameObject[,] tileMap;//the map of tiles
 
     private bool anyRevealed = false;//true if any tile has been revealed
 
-    private static LevelManager instance;
     private bool usedFirstHoldFrame;
 
     private ItemDisplayer foundItem;
@@ -28,6 +34,8 @@ public class LevelManager : MonoBehaviour
         get { return instance.foundItem; }
         set { instance.foundItem = value; }
     }
+
+    private static LevelManager instance;
 
     // Use this for initialization
     void Start()
@@ -69,8 +77,10 @@ public class LevelManager : MonoBehaviour
         instance.anyRevealed = false;
         instance.playerCharacter.reset();
 
-        startSpot.SetActive(false);
-        theSpot.SetActive(false);
+        foreach(LevelGenerator lgen in postRevealLevelGenerators)
+        {
+            lgen.clearGeneratedObjects();
+        }
     }
 
     public static LevelTile getTile(Vector2 pos)
@@ -176,8 +186,6 @@ public class LevelManager : MonoBehaviour
         {
             lgen.generatePostStart(tileMap, itaX, itaY);
         }
-        startSpot.SetActive(true);
-        startSpot.transform.position = getWorldPos(itaX, itaY);
     }
     
     private void generatePostItemReveal(LevelTile.TileType tileType)
