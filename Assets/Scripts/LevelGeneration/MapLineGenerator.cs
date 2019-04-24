@@ -22,13 +22,6 @@ public class MapLineGenerator : LevelGenerator
 
     public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
     {
-        mapLineSegmentRevealedCount = 0;
-        //Clear old path objects
-        foreach (GameObject go in drawnLines)
-        {
-            Destroy(go);
-        }
-        drawnLines.Clear();
         drawnLines = new List<GameObject>();
         int curX = posX;
         int curY = posY;
@@ -160,6 +153,14 @@ public class MapLineGenerator : LevelGenerator
 
     public override void clearGeneratedObjects()
     {
+        mapLineSegmentRevealedCount = 0;
+        //Clear old path objects
+        foreach (GameObject go in drawnLines)
+        {
+            Destroy(go);
+        }
+        drawnLines.Clear();
+
         Managers.Start.SetActive(false);
         Managers.End.SetActive(false);
     }
