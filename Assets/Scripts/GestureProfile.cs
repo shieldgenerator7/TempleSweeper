@@ -3,19 +3,7 @@ using System.Collections;
 
 public class GestureProfile
 {//2018-01-22: copied from Stonicorn.GestureProfile
-
-    protected Camera cam;
-    protected CameraController cmaController;
-    protected GestureManager gestureManager;
-    protected LevelManager levelManager;
-
-    public GestureProfile()
-    {
-        cam = Camera.main;
-        cmaController = cam.GetComponent<CameraController>();
-        gestureManager = GameObject.FindObjectOfType<GestureManager>();
-        levelManager = GameObject.FindObjectOfType<LevelManager>();
-    }
+    
     /// <summary>
     /// Called when this profile is set to the current one
     /// </summary>
@@ -27,25 +15,25 @@ public class GestureProfile
 
     public virtual void processTapGesture(Vector3 curMPWorld)
     {
-        if (cmaController.AutoMoving)
+        if (Managers.Camera.AutoMoving)
         {
-            cmaController.pinpoint();
+            Managers.Camera.pinpoint();
             return;
         }
-        levelManager.processTapGesture(curMPWorld);
-        cmaController.checkForAutomovement(curMPWorld);
+        Managers.Level.processTapGesture(curMPWorld);
+        Managers.Camera.checkForAutomovement(curMPWorld);
     }
     public virtual void processHoldGesture(Vector3 curMPWorld, float holdTime, bool finished)
     {
-        if (cmaController.AutoMoving)
+        if (Managers.Camera.AutoMoving)
         {
-            cmaController.pinpoint();
+            Managers.Camera.pinpoint();
             return;
         }
-        levelManager.processHoldGesture(curMPWorld, finished);
+        Managers.Level.processHoldGesture(curMPWorld, finished);
         if (finished)
         {
-            cmaController.checkForAutomovement(curMPWorld);
+            Managers.Camera.checkForAutomovement(curMPWorld);
         }
     }
     public void processDragGesture()
@@ -54,6 +42,6 @@ public class GestureProfile
     }
     public virtual void processPinchGesture(int adjustment)
     {
-        cmaController.adjustScalePoint(adjustment);
+        Managers.Camera.adjustScalePoint(adjustment);
     }
 }

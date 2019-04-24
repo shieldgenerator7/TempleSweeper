@@ -88,7 +88,7 @@ public class LevelTile : MonoBehaviour
                 {
                     throw new System.InvalidOperationException("Cannot activate non-map tile! tile type: " + tileType);
                 }
-                FindObjectOfType<PlayerCharacter>().MapFoundCount++;
+                Managers.Player.MapFoundCount++;
                 contentsSR.gameObject.AddComponent<ItemDisplayer>();
             }
             else

@@ -18,7 +18,7 @@ public class ItemDisplayer : MonoBehaviour
     void Start()
     {
         //Check to make sure the player is still alive
-        if (FindObjectOfType<PlayerCharacter>().gameEnded())
+        if (Managers.Player.gameEnded())
         {
             Destroy(this);
             return;

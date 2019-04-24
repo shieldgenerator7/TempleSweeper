@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 public class GestureManager : MonoBehaviour
 {//2018-01-22: copied from Stonicorn.GestureManager
-
-    public Camera cam;
-    private CameraController cmaController;
-
+    
     //Settings
     public float dragThreshold = 50;//how far from the original mouse position the current position has to be to count as a drag
     public float holdThreshold = 0.1f;//how long the tap has to be held to count as a hold (in seconds)
@@ -51,8 +48,6 @@ public class GestureManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        cmaController = cam.GetComponent<CameraController>();
-
         gestureProfiles.Add("Main", new GestureProfile());
         currentGP = gestureProfiles["Main"];
 
@@ -84,7 +79,7 @@ public class GestureManager : MonoBehaviour
             {
                 clickState = ClickState.Began;
                 origMP2 = Input.GetTouch(1).position;
-                origScalePoint = cmaController.getScalePointIndex();
+                origScalePoint = Managers.Camera.getScalePointIndex();
             }
             else if (Input.GetTouch(1).phase == TouchPhase.Ended)
             {
@@ -152,7 +147,7 @@ public class GestureManager : MonoBehaviour
                 {
                     curMP = origMP;
                     maxMouseMovement = 0;
-                    origCP = cam.transform.position;
+                    origCP = Camera.main.transform.position;
                     origTime = Time.time;
                     curTime = origTime;
                 }
@@ -175,7 +170,7 @@ public class GestureManager : MonoBehaviour
             default:
                 throw new System.Exception("Click State of wrong type, or type not processed! (Stat Processing) clickState: " + clickState);
         }
-        curMPWorld = (Vector2)cam.ScreenToWorldPoint(curMP);//cast to Vector2 to force z to 0
+        curMPWorld = (Vector2)Camera.main.ScreenToWorldPoint(curMP);//cast to Vector2 to force z to 0
 
 
         //
@@ -217,11 +212,11 @@ public class GestureManager : MonoBehaviour
                 if (isDrag)
                 {
                     //Check to make sure Merky doesn't get dragged off camera
-                    Vector3 delta = cam.ScreenToWorldPoint(origMP) - cam.ScreenToWorldPoint(curMP);
+                    Vector3 delta = Camera.main.ScreenToWorldPoint(origMP) - Camera.main.ScreenToWorldPoint(curMP);
                     Vector3 newPos = origCP + delta;
                     //Move the camera
-                    cam.transform.position = newPos;
-                    cmaController.pinpoint();
+                    Camera.main.transform.position = newPos;
+                    Managers.Camera.pinpoint();
                 }
                 else if (isHoldGesture)
                 {
@@ -232,7 +227,7 @@ public class GestureManager : MonoBehaviour
             {
                 if (isDrag)
                 {
-                    cmaController.pinpoint();
+                    Managers.Camera.pinpoint();
                 }
                 else if (isHoldGesture)
                 {
@@ -304,12 +299,12 @@ public class GestureManager : MonoBehaviour
                     deltaMagnitudeQuo *= (int)Mathf.Sign(prevTouchDeltaMag - touchDeltaMag);
 
                     //Update the camera's scale point index
-                    currentGP.processPinchGesture(origScalePoint + deltaMagnitudeQuo - cmaController.getScalePointIndex());
+                    currentGP.processPinchGesture(origScalePoint + deltaMagnitudeQuo - Managers.Camera.getScalePointIndex());
                 }
             }
             else if (clickState == ClickState.Ended)
             {
-                origScalePoint = cmaController.getScalePointIndex();
+                origScalePoint = Managers.Camera.getScalePointIndex();
             }
         }
 

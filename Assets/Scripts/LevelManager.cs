@@ -9,7 +9,6 @@ public class LevelManager : MonoBehaviour
     public List<Level> levels;
 
     [Header("Objects")]
-    public PlayerCharacter playerCharacter;
     public GameObject frame;
 
     //
@@ -68,7 +67,7 @@ public class LevelManager : MonoBehaviour
     public bool checkReset()
     {
         bool gameOver = false;
-        gameOver = !playerCharacter.alive() || playerCharacter.goalAchieved();
+        gameOver = !Managers.Player.alive() || Managers.Player.goalAchieved();
         if (gameOver)
         {
             reset();
@@ -87,7 +86,7 @@ public class LevelManager : MonoBehaviour
         LevelIndex++;
         generateLevel(Level);
         instance.anyRevealed = false;
-        instance.playerCharacter.reset();
+        Managers.Player.reset();
 
         foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
@@ -262,7 +261,7 @@ public class LevelManager : MonoBehaviour
             if (lt.tileType == LevelTile.TileType.TRAP)
             {
                 revealedItem = LevelTile.TileType.TRAP;
-                if (!playerCharacter.takeHit())
+                if (!Managers.Player.takeHit())
                 {
                     shouldRevealBoard = true;
                 }
@@ -270,7 +269,7 @@ public class LevelManager : MonoBehaviour
             if (lt.tileType == LevelTile.TileType.TREASURE)
             {
                 revealedItem = LevelTile.TileType.TREASURE;
-                if (playerCharacter.findTrophy())
+                if (Managers.Player.findTrophy())
                 {
                     shouldRevealBoard = true;
                 }

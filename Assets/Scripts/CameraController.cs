@@ -12,7 +12,6 @@ public class CameraController : MonoBehaviour
     public float moveSpeed = 3;//how fast it moves when automoving
     private float scale = 1;//scale used to determine orthographicSize, independent of (landscape or portrait) orientation
     private Camera cam;
-    private GestureManager gm;
     private float zoomStartTime = 0.0f;//when the zoom last started
     private float startZoomScale;//the orthographicsize at the start and end of a zoom
     private Vector3 targetPosition;
@@ -46,7 +45,6 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
-        gm = FindObjectOfType<GestureManager>();
         pinpoint();
         scale = cam.orthographicSize;
         //Initialize ScalePoints
@@ -57,7 +55,6 @@ public class CameraController : MonoBehaviour
         //Set the initialize scale point
         setScalePoint(1);
         scale = scalePoints[scalePointIndex].absoluteScalePoint();
-
     }
 
     void Update()
