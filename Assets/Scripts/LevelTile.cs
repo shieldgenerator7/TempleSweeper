@@ -16,7 +16,8 @@ public class LevelTile : MonoBehaviour
         EMPTY,
         TRAP,
         TREASURE,
-        MAP
+        MAP,
+        RESERVED//empty, but not able to be assigned to anything
     };
 
     public TileType tileType = TileType.EMPTY;
@@ -50,6 +51,7 @@ public class LevelTile : MonoBehaviour
                 //Show the contents
                 switch (tileType)
                 {
+                    case TileType.RESERVED:
                     case TileType.EMPTY:
                         GetComponentInChildren<NumberDisplayer>().displayNumber(this);
                         break;
@@ -102,8 +104,27 @@ public class LevelTile : MonoBehaviour
     {
         get
         {
-            return tileType == TileType.EMPTY
-              || tileType == TileType.MAP;
+            return empty(tileType);
         }
+    }
+
+    public static bool empty(TileType type)
+    {
+        return type == TileType.EMPTY
+            || type == TileType.RESERVED
+            || type == TileType.MAP;
+    }
+
+    public bool Available
+    {
+        get
+        {
+            return available(tileType);
+        }
+    }
+
+    public static bool available(TileType type)
+    {
+        return type == TileType.EMPTY;
     }
 }

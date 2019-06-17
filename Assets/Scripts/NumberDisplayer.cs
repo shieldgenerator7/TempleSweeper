@@ -22,6 +22,7 @@ public class NumberDisplayer : MonoBehaviour
         }
         int itemCount = LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.EMPTY, true);
         itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.MAP);
+        itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.RESERVED);
         if (itemCount == 0)
         {
             Destroy(gameObject);

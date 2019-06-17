@@ -331,7 +331,7 @@ public class LevelManager : MonoBehaviour
                 revealedItem = LevelTile.TileType.TREASURE;
                 Managers.Player.findTrophy();
             }
-            if (revealedItem != LevelTile.TileType.EMPTY)
+            if (!LevelTile.empty(revealedItem))
             {
                 lt.Revealed = true;
                 if (shouldRevealBoard)

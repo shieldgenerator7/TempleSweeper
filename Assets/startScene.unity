@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 246416313}
   - component: {fileID: 246416312}
   - component: {fileID: 246416311}
+  - component: {fileID: 246416317}
   m_Layer: 0
   m_Name: 2 - Cave
   m_TagString: Untagged
@@ -251,12 +252,27 @@ MonoBehaviour:
   levelGenerators:
   - {fileID: 246416315}
   postStartLevelGenerators:
-  - {fileID: 246416314}
   - {fileID: 246416313}
   - {fileID: 246416312}
   - {fileID: 246416311}
+  - {fileID: 246416314}
+  - {fileID: 246416317}
   postRevealLevelGenerators:
   - {fileID: 246416311}
+--- !u!114 &246416317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246416309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e04fb95cff7d5247baaac03f3b5394b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fromTileType: 4
+  toTileType: 0
 --- !u!1 &275449122
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +446,7 @@ GameObject:
   - component: {fileID: 484151955}
   - component: {fileID: 484151954}
   - component: {fileID: 484151953}
+  - component: {fileID: 484151958}
   m_Layer: 0
   m_Name: 1 - Island
   m_TagString: Untagged
@@ -468,10 +485,11 @@ MonoBehaviour:
   levelGenerators:
   - {fileID: 484151957}
   postStartLevelGenerators:
-  - {fileID: 484151956}
   - {fileID: 484151955}
   - {fileID: 484151954}
   - {fileID: 484151953}
+  - {fileID: 484151956}
+  - {fileID: 484151958}
   postRevealLevelGenerators:
   - {fileID: 484151953}
 --- !u!114 &484151953
@@ -552,6 +570,20 @@ MonoBehaviour:
   maxLandDistance: 1
   fillInSideCount: 5
   landPrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f, type: 3}
+--- !u!114 &484151958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484151950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e04fb95cff7d5247baaac03f3b5394b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fromTileType: 4
+  toTileType: 0
 --- !u!1 &544433178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,6 +1394,7 @@ MonoBehaviour:
   orthoZoomSpeed: 0.5
   tapCount: 0
   cameraDragInProgress: 0
+  isRightClick: 0
 --- !u!4 &2100196443
 Transform:
   m_ObjectHideFlags: 0

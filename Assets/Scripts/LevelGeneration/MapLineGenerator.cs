@@ -97,7 +97,7 @@ public class MapLineGenerator : LevelGenerator
             //If the spot is on land
             if (spotTile != null
                 //And the spot is not a treasure, mine, or map fragment
-                && spotTile.tileType == LevelTile.TileType.EMPTY)
+                && spotTile.Available)
             {
                 bool noOverlap = true;
                 //Check to make sure the spot is not on another point of the line
@@ -124,6 +124,32 @@ public class MapLineGenerator : LevelGenerator
             else
             {
                 continue;
+            }
+        }
+
+        //Acceptable path generated,
+        //reserve the path so no mines get generated on it
+        for (int n = 0; n < mapPath.Count - 1; n++)
+        {
+            int rx = (int)mapPath[n].x;
+            int ry = (int)mapPath[n].y;
+            int rx2 = (int)mapPath[n + 1].x;
+            int ry2 = (int)mapPath[n + 1].y;
+            int ix = (int)Mathf.Sign(rx2 - rx);
+            int iy = (int)Mathf.Sign(ry2 - ry);
+            for (int x = rx; x != rx2 + ix; x += ix)
+            {
+                for (int y = ry; y != ry2 + iy; y += iy)
+                {
+                    if (tileMap[x, y])
+                    {
+                        LevelTile lt = tileMap[x, y].GetComponent<LevelTile>();
+                        if (lt.Available)
+                        {
+                            lt.tileType = LevelTile.TileType.RESERVED;
+                        }
+                    }
+                }
             }
         }
 

@@ -32,7 +32,7 @@ public class ObjectGenerator : LevelGenerator
                     || Mathf.Abs(posY - iy) > radiusToAvoid)
                 {
                     LevelTile lt = tileMap[ix, iy]?.GetComponent<LevelTile>();
-                    if (lt && lt.tileType == LevelTile.TileType.EMPTY)
+                    if (lt && lt.Available)
                     {
                         lt.tileType = tileType;
                         break;//break the while loop
