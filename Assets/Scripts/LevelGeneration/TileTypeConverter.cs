@@ -8,6 +8,9 @@ public class TileTypeConverter : LevelGenerator
     public LevelTile.TileType fromTileType;
     public LevelTile.TileType toTileType;
 
+    public int maxConvert = -1;
+    public bool randomConvert = false;
+
     public override void generate(GameObject[,] tileMap)
     {
         convert(tileMap);
@@ -34,17 +37,43 @@ public class TileTypeConverter : LevelGenerator
     {
         int width = gridWidth(tileMap);
         int height = gridHeight(tileMap);
-        for (int i = 0; i < width; i++)
+        if (!randomConvert)
         {
-            for (int j = 0; j < height; j++)
+            int converted = 0;
+            for (int i = 0; i < width; i++)
             {
-                GameObject tile = tileMap[i, j];
-                if (tile)
+                for (int j = 0; j < height; j++)
                 {
-                    LevelTile lt = tile.GetComponent<LevelTile>();
-                    if (lt.tileType == fromTileType)
+                    GameObject tile = tileMap[i, j];
+                    if (tile)
+                    {
+                        LevelTile lt = tile.GetComponent<LevelTile>();
+                        if (lt.tileType == fromTileType)
+                        {
+                            lt.tileType = toTileType;
+                            converted++;
+                            if (maxConvert > 0 && converted >= maxConvert)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(int n = 0; n < maxConvert; n++)
+            {
+                while (true)
+                {
+                    int rx = Random.Range(0, width);
+                    int ry = Random.Range(0, height);
+                    LevelTile lt = tileMap[rx, ry]?.GetComponent<LevelTile>();
+                    if (lt && lt.tileType == fromTileType)
                     {
                         lt.tileType = toTileType;
+                        break;
                     }
                 }
             }
