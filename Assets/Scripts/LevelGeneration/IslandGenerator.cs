@@ -19,7 +19,10 @@ public class IslandGenerator : LevelGenerator
         Vector2 min, max;
         min = max = new Vector2(gridWidth(tileMap) / 2, gridHeight(tileMap) / 2);
         //Place the first one
-        tileMap[(int)min.x, (int)min.y] = landPrefab;
+        if (tileMap[(int)min.x, (int)min.y] == null)
+        {
+            tileMap[(int)min.x, (int)min.y] = landPrefab;
+        }
         //Place the rest of them
         for (int i = 0; i < landAmount - 1; i++)
         {
@@ -33,7 +36,8 @@ public class IslandGenerator : LevelGenerator
                 if (inBounds(tileMap, randX, randY))
                 {
                     //If the spot is empty,
-                    if (tileMap[randX, randY] == null)
+                    //or filled with something other than this land prefab,
+                    if (tileMap[randX, randY] != landPrefab)
                     {
                         //And it's next to another land,                    
                         if (containsLand(tileMap, randX, randY, maxLandDistance))
