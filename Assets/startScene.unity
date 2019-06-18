@@ -137,6 +137,8 @@ GameObject:
   - component: {fileID: 165447296}
   - component: {fileID: 165447295}
   - component: {fileID: 165447294}
+  - component: {fileID: 165447303}
+  - component: {fileID: 165447302}
   - component: {fileID: 165447293}
   - component: {fileID: 165447292}
   - component: {fileID: 165447291}
@@ -184,13 +186,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 165447289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 514e0f8ef6011d14f8c87272bee9a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7609708b7536852469c7c40983e5774b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 10
+  amount: 5
   radiusToAvoid: 1
-  tileType: 0
-  rings: 020000000100000001000000
+  tileType: 1
+  minSpan: {x: 1, y: 10}
+  maxSpan: {x: 1, y: 20}
 --- !u!114 &165447293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,13 +203,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 165447289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 514e0f8ef6011d14f8c87272bee9a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7609708b7536852469c7c40983e5774b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 10
+  amount: 5
   radiusToAvoid: 1
-  tileType: 0
-  rings: 030000000100000004000000
+  tileType: 1
+  minSpan: {x: 10, y: 1}
+  maxSpan: {x: 20, y: 1}
 --- !u!114 &165447294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,8 +223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5efc4e23e07f0842a5d8d7dd6dda6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapLineDistMin: 2
-  mapLineDistMax: 9
+  mapLineDistMin: 5
+  mapLineDistMax: 11
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   mapGenerator: {fileID: 165447295}
@@ -266,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 15
+  amount: 20
   radiusToAvoid: 1
   tileType: 1
 --- !u!114 &165447298
@@ -344,11 +348,50 @@ MonoBehaviour:
   - {fileID: 165447298}
   postStartLevelGenerators:
   - {fileID: 165447294}
+  - {fileID: 165447303}
+  - {fileID: 165447302}
   - {fileID: 165447293}
   - {fileID: 165447292}
+  - {fileID: 165447296}
+  - {fileID: 165447295}
+  - {fileID: 165447297}
   - {fileID: 165447291}
   postRevealLevelGenerators:
   - {fileID: 165447294}
+--- !u!114 &165447302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165447289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7609708b7536852469c7c40983e5774b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 15
+  radiusToAvoid: 1
+  tileType: 4
+  minSpan: {x: 1, y: 2}
+  maxSpan: {x: 1, y: 7}
+--- !u!114 &165447303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165447289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7609708b7536852469c7c40983e5774b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 15
+  radiusToAvoid: 1
+  tileType: 4
+  minSpan: {x: 2, y: 1}
+  maxSpan: {x: 7, y: 1}
 --- !u!1 &246416309
 GameObject:
   m_ObjectHideFlags: 0
