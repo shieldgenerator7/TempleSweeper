@@ -68,10 +68,4 @@ public class WallGenerator : ObjectGenerator
     {
         throw new System.NotImplementedException();
     }
-
-    protected bool outOfAreaToAvoid(GameObject[,] tileMap, int posX, int posY, int avoidX, int avoidY)
-    {
-        return Mathf.Abs(posX - avoidX) > radiusToAvoid
-            || Mathf.Abs(posY - avoidY) > radiusToAvoid;
-    }
 }
