@@ -110,7 +110,29 @@ public class MapLineGenerator : LevelGenerator
                         break;
                     }
                 }
-                if (noOverlap)
+
+                bool noOverlapInBetween = true;
+                for (int i = 0; i < mapPath.Count - 1; i++)
+                {
+                    Vector2 point = mapPath[i];
+                    for (int j = 0; j < i - 1; j++)
+                    {
+                        Vector2 point2 = mapPath[j];
+                        if (point.x == point2.x
+                            || point.y == point2.y)
+                        {
+                            noOverlapInBetween = false;
+                            break;
+                        }
+                    }
+                    if (!noOverlapInBetween)
+                    {
+                        break;
+                    }
+                }
+
+                bool acceptable = noOverlap && noOverlapInBetween;
+                if (acceptable)
                 {
                     //Break out of the while loop
                     break;
