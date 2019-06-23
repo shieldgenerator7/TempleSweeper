@@ -58,6 +58,7 @@ public class MapLineGenerator : LevelGenerator
                         (newX != prevX && newY != prevY)
                         && (newX != curX || newY != curY)
                         && inBounds(tileMap, newX, newY)
+                        && tileMap[newX, newY] != null
                     )
                     {
                         bool hallClear = true;
@@ -91,7 +92,7 @@ public class MapLineGenerator : LevelGenerator
                 curY = newY;
                 mapPath.Add(new Vector2(curX, curY));
             }
-            //Test to see if it's acceptable
+            //Test to see if the path is acceptable
             Vector2 theSpot = mapPath[mapPath.Count - 1];
             LevelTile spotTile = tileMap[(int)theSpot.x, (int)theSpot.y]?.GetComponent<LevelTile>();
             //If the spot is on land
