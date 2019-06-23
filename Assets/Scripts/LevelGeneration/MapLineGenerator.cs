@@ -7,6 +7,7 @@ public class MapLineGenerator : LevelGenerator
     [Header("Settings")]
     public int mapLineDistMin = 3;
     public int mapLineDistMax = 5;
+    public bool checkWater = true;
     [Header("Objects")]
     public GameObject linePrefab;
     public ObjectGenerator mapGenerator;
@@ -58,7 +59,7 @@ public class MapLineGenerator : LevelGenerator
                         (newX != prevX && newY != prevY)
                         && (newX != curX || newY != curY)
                         && inBounds(tileMap, newX, newY)
-                        && tileMap[newX, newY] != null
+                        && (!checkWater || tileMap[newX, newY] != null)
                     )
                     {
                         bool hallClear = true;

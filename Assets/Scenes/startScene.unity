@@ -225,6 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapLineDistMin: 5
   mapLineDistMax: 11
+  checkWater: 0
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   mapGenerator: {fileID: 165447295}
@@ -407,6 +408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapLineDistMin: 2
   mapLineDistMax: 9
+  checkWater: 1
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   mapGenerator: {fileID: 246416312}
@@ -755,6 +757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapLineDistMin: 2
   mapLineDistMax: 9
+  checkWater: 1
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   mapGenerator: {fileID: 385660242}
@@ -950,6 +953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapLineDistMin: 2
   mapLineDistMax: 9
+  checkWater: 1
   linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
     type: 3}
   mapGenerator: {fileID: 484151954}
