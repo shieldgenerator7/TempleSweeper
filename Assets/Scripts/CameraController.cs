@@ -151,6 +151,12 @@ public class CameraController : MonoBehaviour
         targetPosition.z = transform.position.z;
     }
 
+    public void moveTo(Vector2 pos)
+    {
+        targetPosition = pos;
+        targetPosition.z = transform.position.z;
+    }
+
     public bool AutoMoving
     {
         get { return targetPosition != transform.position; }

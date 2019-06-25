@@ -68,12 +68,12 @@ public class MapLineUpdater : MonoBehaviour
             {
                 Vector2 size = CurrentLineSR.size;
                 size.x = Mathf.MoveTowards(size.x, targetSize.x, speed * Time.deltaTime);
-                LevelTile lt = LevelManager.getTile(
-                    CurrentLineSR.transform.position + CurrentLineSR.transform.right * size.x
-                    );
+                Vector2 endPos = CurrentLineSR.transform.position + CurrentLineSR.transform.right * size.x;
+                LevelTile lt = LevelManager.getTile(endPos);
                 if (!lt || lt.Revealed)
                 {
                     CurrentLineSR.size = size;
+                    Managers.Camera.moveTo(endPos);
                 }
             }
             else if (currentCount < targetCount)
