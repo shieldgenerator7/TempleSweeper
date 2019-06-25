@@ -32,6 +32,14 @@ public class MapLineUpdater : MonoBehaviour
         }
     }
 
+    public Vector2 LastRevealedSpot
+    {
+        get
+        {
+            return CurrentLineSR.transform.position + CurrentLineSR.transform.right * CurrentLineSR.size.x;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,7 +76,7 @@ public class MapLineUpdater : MonoBehaviour
             {
                 Vector2 size = CurrentLineSR.size;
                 size.x = Mathf.MoveTowards(size.x, targetSize.x, speed * Time.deltaTime);
-                Vector2 endPos = CurrentLineSR.transform.position + CurrentLineSR.transform.right * size.x;
+                Vector2 endPos = LastRevealedSpot;
                 LevelTile lt = LevelManager.getTile(endPos);
                 if (!lt || lt.Revealed)
                 {

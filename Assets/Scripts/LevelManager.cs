@@ -292,11 +292,12 @@ public class LevelManager : MonoBehaviour
             else
             {
                 //Check if map has been completed
-                if (Managers.Player.completedMap()
-                    && getTile(Managers.End.transform.position).Revealed)
+                if (Managers.Player.completedMap())
                 {
-                    //Go to end
-                    Managers.Camera.moveTo(Managers.End);
+                    //Go to latest revealed location
+                    Managers.Camera.moveTo(
+                        FindObjectOfType<MapLineUpdater>().LastRevealedSpot
+                        );
                 }
             }
             foundItem.retire();
