@@ -8,7 +8,7 @@ using UnityEngine;
 public class MapLineUpdater : MonoBehaviour
 {
     public float speed = 1.0f;//the speed at which the map line grows when there's an update
-    
+
     private MapLineGenerator currentMLG;
     private int targetCount = 0;
     private int currentCount = 0;//how many points have been fully revealed
@@ -41,6 +41,18 @@ public class MapLineUpdater : MonoBehaviour
             mlg.onClearObjects += clearObjects;
         }
         drawnLines = new List<SpriteRenderer>();
+    }
+
+    private void OnEnable()
+    {
+        if (targetCount > 0)
+        {
+            if (drawnLines.Count < currentCount + 1)
+            {
+                createNewLine(drawnLines.Count);
+            }
+            Managers.Camera.moveTo(drawnLines[currentCount].gameObject);
+        }
     }
 
     // Update is called once per frame
