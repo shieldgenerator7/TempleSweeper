@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
     [Range(0, 1)]
     public float autoMoveThreshold = 0.2f;//what percentage of half the screen a tap needs to be in to auto-move the screen
     public float moveSpeed = 3;//how fast it moves when automoving
+    public float autoMoveLockThreshold = 0.5f;//how far the camera has to be from its target to lock gesture control (implemented in GestureProfile)
     private float scale = 1;//scale used to determine orthographicSize, independent of (landscape or portrait) orientation
     private Camera cam;
     private float zoomStartTime = 0.0f;//when the zoom last started
@@ -159,7 +160,7 @@ public class CameraController : MonoBehaviour
 
     public bool AutoMoving
     {
-        get { return targetPosition != transform.position; }
+        get { return (targetPosition - transform.position).sqrMagnitude > autoMoveLockThreshold * autoMoveLockThreshold; }
     }
 
     public void checkForAutomovement(Vector3 worldPos)
