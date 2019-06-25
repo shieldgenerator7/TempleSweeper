@@ -14,7 +14,27 @@ public class MapLineGenerator : LevelGenerator
 
     private List<Vector2> mapPath;
     private int mapLineSegmentRevealedCount = 0;
-    private List<GameObject> drawnLines = new List<GameObject>();
+
+    public Vector2 StartPosition
+    {
+        get
+        {
+            return LevelManager.getWorldPos(mapPath[0]);
+        }
+    }
+
+    public Vector2 EndPosition
+    {
+        get
+        {
+            return LevelManager.getWorldPos(mapPath[mapPath.Count - 1]);
+        }
+    }
+
+    public Vector2 getPosition(int pointIndex)
+    {
+        return LevelManager.getWorldPos(mapPath[pointIndex]);
+    }
 
     public override void generate(GameObject[,] tileMap)
     {
@@ -23,7 +43,6 @@ public class MapLineGenerator : LevelGenerator
 
     public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
     {
-        drawnLines = new List<GameObject>();
         int curX = posX;
         int curY = posY;
         int prevX = curX - 1;//set to one less to avoid infinite loop
@@ -184,34 +203,25 @@ public class MapLineGenerator : LevelGenerator
     public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
     {
         if (tileType == LevelTile.TileType.MAP)
-        {
-            GameObject line = Instantiate(linePrefab);
-            Vector2 startPos = LevelManager.getWorldPos(mapPath[mapLineSegmentRevealedCount]);
-            Vector2 endPos = LevelManager.getWorldPos(mapPath[mapLineSegmentRevealedCount + 1]);
-            line.transform.position = startPos;
-            line.transform.right = (endPos - startPos);
-            line.GetComponent<SpriteRenderer>().size = new Vector2((startPos - endPos).magnitude, 1);
-            drawnLines.Add(line);
+        {            
             mapLineSegmentRevealedCount++;
-            if (mapLineSegmentRevealedCount == mapGenerator.amount)
-            {
-                Managers.End.SetActive(true);
-                Managers.End.transform.position = endPos;
-            }
+            onMapSegmentRevealed?.Invoke(this, mapLineSegmentRevealedCount);
         }
     }
+
+    public delegate void OnMapSegmentRevealed(MapLineGenerator mlg, int revealedCount);
+    public OnMapSegmentRevealed onMapSegmentRevealed;
 
     public override void clearGeneratedObjects()
     {
         mapLineSegmentRevealedCount = 0;
-        //Clear old path objects
-        foreach (GameObject go in drawnLines)
-        {
-            Destroy(go);
-        }
-        drawnLines.Clear();
+
+        onClearObjects?.Invoke(this);
 
         Managers.Start.SetActive(false);
         Managers.End.SetActive(false);
     }
+
+    public delegate void OnClearObjects(MapLineGenerator mlg);
+    public OnClearObjects onClearObjects;
 }
