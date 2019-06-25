@@ -115,12 +115,6 @@ public class MapLineUpdater : MonoBehaviour
         SpriteRenderer lineSR = line.GetComponent<SpriteRenderer>();
         lineSR.size = new Vector2(0, 1);
         drawnLines.Add(lineSR);
-        //Set the position of the X
-        //(but don't reveal it yet)
-        if (startIndex + 1 == currentMLG.mapGenerator.amount)
-        {
-            Managers.End.transform.position = endPos;
-        }
     }
 
     public void clearObjects(MapLineGenerator mlg)

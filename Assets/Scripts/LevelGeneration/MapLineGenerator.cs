@@ -170,6 +170,10 @@ public class MapLineGenerator : LevelGenerator
             }
         }
 
+        //Set the position of the X
+        //(but don't reveal it yet)
+        Managers.End.transform.position = EndPosition;
+
         //Acceptable path generated,
         //reserve the path so no mines get generated on it
         for (int n = 0; n < mapPath.Count - 1; n++)
@@ -203,7 +207,7 @@ public class MapLineGenerator : LevelGenerator
     public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
     {
         if (tileType == LevelTile.TileType.MAP)
-        {            
+        {
             mapLineSegmentRevealedCount++;
             onMapSegmentRevealed?.Invoke(this, mapLineSegmentRevealedCount);
         }
