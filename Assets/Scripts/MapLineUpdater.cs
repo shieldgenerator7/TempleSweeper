@@ -29,6 +29,10 @@ public class MapLineUpdater : MonoBehaviour
             {
                 return null;
             }
+            if (currentCount == targetCount)
+            {
+                return drawnLines[currentCount - 1];
+            }
             return drawnLines[currentCount];
         }
     }
