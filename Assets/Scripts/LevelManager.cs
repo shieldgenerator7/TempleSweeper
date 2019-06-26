@@ -317,8 +317,10 @@ public class LevelManager : MonoBehaviour
                 //Auto-Reveal
                 //If the count of surrounding flags equals
                 //the count of surrounding trap tiles,
+                int itemCount = getAdjacentCount(lt, LevelTile.TileType.TRAP);
+                itemCount += getAdjacentCount(lt, LevelTile.TileType.TREASURE);
                 if (lt.Empty && lt.tileType != LevelTile.TileType.MAP &&
-                    getAdjacentFlagCount(lt) == getAdjacentCount(lt, LevelTile.TileType.TRAP))
+                    getAdjacentFlagCount(lt) == itemCount)
                 {
                     //Reveal the surrounding non-flagged tiles
                     foreach (LevelTile neighbor in getSurroundingTiles(lt))
@@ -345,7 +347,7 @@ public class LevelManager : MonoBehaviour
                 //If the count of surrounding unrevealed tiles equals
                 //the count of surrounding trap tiles,
                 if (lt.Empty && lt.tileType != LevelTile.TileType.MAP &&
-                    getAdjacentRevealedCount(lt, true) == getAdjacentCount(lt, LevelTile.TileType.TRAP))
+                    getAdjacentRevealedCount(lt, true) == itemCount)
                 {
                     //Flag the surrounding non-revealed tiles
                     foreach (LevelTile neighbor in getSurroundingTiles(lt))
