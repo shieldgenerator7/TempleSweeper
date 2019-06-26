@@ -327,6 +327,10 @@ public class LevelManager : MonoBehaviour
                             {
                                 Managers.Player.takeHit();
                             }
+                            if (neighbor.tileType == LevelTile.TileType.TREASURE)
+                            {
+                                Managers.Player.findTrophy();
+                            }
                             revealTile(neighbor);
                         }
                     }
