@@ -395,6 +395,9 @@ public class LevelManager : MonoBehaviour
                     if (shouldRevealBoard)
                     {
                         revealBoard();
+                    }
+                    else
+                    {
                         Managers.Time.moveForward();
                     }
                     generatePostItemReveal(revealedItem);
