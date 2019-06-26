@@ -59,6 +59,7 @@ public class ItemDisplayer : MonoBehaviour
         transform.localScale = originalSize;
         GetComponent<NumberDisplayer>().displayNumber(levelTile);
         GetComponentInParent<LevelTile>().tileType = LevelTile.TileType.EMPTY;
+        GetComponent<SpriteRenderer>().sortingOrder = 9;
         //Hide present wheel
         GetComponent<NumberDisplayer>()
             .wheelPresent.enabled = false;
