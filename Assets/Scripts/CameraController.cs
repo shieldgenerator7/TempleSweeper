@@ -140,7 +140,11 @@ public class CameraController : MonoBehaviour
     public void pinpoint()
     {
         targetPosition = transform.position;
+        onAutoMovementCanceled?.Invoke();
     }
+
+    public delegate void OnAutoMovementCanceled();
+    public OnAutoMovementCanceled onAutoMovementCanceled;
 
     /// <summary>
     /// Moves the camera to the given <see langword="GameObject"/>'s position
