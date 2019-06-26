@@ -1722,9 +1722,9 @@ MonoBehaviour:
   - {fileID: 1591888037}
   - {fileID: 1591888038}
   - {fileID: 1591888036}
+  - {fileID: 1591888042}
   - {fileID: 1591888039}
   - {fileID: 1591888035}
-  - {fileID: 1591888042}
   postRevealLevelGenerators:
   - {fileID: 1591888036}
 --- !u!114 &1591888042
