@@ -367,6 +367,14 @@ public class LevelManager : MonoBehaviour
         if (lt != null && !lt.Revealed)
         {
             lt.Flagged = !lt.Flagged;
+            //Update flag counters (fc)
+            foreach(LevelTile fc in getSurroundingTiles(lt))
+            {
+                if (fc.Revealed)
+                {
+                    fc.contentsSR.GetComponent<NumberDisplayer>().displayNumber();
+                }
+            }
         }
     }
     public void processHoldGesture(Vector2 holdPos, bool finished)
@@ -465,6 +473,27 @@ public class LevelManager : MonoBehaviour
         {
             if ((levelTile.tileType == tileType)
                 != notTheType)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /// <summary>
+    /// Returns the number of flagged tiles are surrounding the given tile,
+    /// not including the tile itself
+    /// </summary>
+    /// <param name="lt"></param>
+    /// <param name="notTheType">True to get the amount that is NOT flagged</param>
+    /// <returns></returns>
+    public static int getAdjacentFlagCount(LevelTile lt, bool notFlagged = false)
+    {
+        int count = 0;
+        foreach (LevelTile levelTile in getSurroundingTiles(lt))
+        {
+            if ((levelTile.Flagged == true)
+                != notFlagged)
             {
                 count++;
             }
