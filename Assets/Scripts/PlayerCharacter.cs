@@ -61,20 +61,48 @@ public class PlayerCharacter : MonoBehaviour
     public bool takeHit()
     {
         Health--;
-        return alive();
+        return Alive;
     }
-    public bool alive()
+    public bool Alive
     {
-        return Health > 0;
+        get
+        {
+            return Health > 0;
+        }
+        set
+        {
+            if (value)
+            {
+                Health = startHealth;
+            }
+            else
+            {
+                Health = 0;
+            }
+        }
     }
     public bool findTrophy()
     {
         TrophiesFound++;
-        return goalAchieved();
+        return GoalAchieved;
     }
-    public bool goalAchieved()
+    public bool GoalAchieved
     {
-        return trophiesFound >= goalTrophyCount;
+        get
+        {
+            return trophiesFound >= goalTrophyCount;
+        }
+        set
+        {
+            if (value)
+            {
+                trophiesFound = goalTrophyCount;
+            }
+            else
+            {
+                trophiesFound = 0;
+            }
+        }
     }
     public bool completedMap()
     {

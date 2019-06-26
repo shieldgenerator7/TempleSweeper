@@ -67,7 +67,7 @@ public class LevelManager : MonoBehaviour
     public bool checkReset(Vector2 tapPos)
     {
         bool gameOver = false;
-        if (Managers.Player.alive())
+        if (Managers.Player.Alive)
         {
             if (tapOnObject(Managers.Start, tapPos))
             {
@@ -266,7 +266,7 @@ public class LevelManager : MonoBehaviour
 
     public void processTapGesture(Vector2 tapPos)
     {
-        if (foundItem && Managers.Player.alive())
+        if (foundItem && Managers.Player.Alive)
         {
             recalculateNumbers();
             LevelTile foundLT = foundItem.levelTile;
@@ -283,7 +283,7 @@ public class LevelManager : MonoBehaviour
                     }
                 }
                 //Check if goals have been achieved
-                if (Managers.Player.goalAchieved())
+                if (Managers.Player.GoalAchieved)
                 {
                     //Go to start
                     Managers.Camera.moveTo(Managers.Start);
@@ -336,7 +336,7 @@ public class LevelManager : MonoBehaviour
                             revealTile(neighbor);
                         }
                     }
-                    if (!Managers.Player.alive())
+                    if (!Managers.Player.Alive)
                     {
                         revealBoard();
                     }

@@ -19,7 +19,7 @@ public class ItemDisplayer : MonoBehaviour
     void Start()
     {
         //Check to make sure the player is still alive
-        if (!Managers.Player.alive())
+        if (!Managers.Player.Alive)
         {
             Destroy(this);
             return;
