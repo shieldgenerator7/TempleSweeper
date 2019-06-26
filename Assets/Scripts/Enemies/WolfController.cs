@@ -5,30 +5,68 @@ using UnityEngine;
 public class WolfController : EnemyController
 {
     public int range = 1;
+    public int minTravelInDirection = 3;
+    public int maxTravelInDirection = 5;
+
+    private int turnsTraveledInDirection = 0;
+    private int currentTravelLimit = 0;
+
+    private int dirX = 1;
+    private int dirY = 1;
 
     protected override void takeTurn()
     {
         if (LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.EMPTY) > 0)
         {
-            //Try to find a spot to run to
-            while (true)
+            if (turnsTraveledInDirection == currentTravelLimit)
             {
-                int randX = Random.Range(-range, range + 1);
-                int randY = Random.Range(-range, range + 1);
-                Debug.Log("random: (" + randX + ", " + randY + ")");
-                if (randX != 0 || randY != 0)
-                {
-                    int xIndex = LevelManager.getXIndex(transform.position);
-                    xIndex += randX;
-                    int yIndex = LevelManager.getYIndex(transform.position);
-                    yIndex += randY;
-                    LevelTile destTile = LevelManager.getTile(xIndex, yIndex);
-                    if (destTile && destTile.tileType == LevelTile.TileType.EMPTY){
-                        moveTo(LevelManager.getWorldPos(xIndex, yIndex));
-                        break;
-                    }
-                }
+                chooseDirection();
+            }
+            //Try to find a spot to run to
+            if (canMoveInDirection())
+            {
+                moveInDirection();
+            }
+            else
+            {
+                chooseDirection();
             }
         }
+    }
+
+    private void chooseDirection()
+    {
+        dirX = 0;
+        dirY = 0;
+        while (dirX == 0 && dirY == 0)
+        {
+            dirX = Random.Range(-range, range + 1);
+            dirY = Random.Range(-range, range + 1);
+        }
+        currentTravelLimit = Random.Range(minTravelInDirection, maxTravelInDirection + 1);
+        turnsTraveledInDirection = 0;
+    }
+
+    private bool canMoveInDirection()
+    {
+        int xIndex = LevelManager.getXIndex(transform.position);
+        xIndex += dirX;
+        int yIndex = LevelManager.getYIndex(transform.position);
+        yIndex += dirY;
+        LevelTile destTile = LevelManager.getTile(xIndex, yIndex);
+        return destTile
+            && destTile.tileType == LevelTile.TileType.EMPTY
+            ;
+    }
+
+    private void moveInDirection()
+    {
+        int xIndex = LevelManager.getXIndex(transform.position);
+        xIndex += dirX;
+        int yIndex = LevelManager.getYIndex(transform.position);
+        yIndex += dirY;
+        moveTo(LevelManager.getWorldPos(xIndex, yIndex));
+        //
+        turnsTraveledInDirection++;
     }
 }
