@@ -314,6 +314,7 @@ public class LevelManager : MonoBehaviour
             //If it's revealed
             if (lt.Revealed)
             {
+                //Auto-Reveal
                 //If the count of surrounding flags equals
                 //the count of surrounding trap tiles,
                 if (lt.Empty && lt.tileType != LevelTile.TileType.MAP &&
@@ -338,6 +339,22 @@ public class LevelManager : MonoBehaviour
                     if (!Managers.Player.alive())
                     {
                         revealBoard();
+                    }
+                }
+                //Auto-Flag
+                //If the count of surrounding unrevealed tiles equals
+                //the count of surrounding trap tiles,
+                if (lt.Empty && lt.tileType != LevelTile.TileType.MAP &&
+                    getAdjacentRevealedCount(lt, true) == getAdjacentCount(lt, LevelTile.TileType.TRAP))
+                {
+                    //Flag the surrounding non-revealed tiles
+                    foreach (LevelTile neighbor in getSurroundingTiles(lt))
+                    {
+                        if (!neighbor.Flagged && !neighbor.Revealed)
+                        {
+                            //Flag it
+                            processFlagGesture(neighbor.transform.position);
+                        }
                     }
                 }
             }
