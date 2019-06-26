@@ -316,7 +316,8 @@ public class LevelManager : MonoBehaviour
             {
                 //If the count of surrounding flags equals
                 //the count of surrounding trap tiles,
-                if (getAdjacentFlagCount(lt) == getAdjacentCount(lt, LevelTile.TileType.TRAP))
+                if (lt.Empty && lt.tileType != LevelTile.TileType.MAP &&
+                    getAdjacentFlagCount(lt) == getAdjacentCount(lt, LevelTile.TileType.TRAP))
                 {
                     //Reveal the surrounding non-flagged tiles
                     foreach (LevelTile neighbor in getSurroundingTiles(lt))
