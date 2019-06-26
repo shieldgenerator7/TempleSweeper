@@ -309,50 +309,79 @@ public class LevelManager : MonoBehaviour
             return;
         }
         LevelTile lt = getTile(tapPos);
-        if (lt != null && !lt.Flagged)
+        if (lt != null)
         {
-            if (!anyRevealed)
+            //If it's revealed
+            if (lt.Revealed)
             {
-                generateLevelPostTap(tapPos);
-                anyRevealed = true;
-            }
-            LevelTile.TileType revealedItem = LevelTile.TileType.EMPTY;
-            bool shouldRevealBoard = false;
-            bool prevRevealed = lt.Revealed;
-            if (lt.tileType == LevelTile.TileType.TRAP)
-            {
-                revealedItem = LevelTile.TileType.TRAP;
-                if (!Managers.Player.takeHit())
+                //If the count of surrounding flags equals
+                //the count of surrounding trap tiles,
+                if (getAdjacentFlagCount(lt) == getAdjacentCount(lt, LevelTile.TileType.TRAP))
                 {
-                    shouldRevealBoard = true;
+                    //Reveal the surrounding non-flagged tiles
+                    foreach (LevelTile neighbor in getSurroundingTiles(lt))
+                    {
+                        if (!neighbor.Flagged && !neighbor.Revealed)
+                        {
+                            if (neighbor.tileType == LevelTile.TileType.TRAP)
+                            {
+                                Managers.Player.takeHit();
+                            }
+                            neighbor.Revealed = true;
+                        }
+                    }
+                    if (!Managers.Player.alive())
+                    {
+                        revealBoard();
+                    }
                 }
             }
-            if (lt.tileType == LevelTile.TileType.TREASURE)
+            //If it's not flagged
+            if (!lt.Flagged)
             {
-                revealedItem = LevelTile.TileType.TREASURE;
-                Managers.Player.findTrophy();
-            }
-            if (!LevelTile.empty(revealedItem))
-            {
-                lt.Revealed = true;
-                if (shouldRevealBoard)
+                if (!anyRevealed)
                 {
-                    revealBoard();
+                    generateLevelPostTap(tapPos);
+                    anyRevealed = true;
                 }
-                generatePostItemReveal(revealedItem);
-            }
-            else
-            {
-                revealTile(lt);
-            }
-            if (lt.tileType == LevelTile.TileType.MAP)
-            {
-                //if it's already been revealed
-                //but not activated yet
-                if (prevRevealed && !lt.Activated)
+                LevelTile.TileType revealedItem = LevelTile.TileType.EMPTY;
+                bool shouldRevealBoard = false;
+                bool prevRevealed = lt.Revealed;
+                if (lt.tileType == LevelTile.TileType.TRAP)
                 {
-                    lt.Activated = true;
-                    generatePostItemReveal(LevelTile.TileType.MAP);
+                    revealedItem = LevelTile.TileType.TRAP;
+                    if (!Managers.Player.takeHit())
+                    {
+                        shouldRevealBoard = true;
+                    }
+                }
+                if (lt.tileType == LevelTile.TileType.TREASURE)
+                {
+                    revealedItem = LevelTile.TileType.TREASURE;
+                    Managers.Player.findTrophy();
+                }
+                if (!LevelTile.empty(revealedItem))
+                {
+                    lt.Revealed = true;
+                    if (shouldRevealBoard)
+                    {
+                        revealBoard();
+                    }
+                    generatePostItemReveal(revealedItem);
+                }
+                else
+                {
+                    revealTile(lt);
+                }
+                if (lt.tileType == LevelTile.TileType.MAP)
+                {
+                    //if it's already been revealed
+                    //but not activated yet
+                    if (prevRevealed && !lt.Activated)
+                    {
+                        lt.Activated = true;
+                        generatePostItemReveal(LevelTile.TileType.MAP);
+                    }
                 }
             }
         }
@@ -368,11 +397,11 @@ public class LevelManager : MonoBehaviour
         {
             lt.Flagged = !lt.Flagged;
             //Update flag counters (fc)
-            foreach(LevelTile fc in getSurroundingTiles(lt))
+            foreach (LevelTile fc in getSurroundingTiles(lt))
             {
                 if (fc.Revealed)
                 {
-                    fc.contentsSR.GetComponent<NumberDisplayer>().displayNumber();
+                    fc.numberDisplayer.displayNumber();
                 }
             }
         }
@@ -481,11 +510,11 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the number of flagged tiles are surrounding the given tile,
+    /// Returns the number of flagged tiles that are surrounding the given tile,
     /// not including the tile itself
     /// </summary>
     /// <param name="lt"></param>
-    /// <param name="notTheType">True to get the amount that is NOT flagged</param>
+    /// <param name="notFlagged">True to get the amount that is NOT flagged</param>
     /// <returns></returns>
     public static int getAdjacentFlagCount(LevelTile lt, bool notFlagged = false)
     {

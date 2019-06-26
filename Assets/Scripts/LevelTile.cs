@@ -7,6 +7,7 @@ public class LevelTile : MonoBehaviour
 
     public GameObject cover;
     public SpriteRenderer contentsSR;
+    public NumberDisplayer numberDisplayer;
     public Sprite trapSprite;
     public Sprite treasureSprite;
     public Sprite mapSprite;
@@ -53,7 +54,7 @@ public class LevelTile : MonoBehaviour
                 {
                     case TileType.RESERVED:
                     case TileType.EMPTY:
-                        GetComponentInChildren<NumberDisplayer>().displayNumber(this);
+                        numberDisplayer.displayNumber(this);
                         break;
                     case TileType.TRAP:
                         contentsSR.sprite = trapSprite;

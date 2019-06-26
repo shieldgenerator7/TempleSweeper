@@ -26,12 +26,13 @@ public class NumberDisplayer : MonoBehaviour
         {
             return;
         }
+        gameObject.SetActive(true);
         int itemCount = LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.EMPTY, true);
         itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.MAP);
         itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.RESERVED);
         if (itemCount == 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             return;
         }
         int flagCount = LevelManager.getAdjacentFlagCount(levelTile);

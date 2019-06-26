@@ -248,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover: {fileID: 2556896597648767851}
   contentsSR: {fileID: 212400141604994152}
+  numberDisplayer: {fileID: 114583820923338304}
   trapSprite: {fileID: 21300000, guid: c039a9afaff8fa640be06559c3b47257, type: 3}
   treasureSprite: {fileID: 21300000, guid: 4bdc4e86be637bf49b21f7bc5f24e6c4, type: 3}
   mapSprite: {fileID: 21300000, guid: 5f6e3b6c052d119439886fbae85a476b, type: 3}
