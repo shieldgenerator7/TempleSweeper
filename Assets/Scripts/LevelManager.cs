@@ -327,7 +327,7 @@ public class LevelManager : MonoBehaviour
                             {
                                 Managers.Player.takeHit();
                             }
-                            neighbor.Revealed = true;
+                            revealTile(neighbor);
                         }
                     }
                     if (!Managers.Player.alive())
@@ -447,7 +447,6 @@ public class LevelManager : MonoBehaviour
                 }
             }
             //If all surrounding tiles are empty,
-            //Reveal surrounding tiles
             //Reveal surrounding tiles
             foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
