@@ -552,6 +552,27 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns the number of revealed tiles that are surrounding the given tile,
+    /// not including the tile itself
+    /// </summary>
+    /// <param name="lt"></param>
+    /// <param name="notRevealed">True to get the amount that is NOT revealed</param>
+    /// <returns></returns>
+    public static int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
+    {
+        int count = 0;
+        foreach (LevelTile levelTile in getSurroundingTiles(lt))
+        {
+            if ((levelTile.Revealed == true)
+                != notRevealed)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /// <summary>
     /// Returns a list of all 8 tiles that surround the given tile. 
     /// Note that tiles on the edge have less than 8 surrounding tiles.
     /// </summary>
