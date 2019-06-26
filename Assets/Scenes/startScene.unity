@@ -312,7 +312,7 @@ MonoBehaviour:
   landAmount: 100
   maxLandDistance: 2
   fillInSideCount: 3
-  landPrefab: {fileID: 1903181402368622, guid: 0db96a387fc5f03439fec87c40359acd, type: 3}
+  landPrefab: {fileID: 1903181402368622, guid: 2ace1092118fc8b47b94a59cf3a68357, type: 3}
 --- !u!114 &165447300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,7 +472,7 @@ MonoBehaviour:
   landAmount: 300
   maxLandDistance: 2
   fillInSideCount: 3
-  landPrefab: {fileID: 1903181402368622, guid: 0db96a387fc5f03439fec87c40359acd, type: 3}
+  landPrefab: {fileID: 1903181402368622, guid: 2ace1092118fc8b47b94a59cf3a68357, type: 3}
 --- !u!114 &246416316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,7 +821,7 @@ MonoBehaviour:
   landAmount: 100
   maxLandDistance: 2
   fillInSideCount: 3
-  landPrefab: {fileID: 1903181402368622, guid: 0db96a387fc5f03439fec87c40359acd, type: 3}
+  landPrefab: {fileID: 1903181402368622, guid: 2ace1092118fc8b47b94a59cf3a68357, type: 3}
 --- !u!114 &385660246
 MonoBehaviour:
   m_ObjectHideFlags: 0
