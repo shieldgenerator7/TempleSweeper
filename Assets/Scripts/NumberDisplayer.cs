@@ -12,6 +12,7 @@ public class NumberDisplayer : MonoBehaviour
     [Header("Wheels")]
     public Image wheelOverFlagged;
     public Image wheelFlagged;
+    public Image wheelPresent;
 
     private LevelTile levelTile;
 

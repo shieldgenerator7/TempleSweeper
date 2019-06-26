@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemDisplayer : MonoBehaviour
 {
@@ -29,7 +30,10 @@ public class ItemDisplayer : MonoBehaviour
         scaleIncreaseRate = displayScale / scaleIncreaseDuration;
         scalingStartTime = Time.time;
         //Make it show above everything else
-        GetComponent<SpriteRenderer>().sortingOrder = 10;
+        GetComponent<SpriteRenderer>().sortingOrder = 100;
+        //Show present wheel
+        GetComponent<NumberDisplayer>()
+            .wheelPresent.enabled = true;
         //Register with Level Manager
         LevelManager.FoundItem = this;
         //Get level tile
@@ -55,6 +59,10 @@ public class ItemDisplayer : MonoBehaviour
         transform.localScale = originalSize;
         GetComponent<NumberDisplayer>().displayNumber(levelTile);
         GetComponentInParent<LevelTile>().tileType = LevelTile.TileType.EMPTY;
+        //Hide present wheel
+        GetComponent<NumberDisplayer>()
+            .wheelPresent.enabled = false;
+        //Retire this script
         Destroy(this);
     }
 }
