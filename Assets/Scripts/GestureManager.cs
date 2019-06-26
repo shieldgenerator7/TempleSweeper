@@ -211,6 +211,10 @@ public class GestureManager : MonoBehaviour
                     isTapGesture = true;
                     isHoldGesture = false;
                 }
+                if (isRightClick)
+                {
+                    isHoldGesture = true;
+                }
             }
             else if (clickState == ClickState.InProgress)
             {
