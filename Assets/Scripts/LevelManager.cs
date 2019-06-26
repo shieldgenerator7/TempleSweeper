@@ -132,6 +132,10 @@ public class LevelManager : MonoBehaviour
     {
         int xIndex = getXIndex(pos);
         int yIndex = getYIndex(pos);
+        return getTile(xIndex, yIndex);
+    }
+    public static LevelTile getTile(int xIndex, int yIndex)
+    {
         if (inBounds(xIndex, yIndex))
         {
             return instance.tileMap[xIndex, yIndex]?.GetComponent<LevelTile>();
@@ -142,12 +146,12 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private static int getXIndex(Vector2 pos)
+    public static int getXIndex(Vector2 pos)
     {
         return Mathf.RoundToInt(pos.x + instance.Level.gridWidth / 2);
     }
 
-    private static int getYIndex(Vector2 pos)
+    public static int getYIndex(Vector2 pos)
     {
         return Mathf.RoundToInt(pos.y + instance.Level.gridHeight / 2);
     }
@@ -336,6 +340,7 @@ public class LevelManager : MonoBehaviour
                                 Managers.Player.findTrophy();
                             }
                             revealTile(neighbor);
+                            Managers.Time.moveForward();
                         }
                     }
                     if (!Managers.Player.Alive)
@@ -390,12 +395,14 @@ public class LevelManager : MonoBehaviour
                     if (shouldRevealBoard)
                     {
                         revealBoard();
+                        Managers.Time.moveForward();
                     }
                     generatePostItemReveal(revealedItem);
                 }
-                else
+                else if (!lt.Revealed)
                 {
                     revealTile(lt);
+                    Managers.Time.moveForward();
                 }
                 if (lt.tileType == LevelTile.TileType.MAP)
                 {
@@ -580,7 +587,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    static List<LevelTile> getSurroundingTiles(LevelTile lt)
+    public static List<LevelTile> getSurroundingTiles(LevelTile lt)
     {
         List<LevelTile> surroundingTiles = new List<LevelTile>();
         for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)

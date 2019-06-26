@@ -47,8 +47,8 @@ public class LevelTile : MonoBehaviour
             revealed = value;
             if (revealed)
             {
-                //Destroy the cover
-                Destroy(cover);
+                //Hide the cover
+                cover.SetActive(false);
                 //Show the contents
                 switch (tileType)
                 {
@@ -73,7 +73,7 @@ public class LevelTile : MonoBehaviour
             }
             else
             {
-                throw new System.InvalidOperationException("Cannot unreveal tile!");
+                cover.SetActive(true);
             }
         }
     }

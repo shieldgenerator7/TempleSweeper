@@ -7,6 +7,7 @@ public class ObjectGenerator : LevelGenerator
     public int amount = 10;
     public int radiusToAvoid = 1;
     public LevelTile.TileType tileType;
+    public GameObject specificTypePrefab;
 
     public override void generate(GameObject[,] tileMap)
     {
@@ -34,7 +35,7 @@ public class ObjectGenerator : LevelGenerator
                     LevelTile lt = tileMap[ix, iy]?.GetComponent<LevelTile>();
                     if (lt && lt.Available)
                     {
-                        lt.tileType = tileType;
+                        generate(lt, tileType, specificTypePrefab);
                         break;//break the while loop
                     }
                 }
@@ -45,6 +46,16 @@ public class ObjectGenerator : LevelGenerator
     public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
     {
         throw new System.NotImplementedException();
+    }
+
+    protected void generate(LevelTile lt, LevelTile.TileType tileType, GameObject typePrefab = null)
+    {
+        lt.tileType = tileType;
+        if (typePrefab != null)
+        {
+            GameObject item = Instantiate(typePrefab);
+            item.transform.position = lt.transform.position;
+        }
     }
 
     protected bool outOfAreaToAvoid(GameObject[,] tileMap, int posX, int posY, int avoidX, int avoidY)

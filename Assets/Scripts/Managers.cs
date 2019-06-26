@@ -68,6 +68,19 @@ public class Managers : MonoBehaviour
         }
     }
 
+    private TimeManager timeManager;
+    public static TimeManager Time
+    {
+        get
+        {
+            if (instance.timeManager == null)
+            {
+                instance.timeManager = FindObjectOfType<TimeManager>();
+            }
+            return instance.timeManager;
+        }
+    }
+
     private static Managers instance;
     private void Awake()
     {
