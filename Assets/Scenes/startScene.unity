@@ -120,6 +120,184 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &20814989
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 20814990}
+  - component: {fileID: 20814997}
+  - component: {fileID: 20814996}
+  - component: {fileID: 20814995}
+  - component: {fileID: 20814998}
+  - component: {fileID: 20814994}
+  - component: {fileID: 20814993}
+  - component: {fileID: 20814992}
+  - component: {fileID: 20814991}
+  m_Layer: 0
+  m_Name: 6 - Spider Cave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &20814990
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 544433180}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &20814991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e04fb95cff7d5247baaac03f3b5394b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fromTileType: 4
+  toTileType: 0
+  maxConvert: -1
+  randomConvert: 0
+--- !u!114 &20814992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5efc4e23e07f0842a5d8d7dd6dda6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapLineDistMin: 2
+  mapLineDistMax: 9
+  checkWater: 1
+  linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
+    type: 3}
+  mapGenerator: {fileID: 20814993}
+--- !u!114 &20814993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 3
+  specificTypePrefab: {fileID: 0}
+--- !u!114 &20814994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 2
+  specificTypePrefab: {fileID: 0}
+--- !u!114 &20814995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 89
+  radiusToAvoid: 1
+  tileType: 1
+  specificTypePrefab: {fileID: 0}
+--- !u!114 &20814996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf08457d33d3cb4eb8f85eab58e3518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landAmount: 300
+  maxLandDistance: 2
+  fillInSideCount: 3
+  landPrefab: {fileID: 1903181402368622, guid: 2ace1092118fc8b47b94a59cf3a68357, type: 3}
+--- !u!114 &20814997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0731c686a2c5004428c7bbc657bb2f38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridHeight: 32
+  gridWidth: 60
+  levelGenerators:
+  - {fileID: 20814996}
+  postStartLevelGenerators:
+  - {fileID: 20814994}
+  - {fileID: 20814993}
+  - {fileID: 20814992}
+  - {fileID: 20814998}
+  - {fileID: 20814995}
+  - {fileID: 20814991}
+  postRevealLevelGenerators:
+  - {fileID: 20814992}
+--- !u!114 &20814998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20814989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 1
+  radiusToAvoid: 1
+  tileType: 1
+  specificTypePrefab: {fileID: 3949272093916718091, guid: 8b7a1798e60cd6942b51dd51aac7ffa2,
+    type: 3}
 --- !u!1 &165447289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,12 +1257,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6c7c648ce9d434ebf740b1e23244b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testStartLevelIndex: 5
   levels:
   - {fileID: 484151952}
   - {fileID: 246416316}
   - {fileID: 385660247}
   - {fileID: 165447301}
   - {fileID: 1591888041}
+  - {fileID: 20814997}
   frame: {fileID: 875580688}
 --- !u!4 &544433180
 Transform:
@@ -1102,6 +1282,7 @@ Transform:
   - {fileID: 385660238}
   - {fileID: 165447290}
   - {fileID: 1591888034}
+  - {fileID: 20814990}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
