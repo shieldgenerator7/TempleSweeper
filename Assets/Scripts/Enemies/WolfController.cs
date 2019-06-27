@@ -14,8 +14,22 @@ public class WolfController : EnemyController
     private int dirX = 1;
     private int dirY = 1;
 
+    private bool revealStuns = true;
+
     protected override void takeTurn()
     {
+        if (OccupiedTile.Revealed)
+        {
+            if (revealStuns)
+            {
+                revealStuns = false;
+                //don't move if the player revealed its tile
+                return;
+            }
+        }
+        revealStuns = true;
+
+        //Decide what to do
         if (LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.EMPTY) > 0)
         {
             if (turnsTraveledInDirection == currentTravelLimit)
