@@ -98,4 +98,13 @@ public abstract class EnemyController : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Kill this enemy
+    /// </summary>
+    protected void kill()
+    {
+        gameObject.SetActive(false);
+        Managers.Time.onTimePassed -= checkForTurn;
+    }
 }

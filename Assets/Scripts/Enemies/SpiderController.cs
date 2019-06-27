@@ -10,6 +10,12 @@ public class SpiderController : EnemyController
 
     protected override void takeTurn()
     {
+        //Kill the spider if it gets revealed
+        if (OccupiedTile.Revealed)
+        {
+            kill();
+        }
+
         int validSpaceCount = LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.EMPTY);
         validSpaceCount += LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.TRAP);
         if (validSpaceCount > 0)
