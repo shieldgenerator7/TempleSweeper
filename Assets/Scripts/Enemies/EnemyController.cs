@@ -6,6 +6,12 @@ public abstract class EnemyController : MonoBehaviour
 {
     [Range(1, 100)]
     public int delayBetweenTurns = 1;//how long until the next turn. 1 = essentially no delay
+    [Range(-1, 10)]
+    /// <summary>
+    /// When this enemy moves, the range around it that it obscures
+    /// 1 = just the 8 squares around it, 0 = just itself, -1 = none
+    /// </summary>
+    public int obscureRange = 1;
 
     private int lastTurnTime = 0;
 
@@ -55,19 +61,37 @@ public abstract class EnemyController : MonoBehaviour
     {
         LevelTile fromTile = LevelManager.getTile(fromPos);
         LevelTile toTile = LevelManager.getTile(toPos);
+
         //Move entity
         fromTile.tileType = LevelTile.TileType.EMPTY;
         transform.position = toPos;
         toTile.tileType = LevelTile.TileType.TRAP;
         toTile.trapSprite = trapSprite;
+
         //Hide tiles around fromPos and toPos
-        List<LevelTile> tilesToHide = LevelManager.getSurroundingTiles(fromTile);
-        tilesToHide.AddRange(LevelManager.getSurroundingTiles(toTile));
-        tilesToHide.Add(fromTile);
-        tilesToHide.Add(toTile);
-        foreach(LevelTile lt in tilesToHide)
+        List<LevelTile> tilesToHide = new List<LevelTile>();
+        if (obscureRange > 0)
+        {
+            tilesToHide.AddRange(LevelManager.getSurroundingTiles(fromTile, obscureRange));
+            tilesToHide.AddRange(LevelManager.getSurroundingTiles(toTile, obscureRange));
+        }
+        if (obscureRange >= 0)
+        {
+            tilesToHide.Add(fromTile);
+            tilesToHide.Add(toTile);
+        }
+        foreach (LevelTile lt in tilesToHide)
         {
             lt.Revealed = false;
+        }
+
+        //Update trap numbers of the tiles around from and to
+        List<LevelTile> tilesToUpdate = new List<LevelTile>();
+        tilesToUpdate.AddRange(LevelManager.getSurroundingTiles(fromTile));
+        tilesToUpdate.AddRange(LevelManager.getSurroundingTiles(toTile));
+        foreach (LevelTile lt in tilesToUpdate)
+        {
+            lt.numberDisplayer.displayNumber();
         }
     }
 }

@@ -594,12 +594,12 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public static List<LevelTile> getSurroundingTiles(LevelTile lt)
+    public static List<LevelTile> getSurroundingTiles(LevelTile lt, int range = 1)
     {
         List<LevelTile> surroundingTiles = new List<LevelTile>();
-        for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+        for (int i = lt.indexX - range; i <= lt.indexX + range; i++)
         {
-            for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+            for (int j = lt.indexY - range; j <= lt.indexY + range; j++)
             {
                 if (inBounds(i, j))
                 {
