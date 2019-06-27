@@ -5,6 +5,8 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
 
+    public int testStartLevelIndex = 0;//for testing purposes
+
     [Header("Levels")]
     public List<Level> levels;
 
@@ -61,6 +63,10 @@ public class LevelManager : MonoBehaviour
             return;
         }
         //Initialization stuff
+        if (Application.isEditor)
+        {
+            LevelIndex = testStartLevelIndex;
+        }
         generateLevel(Level);
         updateOrthographicSize();
     }
