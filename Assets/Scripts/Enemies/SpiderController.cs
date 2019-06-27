@@ -17,6 +17,7 @@ public class SpiderController : EnemyController
         }
 
         int validSpaceCount = LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.EMPTY);
+        validSpaceCount += LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.RESERVED);
         validSpaceCount += LevelManager.getAdjacentCount(OccupiedTile, LevelTile.TileType.TRAP);
         if (validSpaceCount > 0)
         {
@@ -37,13 +38,22 @@ public class SpiderController : EnemyController
                         || destTile.tileType == LevelTile.TileType.TRAP))
                     {
                         LevelTile fromTile = OccupiedTile;
+                        LevelTile.TileType layType;
+                        if (fromTile.tileType == LevelTile.TileType.RESERVED)
+                        {
+                            layType = LevelTile.TileType.EMPTY;
+                        }
+                        else
+                        {
+                            //Lay a web trap
+                            fromTile.trapSprite = webSprite;
+                            layType = LevelTile.TileType.TRAP;
+                        }
                         move(
                             transform.position,
                             LevelManager.getWorldPos(xIndex, yIndex),
-                            LevelTile.TileType.TRAP
+                            layType
                             );
-                        //Lay a web trap
-                        fromTile.trapSprite = webSprite;
                         break;
                     }
                 }
