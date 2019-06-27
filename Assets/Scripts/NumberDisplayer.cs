@@ -15,18 +15,29 @@ public class NumberDisplayer : MonoBehaviour
     public Image wheelPresent;
 
     private LevelTile levelTile;
+    private SpriteRenderer sr;
 
     public void displayNumber(LevelTile parent)
     {
         levelTile = parent;
+        sr = GetComponent<SpriteRenderer>();
         displayNumber();
     }
-    public void displayNumber() { 
+    public void displayNumber()
+    {
         if (levelTile == null)
         {
             return;
         }
         gameObject.SetActive(true);
+        if (levelTile.tileType != LevelTile.TileType.EMPTY
+            && levelTile.tileType != LevelTile.TileType.RESERVED)
+        {
+            sr.color = Color.white;
+            wheelFlagged.fillAmount = 0;
+            wheelOverFlagged.fillAmount = 0;
+            return;
+        }
         int itemCount = LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.EMPTY, true);
         itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.MAP);
         itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.RESERVED);
@@ -39,11 +50,11 @@ public class NumberDisplayer : MonoBehaviour
         displayNumber(itemCount, flagCount);
         if (LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.TREASURE) > 0)
         {
-            GetComponent<SpriteRenderer>().color = treasureColor;
+            sr.color = treasureColor;
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = trapColor;
+            sr.color = trapColor;
         }
     }
 
@@ -52,11 +63,11 @@ public class NumberDisplayer : MonoBehaviour
         //Set pie sprite
         if (objectCount >= 1)
         {
-            GetComponent<SpriteRenderer>().sprite = numberSprites[objectCount - 1];
+            sr.sprite = numberSprites[objectCount - 1];
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = null;
+            sr.sprite = null;
         }
         //Set flagged wheel
         wheelFlagged.fillAmount = (float)flagCount / (float)objectCount;

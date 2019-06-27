@@ -15,6 +15,9 @@ public class ItemDisplayer : MonoBehaviour
 
     public LevelTile levelTile;
 
+    private SpriteRenderer sr;
+    private NumberDisplayer numDis;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,10 +33,12 @@ public class ItemDisplayer : MonoBehaviour
         scaleIncreaseRate = displayScale / scaleIncreaseDuration;
         scalingStartTime = Time.time;
         //Make it show above everything else
-        GetComponent<SpriteRenderer>().sortingOrder = 100;
+        sr = GetComponent<SpriteRenderer>();
+        sr.sortingOrder = 100;
+        sr.color = Color.white;
         //Show present wheel
-        GetComponent<NumberDisplayer>()
-            .wheelPresent.enabled = true;
+        numDis = GetComponent<NumberDisplayer>();
+        numDis.wheelPresent.enabled = true;
         //Register with Level Manager
         LevelManager.FoundItem = this;
         //Get level tile
@@ -57,12 +62,13 @@ public class ItemDisplayer : MonoBehaviour
     public void retire()
     {
         transform.localScale = originalSize;
-        GetComponent<NumberDisplayer>().displayNumber(levelTile);
-        GetComponentInParent<LevelTile>().tileType = LevelTile.TileType.EMPTY;
-        GetComponent<SpriteRenderer>().sortingOrder = 9;
-        //Hide present wheel
-        GetComponent<NumberDisplayer>()
-            .wheelPresent.enabled = false;
+        levelTile.tileType = LevelTile.TileType.EMPTY;
+        //Reset content sprite renderer
+        sr.sortingOrder = 9;
+        sr.color = Color.white;
+        //Reset number displayer
+        numDis.displayNumber(levelTile);
+        numDis.wheelPresent.enabled = false;
         //Retire this script
         Destroy(this);
     }
