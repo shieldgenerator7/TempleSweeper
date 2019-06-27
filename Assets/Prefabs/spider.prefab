@@ -94,5 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delayBetweenTurns: 3
   obscureRange: 0
+  selfType: 1
   range: 1
   webSprite: {fileID: 21300000, guid: 1193cdceb008fbe479374e1a8b6d137b, type: 3}

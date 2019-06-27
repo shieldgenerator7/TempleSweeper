@@ -12,6 +12,7 @@ public abstract class EnemyController : MonoBehaviour
     /// 1 = just the 8 squares around it, 0 = just itself, -1 = none
     /// </summary>
     public int obscureRange = 1;
+    public LevelTile.TileType selfType = LevelTile.TileType.TRAP;
 
     private int lastTurnTime = 0;
 
@@ -66,7 +67,7 @@ public abstract class EnemyController : MonoBehaviour
         //Move entity
         fromTile.tileType = leaveBehindType;
         transform.position = toPos;
-        toTile.tileType = LevelTile.TileType.TRAP;
+        toTile.tileType = selfType;
         toTile.trapSprite = trapSprite;
 
         //Hide tiles around fromPos and toPos
