@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 1
+  amount: 3
   radiusToAvoid: 1
   tileType: 1
   specificTypePrefab: {fileID: 3949272093916718091, guid: 8b7a1798e60cd6942b51dd51aac7ffa2,
