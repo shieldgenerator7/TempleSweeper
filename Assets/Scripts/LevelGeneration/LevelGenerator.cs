@@ -10,10 +10,7 @@ public abstract class LevelGenerator : MonoBehaviour
 
     public abstract void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType);
 
-    public virtual void clearGeneratedObjects()
-    {
-        throw new System.NotImplementedException();
-    }
+    public virtual void clearGeneratedObjects() { }
 
 
 

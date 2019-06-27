@@ -107,6 +107,10 @@ public class LevelManager : MonoBehaviour
         }
 
         //Clear extra generated sprites
+        foreach (LevelGenerator lgen in Level.postStartLevelGenerators)
+        {
+            lgen.clearGeneratedObjects();
+        }
         foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.clearGeneratedObjects();

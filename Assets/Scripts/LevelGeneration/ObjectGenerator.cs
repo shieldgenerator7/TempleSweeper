@@ -9,6 +9,8 @@ public class ObjectGenerator : LevelGenerator
     public LevelTile.TileType tileType;
     public GameObject specificTypePrefab;
 
+    private List<GameObject> spawnedEntities = new List<GameObject>();
+
     public override void generate(GameObject[,] tileMap)
     {
         throw new System.NotImplementedException();
@@ -55,6 +57,7 @@ public class ObjectGenerator : LevelGenerator
         {
             GameObject item = Instantiate(typePrefab);
             item.transform.position = lt.transform.position;
+            spawnedEntities.Add(item);
         }
     }
 
@@ -62,5 +65,13 @@ public class ObjectGenerator : LevelGenerator
     {
         return Mathf.Abs(posX - avoidX) > radiusToAvoid
             || Mathf.Abs(posY - avoidY) > radiusToAvoid;
+    }
+
+    public override void clearGeneratedObjects()
+    {
+        foreach(GameObject go in spawnedEntities)
+        {
+            Destroy(go);
+        }
     }
 }
