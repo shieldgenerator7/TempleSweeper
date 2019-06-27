@@ -57,13 +57,14 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="fromPos">The original position in World coordinates</param>
     /// <param name="toPos">The destination position in World coordinates</param>
-    protected void move(Vector2 fromPos, Vector2 toPos)
+    protected void move(Vector2 fromPos, Vector2 toPos,
+        LevelTile.TileType leaveBehindType = LevelTile.TileType.EMPTY)
     {
         LevelTile fromTile = LevelManager.getTile(fromPos);
         LevelTile toTile = LevelManager.getTile(toPos);
 
         //Move entity
-        fromTile.tileType = LevelTile.TileType.EMPTY;
+        fromTile.tileType = leaveBehindType;
         transform.position = toPos;
         toTile.tileType = LevelTile.TileType.TRAP;
         toTile.trapSprite = trapSprite;
@@ -91,7 +92,10 @@ public abstract class EnemyController : MonoBehaviour
         tilesToUpdate.AddRange(LevelManager.getSurroundingTiles(toTile));
         foreach (LevelTile lt in tilesToUpdate)
         {
-            lt.numberDisplayer.displayNumber();
+            if (lt.Revealed)
+            {
+                lt.numberDisplayer.displayNumber();
+            }
         }
     }
 }

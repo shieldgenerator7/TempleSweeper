@@ -31,9 +31,12 @@ public class SpiderController : EnemyController
                         || destTile.tileType == LevelTile.TileType.TRAP))
                     {
                         LevelTile fromTile = OccupiedTile;
-                        moveTo(LevelManager.getWorldPos(xIndex, yIndex));
+                        move(
+                            transform.position,
+                            LevelManager.getWorldPos(xIndex, yIndex),
+                            LevelTile.TileType.TRAP
+                            );
                         //Lay a web trap
-                        fromTile.tileType = LevelTile.TileType.TRAP;
                         fromTile.trapSprite = webSprite;
                         break;
                     }
