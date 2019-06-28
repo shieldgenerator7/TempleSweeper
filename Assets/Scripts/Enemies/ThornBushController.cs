@@ -35,6 +35,38 @@ public class ThornBushController : EnemyController
             randX = Mathf.Round(randX);
             float randY = Random.Range(minArea.y - 1, maxArea.y + 1);
             randY = Mathf.Round(randY);
+            //if it should expand the area,
+            if (rollD6(3))
+            {
+                //Randomize doing it in x direction
+                if (coinFlip())
+                {
+                    //Randomize which end it should go to
+                    if (coinFlip())
+                    {
+                        randX = maxArea.x + 1;
+                    }
+                    else
+                    {
+                        randX = minArea.x - 1;
+                    }
+                    randY = transform.position.y;
+                }
+                else
+                {
+                    //Randomize which end it should go to
+                    if (coinFlip())
+                    {
+                        randY = maxArea.y + 1;
+                    }
+                    else
+                    {
+                        randY = minArea.y - 1;
+                    }
+                    randX = transform.position.x;
+                }
+            }
+            //
             LevelTile lt = LevelManager.getTile(new Vector2(randX, randY));
             if (lt &&
                 (lt.tileType == LevelTile.TileType.EMPTY
@@ -68,5 +100,14 @@ public class ThornBushController : EnemyController
                 }
             }
         }
+    }
+
+    bool coinFlip()
+    {
+        return Random.Range(0, 1 + 1) == 1;
+    }
+    bool rollD6(int min)
+    {
+        return Random.Range(0, 6 + 1) >= min;
     }
 }

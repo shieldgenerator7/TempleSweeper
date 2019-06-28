@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 39992019}
   - component: {fileID: 39992026}
   - component: {fileID: 39992025}
+  - component: {fileID: 39992030}
   - component: {fileID: 39992028}
   - component: {fileID: 39992027}
   - component: {fileID: 39992024}
@@ -328,6 +329,7 @@ MonoBehaviour:
   - {fileID: 39992022}
   - {fileID: 39992021}
   - {fileID: 39992028}
+  - {fileID: 39992030}
   postRevealLevelGenerators:
   - {fileID: 39992023}
 --- !u!114 &39992020
@@ -379,7 +381,7 @@ MonoBehaviour:
   radiusToAvoid: 1
   tileType: 0
   specificTypePrefab: {fileID: 0}
-  rings: 030000000100000004000000
+  rings: 0300000004000000
 --- !u!114 &39992023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,7 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 1
+  amount: 5
   radiusToAvoid: 1
   tileType: 1
   specificTypePrefab: {fileID: 7484666066954529813, guid: 1c3a3a93d7a96be46828cc1ac6d8d0e5,
@@ -493,6 +495,22 @@ Transform:
   m_Father: {fileID: 544433180}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &39992030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 20
+  radiusToAvoid: 1
+  tileType: 1
+  specificTypePrefab: {fileID: 0}
 --- !u!1 &165447289
 GameObject:
   m_ObjectHideFlags: 0
