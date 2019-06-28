@@ -28,6 +28,15 @@ public abstract class EnemyController : MonoBehaviour
 
     private void checkForTurn(int currentTime)
     {
+        if (selfType == LevelTile.TileType.TRAP
+            && obscureRange >= 0)
+        {
+            if (OccupiedTile.Revealed)
+            {
+                OccupiedTile.Revealed = false;
+                LevelManager.updateSurroundingTiles(OccupiedTile);
+            }
+        }
         if (currentTime >= lastTurnTime + delayBetweenTurns)
         {
             lastTurnTime = currentTime;
