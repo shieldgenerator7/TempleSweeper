@@ -280,6 +280,219 @@ MonoBehaviour:
   tileType: 1
   specificTypePrefab: {fileID: 3949272093916718091, guid: 8b7a1798e60cd6942b51dd51aac7ffa2,
     type: 3}
+--- !u!1 &39992018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 39992029}
+  - component: {fileID: 39992019}
+  - component: {fileID: 39992026}
+  - component: {fileID: 39992025}
+  - component: {fileID: 39992028}
+  - component: {fileID: 39992027}
+  - component: {fileID: 39992024}
+  - component: {fileID: 39992023}
+  - component: {fileID: 39992022}
+  - component: {fileID: 39992021}
+  - component: {fileID: 39992020}
+  m_Layer: 0
+  m_Name: 7 - Thorn Bush Cluster Island
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &39992019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0731c686a2c5004428c7bbc657bb2f38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridHeight: 32
+  gridWidth: 48
+  levelGenerators:
+  - {fileID: 39992026}
+  - {fileID: 39992025}
+  postStartLevelGenerators:
+  - {fileID: 39992023}
+  - {fileID: 39992022}
+  - {fileID: 39992021}
+  - {fileID: 39992028}
+  postRevealLevelGenerators:
+  - {fileID: 39992023}
+--- !u!114 &39992020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e04fb95cff7d5247baaac03f3b5394b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fromTileType: 4
+  toTileType: 0
+  maxConvert: -1
+  randomConvert: 0
+--- !u!114 &39992021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514e0f8ef6011d14f8c87272bee9a277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 0
+  specificTypePrefab: {fileID: 0}
+  rings: 020000000100000004000000
+--- !u!114 &39992022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514e0f8ef6011d14f8c87272bee9a277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 0
+  specificTypePrefab: {fileID: 0}
+  rings: 030000000100000004000000
+--- !u!114 &39992023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5efc4e23e07f0842a5d8d7dd6dda6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapLineDistMin: 2
+  mapLineDistMax: 9
+  checkWater: 1
+  linePrefab: {fileID: 3662918683423665743, guid: c0644ba75cef3fd499bb9b6a1621cc10,
+    type: 3}
+  mapGenerator: {fileID: 39992024}
+--- !u!114 &39992024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 3
+  specificTypePrefab: {fileID: 0}
+--- !u!114 &39992025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf08457d33d3cb4eb8f85eab58e3518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landAmount: 100
+  maxLandDistance: 2
+  fillInSideCount: 3
+  landPrefab: {fileID: 1903181402368622, guid: 2ace1092118fc8b47b94a59cf3a68357, type: 3}
+--- !u!114 &39992026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf08457d33d3cb4eb8f85eab58e3518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landAmount: 480
+  maxLandDistance: 1
+  fillInSideCount: 5
+  landPrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f, type: 3}
+--- !u!114 &39992027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 10
+  radiusToAvoid: 1
+  tileType: 2
+  specificTypePrefab: {fileID: 0}
+--- !u!114 &39992028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amount: 1
+  radiusToAvoid: 1
+  tileType: 1
+  specificTypePrefab: {fileID: 7484666066954529813, guid: 1c3a3a93d7a96be46828cc1ac6d8d0e5,
+    type: 3}
+--- !u!4 &39992029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39992018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 544433180}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &165447289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6c7c648ce9d434ebf740b1e23244b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testStartLevelIndex: 5
+  testStartLevelIndex: 6
   levels:
   - {fileID: 484151952}
   - {fileID: 246416316}
@@ -1247,6 +1460,7 @@ MonoBehaviour:
   - {fileID: 165447301}
   - {fileID: 1591888041}
   - {fileID: 20814997}
+  - {fileID: 39992019}
   frame: {fileID: 875580688}
 --- !u!4 &544433180
 Transform:
@@ -1265,6 +1479,7 @@ Transform:
   - {fileID: 165447290}
   - {fileID: 1591888034}
   - {fileID: 20814990}
+  - {fileID: 39992029}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

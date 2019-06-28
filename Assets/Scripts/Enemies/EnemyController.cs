@@ -24,7 +24,10 @@ public abstract class EnemyController : MonoBehaviour
         Managers.Time.onTimePassed += checkForTurn;
         trapSprite = GetComponent<SpriteRenderer>().sprite;
         OccupiedTile.trapSprite = trapSprite;
+        awaken();
     }
+
+    protected virtual void awaken() { }
 
     private void checkForTurn(int currentTime)
     {
@@ -88,6 +91,25 @@ public abstract class EnemyController : MonoBehaviour
         LevelManager.updateSurroundingTiles(toTile);
     }
 
+    /// <summary>
+    /// Adds a type to the given position
+    /// </summary>
+    /// <param name="addPos">The position to add something to in World coordinates</param>
+    /// <param name="addType">The type to add</param>
+    protected void add(Vector2 addPos,
+        LevelTile.TileType addType = LevelTile.TileType.TRAP)
+    {
+        LevelTile addTile = LevelManager.getTile(addPos);
+        add(addTile, addType);
+    }
+    protected void add(LevelTile addTile,
+        LevelTile.TileType addType = LevelTile.TileType.TRAP)
+    {
+        addTile.tileType = addType;
+        LevelManager.hideSurroundingTiles(addTile, obscureRange);
+        LevelManager.updateSurroundingTiles(addTile);
+    }
+    
     /// <summary>
     /// Kill this enemy
     /// </summary>

@@ -623,6 +623,31 @@ public class LevelManager : MonoBehaviour
         return surroundingTiles;
     }
 
+    public static List<LevelTile> getSurroundingTilesManhattan(LevelTile lt, int range = 1)
+    {
+        List<LevelTile> surroundingTiles = new List<LevelTile>();
+        for (int i = lt.indexX - range; i <= lt.indexX + range; i++)
+        {
+            for (int j = lt.indexY - range; j <= lt.indexY + range; j++)
+            {
+                if (inBounds(i, j))
+                {
+                    if (i != lt.indexX || j != lt.indexY)
+                    {
+                        if (Mathf.Abs(i - lt.indexX) + Mathf.Abs(j - lt.indexY) <= range)
+                        {
+                            GameObject tile = instance.tileMap[i, j];
+                            if (tile != null)
+                            {
+                                surroundingTiles.Add(tile.GetComponent<LevelTile>());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return surroundingTiles;
+    }
 
     public static void hideSurroundingTiles(LevelTile center, int obscureRange = 1)
     {
