@@ -80,33 +80,12 @@ public abstract class EnemyController : MonoBehaviour
         toTile.trapSprite = trapSprite;
 
         //Hide tiles around fromPos and toPos
-        List<LevelTile> tilesToHide = new List<LevelTile>();
-        if (obscureRange > 0)
-        {
-            tilesToHide.AddRange(LevelManager.getSurroundingTiles(fromTile, obscureRange));
-            tilesToHide.AddRange(LevelManager.getSurroundingTiles(toTile, obscureRange));
-        }
-        if (obscureRange >= 0)
-        {
-            tilesToHide.Add(fromTile);
-            tilesToHide.Add(toTile);
-        }
-        foreach (LevelTile lt in tilesToHide)
-        {
-            lt.Revealed = false;
-        }
+        LevelManager.hideSurroundingTiles(fromTile, obscureRange);
+        LevelManager.hideSurroundingTiles(toTile, obscureRange);
 
         //Update trap numbers of the tiles around from and to
-        List<LevelTile> tilesToUpdate = new List<LevelTile>();
-        tilesToUpdate.AddRange(LevelManager.getSurroundingTiles(fromTile));
-        tilesToUpdate.AddRange(LevelManager.getSurroundingTiles(toTile));
-        foreach (LevelTile lt in tilesToUpdate)
-        {
-            if (lt.Revealed)
-            {
-                lt.numberDisplayer.displayNumber();
-            }
-        }
+        LevelManager.updateSurroundingTiles(fromTile);
+        LevelManager.updateSurroundingTiles(toTile);
     }
 
     /// <summary>

@@ -623,6 +623,37 @@ public class LevelManager : MonoBehaviour
         return surroundingTiles;
     }
 
+
+    public static void hideSurroundingTiles(LevelTile center, int obscureRange = 1)
+    {
+        List<LevelTile> tilesToHide = new List<LevelTile>();
+        if (obscureRange > 0)
+        {
+            tilesToHide.AddRange(getSurroundingTiles(center, obscureRange));
+        }
+        if (obscureRange >= 0)
+        {
+            tilesToHide.Add(center);
+        }
+        foreach (LevelTile lt in tilesToHide)
+        {
+            lt.Revealed = false;
+        }
+    }
+
+    public static void updateSurroundingTiles(LevelTile center)
+    {
+        List<LevelTile> tilesToUpdate = getSurroundingTiles(center);
+        tilesToUpdate.Add(center);
+        foreach (LevelTile lt in tilesToUpdate)
+        {
+            if (lt.Revealed)
+            {
+                lt.numberDisplayer.displayNumber();
+            }
+        }
+    }
+
     public void updateOrthographicSize()
     {
         while (true)//loop until broken out of
