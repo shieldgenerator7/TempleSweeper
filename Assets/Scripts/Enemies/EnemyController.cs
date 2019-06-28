@@ -108,4 +108,10 @@ public abstract class EnemyController : MonoBehaviour
         gameObject.SetActive(false);
         Managers.Time.onTimePassed -= checkForTurn;
     }
+
+    public void retire()
+    {
+        kill();
+        Destroy(gameObject);
+    }
 }

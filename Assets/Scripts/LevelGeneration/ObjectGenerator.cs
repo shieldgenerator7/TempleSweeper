@@ -9,7 +9,7 @@ public class ObjectGenerator : LevelGenerator
     public LevelTile.TileType tileType;
     public GameObject specificTypePrefab;
 
-    private List<GameObject> spawnedEntities = new List<GameObject>();
+    private List<EnemyController> spawnedEntities = new List<EnemyController>();
 
     public override void generate(GameObject[,] tileMap)
     {
@@ -57,7 +57,7 @@ public class ObjectGenerator : LevelGenerator
         {
             GameObject item = Instantiate(typePrefab);
             item.transform.position = lt.transform.position;
-            spawnedEntities.Add(item);
+            spawnedEntities.Add(item.GetComponent<EnemyController>());
         }
     }
 
@@ -69,9 +69,9 @@ public class ObjectGenerator : LevelGenerator
 
     public override void clearGeneratedObjects()
     {
-        foreach(GameObject go in spawnedEntities)
+        foreach(EnemyController ec in spawnedEntities)
         {
-            Destroy(go);
+            ec.retire();
         }
     }
 }
