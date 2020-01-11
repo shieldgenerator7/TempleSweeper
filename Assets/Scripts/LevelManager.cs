@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelManager
 
-    public int testStartLevelIndex = 0;//for testing purposes
+    public Level testStartLevel = null;//level to jump to when testing
 
-    [Header("Levels")]
-    public List<Level> levels;
+    [Header("Level Groups")]
+    public List<LevelGroup> levelGroups;
 
     [Header("Objects")]
     public GameObject frame;
@@ -17,23 +18,27 @@ public class LevelManager : MonoBehaviour
     // Runtime vars
     //
     private GameObject[,] tileMap;//the map of tiles
-    private int currentLevelIndex = 0;
-    public int LevelIndex
+    private int currentLevelGroupIndex = 0;
+    public int LevelGroupIndex
     {
-        get { return currentLevelIndex; }
+        get { return currentLevelGroupIndex; }
         set
         {
             if (value < 0)
             {
                 throw new System.ArgumentOutOfRangeException("Value must be greater than 0. value: " + value);
             }
-            currentLevelIndex = value % levels.Count;
+            currentLevelGroupIndex = value % levelGroups.Count;
         }
+    }
+    private LevelGroup LevelGroup
+    {
+        get { return levelGroups[currentLevelGroupIndex]; }
+        set { currentLevelGroupIndex = levelGroups.IndexOf(value); }
     }
     private Level Level
     {
-        get { return levels[currentLevelIndex]; }
-        set { currentLevelIndex = levels.IndexOf(value); }
+        get { return levelGroups[currentLevelGroupIndex].Level; }
     }
 
     private bool anyRevealed = false;//true if any tile has been revealed
@@ -63,11 +68,14 @@ public class LevelManager : MonoBehaviour
             return;
         }
         //Initialization stuff
-        if (Application.isEditor)
+        if (Application.isEditor && testStartLevel)
         {
-            LevelIndex = testStartLevelIndex;
+            generateLevel(testStartLevel);
         }
-        generateLevel(Level);
+        else
+        {
+            generateLevel(Level);
+        }
         updateOrthographicSize();
     }
     public bool checkReset(Vector2 tapPos)
@@ -125,11 +133,23 @@ public class LevelManager : MonoBehaviour
         //Move to next level
         if (resetToBeginning)
         {
-            LevelIndex = 0;
+            SceneManager.LoadScene("startScene");
         }
         else
         {
-            LevelIndex++;
+            LevelGroup.NextLevel();
+            //If this level group has a next level,
+            if (Level)
+            {
+                //we're good, do nothing
+            }
+            //Else if this level group is now empty,
+            else
+            {
+                //Ask the next level group for a level
+                LevelGroupIndex++;
+                LevelGroup.NextLevel();
+            }
         }
         generateLevel(Level);
 
