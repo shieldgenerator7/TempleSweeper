@@ -1521,7 +1521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6c7c648ce9d434ebf740b1e23244b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testStartLevel: {fileID: 0}
+  testStartLevel: {fileID: 20814997}
   levelGroups:
   - {fileID: 1969372834}
   - {fileID: 215530025}

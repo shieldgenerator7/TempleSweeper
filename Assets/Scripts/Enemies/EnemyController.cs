@@ -18,10 +18,21 @@ public abstract class EnemyController : MonoBehaviour
 
     private Sprite trapSprite;
 
+    public enum Response
+    {
+        NOTHING,//the enemy does not respond
+        STUN,//the enemy becomes stunned
+        DIE//the enemy dies
+    }
+    public Response onFlagResponse;
+    public Response onRevealResponse;
+
     // Start is called before the first frame update
     void Start()
     {
         Managers.Time.onTimePassed += checkForTurn;
+        Managers.Level.onTileRevealed += OnReveal;
+        Managers.Level.onTileFlagged += OnFlag;
         trapSprite = GetComponent<SpriteRenderer>().sprite;
         OccupiedTile.trapSprite = trapSprite;
         awaken();
@@ -109,7 +120,7 @@ public abstract class EnemyController : MonoBehaviour
         LevelManager.hideSurroundingTiles(addTile, obscureRange);
         LevelManager.updateSurroundingTiles(addTile);
     }
-    
+
     /// <summary>
     /// Kill this enemy
     /// </summary>
@@ -117,11 +128,45 @@ public abstract class EnemyController : MonoBehaviour
     {
         gameObject.SetActive(false);
         Managers.Time.onTimePassed -= checkForTurn;
+        Managers.Level.onTileRevealed -= OnReveal;
+        Managers.Level.onTileFlagged -= OnFlag;
     }
 
     public void retire()
     {
         kill();
         Destroy(gameObject);
+    }
+
+    public void OnFlag(LevelTile lt)
+    {
+        if ((Vector2)lt.transform.position == (Vector2)transform.position)
+        {
+            OnResponse(onFlagResponse);
+        }
+    }
+
+    public void OnReveal(LevelTile lt)
+    {
+        if ((Vector2)lt.transform.position == (Vector2)transform.position)
+        {
+            OnResponse(onRevealResponse);
+        }
+    }
+
+    private void OnResponse(Response response)
+    {
+        switch (response)
+        {
+            case Response.NOTHING:
+                break;
+            case Response.STUN:
+                break;
+            case Response.DIE:
+                kill();
+                break;
+            default:
+                throw new UnityException("Response option not processed! response: " + response);
+        }
     }
 }

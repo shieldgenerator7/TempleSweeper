@@ -57,6 +57,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -95,5 +96,7 @@ MonoBehaviour:
   delayBetweenTurns: 1
   obscureRange: 0
   selfType: 1
+  onFlagResponse: 2
+  onRevealResponse: 2
   bushSprite: {fileID: 21300000, guid: e32a226e7c2191346a4f0da40f289e69, type: 3}
   maxTries: 100

@@ -57,6 +57,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -92,8 +93,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6756d21eb6fbc40882b64416713d72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayBetweenTurns: 3
+  delayBetweenTurns: 4
   obscureRange: 0
   selfType: 1
+  onFlagResponse: 2
+  onRevealResponse: 2
   range: 1
   webSprite: {fileID: 21300000, guid: 1193cdceb008fbe479374e1a8b6d137b, type: 3}

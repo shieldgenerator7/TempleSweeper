@@ -38,7 +38,12 @@ public class LevelManager : MonoBehaviour
     }
     private Level Level
     {
-        get { return levelGroups[currentLevelGroupIndex].Level; }
+        get
+        {
+            return (Application.isEditor && testStartLevel)
+                ? testStartLevel
+                : levelGroups[currentLevelGroupIndex].Level;
+        }
     }
 
     private bool anyRevealed = false;//true if any tile has been revealed
@@ -460,6 +465,10 @@ public class LevelManager : MonoBehaviour
         if (lt != null && !lt.Revealed)
         {
             lt.Flagged = !lt.Flagged;
+            if (lt.Flagged)
+            {
+                onTileFlagged?.Invoke(lt);
+            }
             //Update flag counters (fc)
             foreach (LevelTile fc in getSurroundingTiles(lt))
             {
@@ -470,6 +479,9 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
+    public delegate void OnTileFlagged(LevelTile lt);
+    public OnTileFlagged onTileFlagged;
+
     public void processHoldGesture(Vector2 holdPos, bool finished)
     {
         LevelTile lt = getTile(holdPos);
@@ -501,6 +513,7 @@ public class LevelManager : MonoBehaviour
         if ((!lt.Revealed || forceReveal) && !lt.Flagged)
         {
             lt.Revealed = true;
+            onTileRevealed?.Invoke(lt);
             //Check to make sure surrounding tiles are empty
             foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
@@ -518,6 +531,8 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
+    public delegate void OnTileRevealed(LevelTile lt);
+    public OnTileRevealed onTileRevealed;
 
     /// <summary>
     /// Reveals the important tiles of the board, namely the treasures
