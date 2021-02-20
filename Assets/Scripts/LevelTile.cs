@@ -101,13 +101,7 @@ public class LevelTile : MonoBehaviour
         }
     }
 
-    public bool Empty
-    {
-        get
-        {
-            return empty(tileType);
-        }
-    }
+    public bool Empty => empty(tileType);
 
     public static bool empty(TileType type)
     {
@@ -116,13 +110,7 @@ public class LevelTile : MonoBehaviour
             || type == TileType.MAP;
     }
 
-    public bool Available
-    {
-        get
-        {
-            return available(tileType);
-        }
-    }
+    public bool Available => available(tileType);
 
     public static bool available(TileType type)
     {

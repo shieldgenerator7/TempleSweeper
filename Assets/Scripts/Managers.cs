@@ -68,6 +68,19 @@ public class Managers : MonoBehaviour
         }
     }
 
+    private EffectManager effectManager;
+    public static EffectManager Effect
+    {
+        get
+        {
+            if (instance.effectManager == null)
+            {
+                instance.effectManager = FindObjectOfType<EffectManager>();
+            }
+            return instance.effectManager;
+        }
+    }
+
     private static Managers instance;
     private void Awake()
     {

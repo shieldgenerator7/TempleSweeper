@@ -387,6 +387,7 @@ public class LevelManager : MonoBehaviour
                 if (!LevelTile.empty(revealedItem))
                 {
                     lt.Revealed = true;
+                    Managers.Effect.highlightChange(lt);
                     if (shouldRevealBoard)
                     {
                         revealBoard();
@@ -404,6 +405,7 @@ public class LevelManager : MonoBehaviour
                     if (prevRevealed && !lt.Activated)
                     {
                         lt.Activated = true;
+                        Managers.Effect.highlightChange(lt);
                         generatePostItemReveal(LevelTile.TileType.MAP);
                     }
                 }
@@ -420,6 +422,7 @@ public class LevelManager : MonoBehaviour
         if (lt != null && !lt.Revealed)
         {
             lt.Flagged = !lt.Flagged;
+            Managers.Effect.highlightChange(lt);
             //Update flag counters (fc)
             foreach (LevelTile fc in getSurroundingTiles(lt))
             {
@@ -461,6 +464,7 @@ public class LevelManager : MonoBehaviour
         if ((!lt.Revealed || forceReveal) && !lt.Flagged)
         {
             lt.Revealed = true;
+            Managers.Effect.highlightChange(lt);
             //Check to make sure surrounding tiles are empty
             foreach (LevelTile levelTile in getSurroundingTiles(lt))
             {
@@ -494,6 +498,7 @@ public class LevelManager : MonoBehaviour
                     || lt.tileType == LevelTile.TileType.MAP)
                 {
                     lt.Revealed = true;
+                    Managers.Effect.highlightChange(lt);
                 }
             }
         }
