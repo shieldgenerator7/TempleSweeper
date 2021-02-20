@@ -14,6 +14,7 @@ public class MapLineUpdater : MonoBehaviour
     private int currentCount = 0;//how many points have been fully revealed
     private Vector2 targetSize;//how long the segment should be when its fully drawn
     private bool okToMoveCamera = true;
+    private bool okToMoveCameraEver = true;
 
     private List<SpriteRenderer> drawnLines = new List<SpriteRenderer>();
 
@@ -67,7 +68,10 @@ public class MapLineUpdater : MonoBehaviour
                 createNewLine(drawnLines.Count);
             }
             okToMoveCamera = true;
-            Managers.Camera.moveTo(drawnLines[currentCount].gameObject);
+            if (okToMoveCameraEver)
+            {
+                Managers.Camera.moveTo(drawnLines[currentCount].gameObject);
+            }
         }
     }
 
@@ -89,7 +93,7 @@ public class MapLineUpdater : MonoBehaviour
                 if (!lt || lt.Revealed)
                 {
                     CurrentLineSR.size = size;
-                    if (okToMoveCamera)
+                    if (okToMoveCamera && okToMoveCameraEver)
                     {
                         Managers.Camera.moveTo(endPos);
                     }
@@ -158,5 +162,6 @@ public class MapLineUpdater : MonoBehaviour
     public void stopMovingCamera()
     {
         okToMoveCamera = false;
+        okToMoveCameraEver = false;
     }
 }
