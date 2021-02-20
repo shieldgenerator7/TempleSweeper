@@ -285,8 +285,19 @@ public class LevelManager : MonoBehaviour
                 //Check if goals have been achieved
                 if (Managers.Player.GoalAchieved)
                 {
-                    //Go to start
-                    Managers.Camera.moveTo(Managers.Start);
+                    //Check if map has been completed
+                    if (Managers.Player.completedMap())
+                    {
+                        //Go to latest revealed location
+                        Managers.Camera.moveTo(
+                            FindObjectOfType<MapLineUpdater>().LastRevealedSpot
+                            );
+                    }
+                    else
+                    {
+                        //Go to start
+                        Managers.Camera.moveTo(Managers.Start);
+                    }
                 }
             }
             else
