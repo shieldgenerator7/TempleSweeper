@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GestureProfile
 {//2018-01-22: copied from Stonicorn.GestureProfile
-    
+
     /// <summary>
     /// Called when this profile is set to the current one
     /// </summary>
@@ -50,7 +50,13 @@ public class GestureProfile
         if (show)
         {
             LevelTile lt = LevelManager.getTile(curMPWorld);
-            if (!lt.Revealed || lt.DetectedAny)
+            if (!lt)
+            {
+                return;
+            }
+            if (!lt.Revealed || lt.DetectedAny
+                || lt == Managers.Level.StartTile || (Managers.Player.completedMap() && lt == Managers.Level.XTile)
+                )
             {
                 Managers.Effect.moveCursor(lt);
             }

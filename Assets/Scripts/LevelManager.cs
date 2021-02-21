@@ -142,6 +142,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public LevelTile StartTile
+        => getTile(Managers.Start.transform.position);
+    public LevelTile XTile
+        => getTile(FindObjectOfType<MapLineUpdater>().LastRevealedSpot);
+
     private static int getXIndex(Vector2 pos)
     {
         return Mathf.RoundToInt(pos.x + instance.Level.gridWidth / 2);
