@@ -379,7 +379,7 @@ public class LevelManager : MonoBehaviour
                     generateLevelPostTap(tapPos);
                     anyRevealed = true;
                 }
-                if ((!lt.Revealed)|| lt.DetectedAny)
+                if ((!lt.Revealed) || lt.DetectedAny)
                 {
                     Managers.Effect.highlightChange(lt);
                 }
@@ -460,11 +460,14 @@ public class LevelManager : MonoBehaviour
         {
             usedFirstHoldFrame = true;
             processFlagGesture(holdPos);
-            Managers.Effect.highlightChange(lt);
             Vibration.Vibrate(75);
             if (lt.Revealed)
             {
                 frame.SetActive(true);
+            }
+            else
+            {
+                Managers.Effect.highlightChange(lt);
             }
         }
         frame.transform.position = lt.transform.position;
