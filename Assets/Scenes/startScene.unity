@@ -1773,6 +1773,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   changeHighlighterPrefab: {fileID: 3678902313356662285, guid: 1fa08ab0a3966284a859ddb0af98884b,
     type: 3}
+  tileHighlighterPrefab: {fileID: 3678902313356662285, guid: 1e198eb24c5281f4e9af432a041ed6fd,
+    type: 3}
 --- !u!114 &1897694198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,6 +1787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc709ca69a469594c9b9e09fed8cadbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  revealDelay: 0.1
 --- !u!1 &2018190591
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,10 @@ using UnityEngine;
 public class EffectManager : MonoBehaviour
 {
     public GameObject changeHighlighterPrefab;
-
     private List<ChangeHighlighter> changeHighlighterPool = new List<ChangeHighlighter>();
+
+    public GameObject tileHighlighterPrefab;
+    private List<ChangeHighlighter> tileHighlighterPool = new List<ChangeHighlighter>();
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +18,14 @@ public class EffectManager : MonoBehaviour
     }
 
     public void highlightChange(LevelTile tile)
+    {
+        highlightEffect(tile, changeHighlighterPrefab, changeHighlighterPool);
+    }
+    public void highlightTile(LevelTile tile)
+    {
+        highlightEffect(tile, tileHighlighterPrefab, tileHighlighterPool);
+    }
+    private void highlightEffect(LevelTile tile, GameObject prefab, List<ChangeHighlighter> pool)
     {
         //Determine position
         Vector2 position = tile.transform.position;
@@ -46,13 +56,13 @@ public class EffectManager : MonoBehaviour
         }
         //Find change highlighter instance
         ChangeHighlighter highlighter;
-        highlighter = changeHighlighterPool.FirstOrDefault(chl => !chl.Running);
+        highlighter = pool.FirstOrDefault(chl => !chl.Running);
         if (!highlighter)
         {
-            GameObject newHighlighter = Instantiate(changeHighlighterPrefab);
+            GameObject newHighlighter = Instantiate(prefab);
             newHighlighter.SetActive(false);
             highlighter = newHighlighter.GetComponent<ChangeHighlighter>();
-            changeHighlighterPool.Add(highlighter);
+            pool.Add(highlighter);
         }
         //Start effect
         highlighter.startEffect(position, changeType);

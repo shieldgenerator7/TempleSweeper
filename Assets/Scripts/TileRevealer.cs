@@ -41,7 +41,7 @@ public class TileRevealer : MonoBehaviour
         foreach (LevelTile lt in tilesToReveal)
         {
             lt.Revealed = true;
-            Managers.Effect.highlightChange(lt);
+            Managers.Effect.highlightTile(lt);
             //Surrounding tiles
             List<LevelTile> surroundingTiles = LevelManager.getSurroundingTiles(lt);
             bool emptyAllAround = !surroundingTiles.Any(lt => !lt.Empty);
