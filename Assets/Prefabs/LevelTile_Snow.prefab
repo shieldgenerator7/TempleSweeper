@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 4599844543421534}
   - component: {fileID: 114140162538363566}
   m_Layer: 0
-  m_Name: LevelTile_Grass
+  m_Name: LevelTile_Snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,7 +332,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: dff721c87934b504bb6a1a57e980048a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 37c143bde8a93414d8aa477950657307, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -808,7 +808,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 9875660e5a6bcd7419847dad49a64694, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d2ef7dc45e64b6f4d833f2889a1fd52b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

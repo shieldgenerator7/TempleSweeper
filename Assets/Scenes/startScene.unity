@@ -871,7 +871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf08457d33d3cb4eb8f85eab58e3518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  landAmount: 100
+  landAmount: 20
   maxLandDistance: 2
   fillInSideCount: 3
   landPrefab: {fileID: 1903181402368622, guid: 2ace1092118fc8b47b94a59cf3a68357, type: 3}
@@ -890,7 +890,7 @@ MonoBehaviour:
   landAmount: 480
   maxLandDistance: 1
   fillInSideCount: 5
-  landPrefab: {fileID: 1903181402368622, guid: 84d737791f7a4c643b2bcb21ebcb891f, type: 3}
+  landPrefab: {fileID: 1903181402368622, guid: a4e8108822c86b14db967b4bdb4e18f9, type: 3}
 --- !u!114 &385660247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1252,7 +1252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 2
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
