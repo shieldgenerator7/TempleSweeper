@@ -56,6 +56,7 @@ public class GestureProfile
             }
             if (!lt.Revealed || lt.DetectedAny
                 || lt == Managers.Level.StartTile || (Managers.Player.completedMap() && lt == Managers.Level.XTile)
+                || (lt.tileType == LevelTile.TileType.MAP && !lt.Activated)
                 )
             {
                 Managers.Effect.moveCursor(lt);
