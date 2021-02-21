@@ -33,6 +33,14 @@ public class DisplayBar : MonoBehaviour
             return spacing;
         }
     }
+    public Vector2 PerpendicularSpacing
+    {
+        get
+        {
+            Vector2 spacing = Spacing;
+            return new Vector2(spacing.y, spacing.x);
+        }
+    }
     public enum Direction
     {
         LEFT,
@@ -43,7 +51,7 @@ public class DisplayBar : MonoBehaviour
     public Direction direction;
 
     private List<Image> barIcons = new List<Image>();
-    
+
     /// <summary>
     /// Updates the display to the stat value
     /// </summary>
@@ -83,6 +91,20 @@ public class DisplayBar : MonoBehaviour
             icon.transform.SetParent(seed.transform.parent);
             i++;
         }
+    }
+
+    /// <summary>
+    /// Place this display bar at its starting position
+    /// </summary>
+    /// <param name="row">Row 0 is the first row.</param>
+    public void reposition(int row)
+    {
+        Rect rect = seed.rectTransform.rect;
+        rect.y = seed.rectTransform.rect.height * row + 10;
+        seed.rectTransform.anchoredPosition = new Vector2(
+            seed.rectTransform.anchoredPosition.x,
+            ((seed.rectTransform.rect.height * row) + (10 * (row + 1))) * -1
+            );
     }
 
 }
