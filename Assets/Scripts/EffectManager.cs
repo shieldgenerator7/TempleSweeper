@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class EffectManager : MonoBehaviour
 {
+    public GameObject cursorRevealed;
+    public GameObject cursorHidden;
+
     public GameObject changeHighlighterPrefab;
     private List<ChangeHighlighter> changeHighlighterPool = new List<ChangeHighlighter>();
 
@@ -66,5 +69,18 @@ public class EffectManager : MonoBehaviour
         }
         //Start effect
         highlighter.startEffect(position, changeType);
+    }
+
+    public void moveCursor(LevelTile tile)
+    {
+        cursorRevealed.transform.position = tile.transform.position;
+        cursorHidden.transform.position = tile.transform.position;
+        cursorRevealed.gameObject.SetActive(tile.Revealed);
+        cursorHidden.gameObject.SetActive(!tile.Revealed);
+    }
+    public void hideCursor()
+    {
+        cursorRevealed.gameObject.SetActive(false);
+        cursorHidden.gameObject.SetActive(false);
     }
 }

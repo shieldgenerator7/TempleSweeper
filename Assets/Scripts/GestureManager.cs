@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GestureManager : MonoBehaviour
 {//2018-01-22: copied from Stonicorn.GestureManager
-    
+
     //Settings
     public float dragThreshold = 50;//how far from the original mouse position the current position has to be to count as a drag
     public float holdThreshold = 0.1f;//how long the tap has to be held to count as a hold (in seconds)
@@ -195,6 +195,14 @@ public class GestureManager : MonoBehaviour
         }
         curMPWorld = (Vector2)Camera.main.ScreenToWorldPoint(curMP);//cast to Vector2 to force z to 0
 
+        if (Input.touchCount == 0 && Input.mousePresent)
+        {
+            currentGP.processCursorMoveGesture((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), true);
+        }
+        else
+        {
+            currentGP.processCursorMoveGesture(Vector3.zero, false);
+        }
 
         //
         //Input Processing

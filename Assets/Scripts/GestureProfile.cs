@@ -44,4 +44,16 @@ public class GestureProfile
     {
         Managers.Camera.adjustScalePoint(adjustment);
     }
+    public virtual void processCursorMoveGesture(Vector3 curMPWorld, bool show)
+    {
+        Managers.Effect.hideCursor();
+        if (show)
+        {
+            LevelTile lt = LevelManager.getTile(curMPWorld);
+            if (!lt.Revealed || lt.DetectedAny)
+            {
+                Managers.Effect.moveCursor(lt);
+            }
+        }
+    }
 }
