@@ -136,7 +136,6 @@ GameObject:
   - component: {fileID: 165447300}
   - component: {fileID: 165447299}
   - component: {fileID: 165447298}
-  - component: {fileID: 165447297}
   - component: {fileID: 165447296}
   - component: {fileID: 165447295}
   - component: {fileID: 165447294}
@@ -178,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fromTileType: 1
   toTileType: 0
-  maxConvert: 20
+  maxConvert: 30
   randomConvert: 1
 --- !u!114 &165447292
 MonoBehaviour:
@@ -192,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7609708b7536852469c7c40983e5774b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 5
+  amount: 7
   radiusToAvoid: 1
   tileType: 1
   minSpan: {x: 1, y: 10}
@@ -209,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7609708b7536852469c7c40983e5774b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 5
+  amount: 7
   radiusToAvoid: 1
   tileType: 1
   minSpan: {x: 10, y: 1}
@@ -262,21 +261,6 @@ MonoBehaviour:
   amount: 10
   radiusToAvoid: 1
   tileType: 2
---- !u!114 &165447297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 165447289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 780f73b173b831c40a1bf24a93d6f885, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amount: 20
-  radiusToAvoid: 1
-  tileType: 1
 --- !u!114 &165447298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +341,6 @@ MonoBehaviour:
   - {fileID: 165447291}
   - {fileID: 165447296}
   - {fileID: 165447295}
-  - {fileID: 165447297}
   postRevealLevelGenerators:
   - {fileID: 165447294}
 --- !u!850595691 &219801637
