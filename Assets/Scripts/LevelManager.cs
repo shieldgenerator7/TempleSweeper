@@ -474,23 +474,7 @@ public class LevelManager : MonoBehaviour
     {
         if ((!lt.Revealed || forceReveal) && !lt.Flagged)
         {
-            lt.Revealed = true;
-            Managers.Effect.highlightChange(lt);
-            //Check to make sure surrounding tiles are empty
-            foreach (LevelTile levelTile in getSurroundingTiles(lt))
-            {
-                if (!levelTile.Empty)
-                {
-                    //break out of the method
-                    return;
-                }
-            }
-            //If all surrounding tiles are empty,
-            //Reveal surrounding tiles
-            foreach (LevelTile levelTile in getSurroundingTiles(lt))
-            {
-                revealTile(levelTile);
-            }
+            Managers.TileRevealer.revealTilesAround(lt);
         }
     }
 
@@ -596,7 +580,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    static List<LevelTile> getSurroundingTiles(LevelTile lt)
+    public static List<LevelTile> getSurroundingTiles(LevelTile lt)
     {
         List<LevelTile> surroundingTiles = new List<LevelTile>();
         for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)

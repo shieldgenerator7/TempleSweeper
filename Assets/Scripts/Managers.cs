@@ -81,6 +81,19 @@ public class Managers : MonoBehaviour
         }
     }
 
+    private TileRevealer tileRevealer;
+    public static TileRevealer TileRevealer
+    {
+        get
+        {
+            if (instance.tileRevealer == null)
+            {
+                instance.tileRevealer = FindObjectOfType<TileRevealer>();
+            }
+            return instance.tileRevealer;
+        }
+    }
+
     private static Managers instance;
     private void Awake()
     {
