@@ -116,4 +116,6 @@ public class LevelTile : MonoBehaviour
     {
         return type == TileType.EMPTY;
     }
+
+    public bool DetectedAny => numberDisplayer.DetectedCount > 0;
 }

@@ -379,7 +379,10 @@ public class LevelManager : MonoBehaviour
                     generateLevelPostTap(tapPos);
                     anyRevealed = true;
                 }
-                Managers.Effect.highlightChange(lt);
+                if ((!lt.Revealed)|| lt.DetectedAny)
+                {
+                    Managers.Effect.highlightChange(lt);
+                }
                 LevelTile.TileType revealedItem = LevelTile.TileType.EMPTY;
                 bool shouldRevealBoard = false;
                 bool prevRevealed = lt.Revealed;

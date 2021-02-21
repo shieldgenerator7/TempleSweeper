@@ -14,6 +14,9 @@ public class NumberDisplayer : MonoBehaviour
     public Image wheelFlagged;
     public Image wheelPresent;
 
+    private int detectedCount;
+    public int DetectedCount => detectedCount;
+
     private LevelTile levelTile;
 
     public void displayNumber(LevelTile parent)
@@ -27,16 +30,16 @@ public class NumberDisplayer : MonoBehaviour
             return;
         }
         gameObject.SetActive(true);
-        int itemCount = LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.EMPTY, true);
-        itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.MAP);
-        itemCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.RESERVED);
-        if (itemCount == 0)
+        detectedCount = LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.EMPTY, true);
+        detectedCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.MAP);
+        detectedCount -= LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.RESERVED);
+        if (detectedCount == 0)
         {
             gameObject.SetActive(false);
             return;
         }
         int flagCount = LevelManager.getAdjacentFlagCount(levelTile);
-        displayNumber(itemCount, flagCount);
+        displayNumber(detectedCount, flagCount);
         if (LevelManager.getAdjacentCount(levelTile, LevelTile.TileType.TREASURE) > 0)
         {
             GetComponent<SpriteRenderer>().color = treasureColor;
