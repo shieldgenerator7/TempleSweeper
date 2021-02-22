@@ -1,121 +1,88 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelTile : MonoBehaviour
-{//2018-01-02: copied from WolfSim.LevelTile
-
-    public GameObject cover;
-    public SpriteRenderer contentsSR;
-    public NumberDisplayer numberDisplayer;
-    public Sprite trapSprite;
-    public Sprite treasureSprite;
-    public Sprite mapSprite;
-
-    public enum TileType
+[System.Serializable]
+public class LevelTile
+{
+    public enum Contents
     {
-        EMPTY,
-        TRAP,
+        NONE,
         TREASURE,
         MAP,
-        RESERVED//empty, but not able to be assigned to anything
-    };
-
-    public TileType tileType = TileType.EMPTY;
-    public int indexX, indexY;//its index in the grid
+        TRAP
+    }
+    private Contents contents = Contents.NONE;
+    public Contents Content
+    {
+        get => contents;
+        set
+        {
+            if (!Locked)
+            {
+                contents = value;
+            }
+        }
+    }
 
     /// <summary>
-    /// When flagged, a tile cannot be revealed
+    /// True if its contents are non-editable
     /// </summary>
-    private bool flagged = false;
+    public bool Locked = false;
+
+    /// <summary>
+    /// True if it is land, false if it is water
+    /// </summary>
+    public bool Walkable = false;
+
+    public LevelTile()
+    {
+        contents = Contents.NONE;
+        Locked = false;
+        Walkable = false;
+    }
+    public LevelTile(Contents content, bool locked = false)
+    {
+        this.contents = content;
+        this.Locked = locked;
+        this.Walkable = true;
+    }
+
+    /// <summary>
+    /// True if this tile has a flag on it
+    /// </summary>
     public bool Flagged
     {
-        get { return flagged; }
+        get => flagged;
         set
         {
-            flagged = value;
-            GetComponentInChildren<FlagDisplayer>().showFlag(flagged);
+            if (!revealed)
+            {
+                flagged = value;
+                onFlaggedChanged?.Invoke(flagged);
+            }
         }
     }
+    private bool flagged = false;
+    public delegate void OnFlaggedChanged(bool flagged);
+    public OnFlaggedChanged onFlaggedChanged;
 
-    private bool revealed = false;
+    /// <summary>
+    /// True if this tile has been revealed
+    /// </summary>
     public bool Revealed
     {
-        get { return revealed; }
+        get => revealed;
         set
         {
-            revealed = value;
-            if (revealed)
+            if (!flagged)
             {
-                //Destroy the cover
-                Destroy(cover);
-                //Show the contents
-                switch (tileType)
-                {
-                    case TileType.RESERVED:
-                    case TileType.EMPTY:
-                        numberDisplayer.displayNumber(this);
-                        break;
-                    case TileType.TRAP:
-                        contentsSR.sprite = trapSprite;
-                        contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                        tileType = TileType.EMPTY;
-                        break;
-                    case TileType.TREASURE:
-                        contentsSR.sprite = treasureSprite;
-                        contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                        tileType = TileType.EMPTY;
-                        break;
-                    case TileType.MAP:
-                        contentsSR.sprite = mapSprite;
-                        break;
-                }
-            }
-            else
-            {
-                throw new System.InvalidOperationException("Cannot unreveal tile!");
+                revealed = value;
+                onRevealedChanged?.Invoke(revealed);
             }
         }
     }
-
-    private bool activated = false;
-    public bool Activated
-    {
-        get { return activated; }
-        set
-        {
-            activated = value;
-            if (activated)
-            {
-                if (tileType != TileType.MAP)
-                {
-                    throw new System.InvalidOperationException("Cannot activate non-map tile! tile type: " + tileType);
-                }
-                Managers.Player.MapFoundCount++;
-                contentsSR.gameObject.AddComponent<ItemDisplayer>();
-            }
-            else
-            {
-                throw new System.InvalidOperationException("Cannot unactivate tile!");
-            }
-        }
-    }
-
-    public bool Empty => empty(tileType);
-
-    public static bool empty(TileType type)
-    {
-        return type == TileType.EMPTY
-            || type == TileType.RESERVED
-            || type == TileType.MAP;
-    }
-
-    public bool Available => available(tileType);
-
-    public static bool available(TileType type)
-    {
-        return type == TileType.EMPTY;
-    }
-
-    public bool DetectedAny => numberDisplayer.DetectedCount > 0;
+    private bool revealed = false;
+    public delegate void OnRevealedChanged(bool revealed);
+    public OnRevealedChanged onRevealedChanged;
 }
