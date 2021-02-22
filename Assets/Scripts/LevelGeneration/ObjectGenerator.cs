@@ -6,9 +6,9 @@ public class ObjectGenerator : LevelGenerator
 {
     public int amount = 10;
     public int radiusToAvoid = 1;
-    public LevelTileController.TileType tileType;
+    public LevelTile.Contents content;
 
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         throw new System.NotImplementedException();
     }
@@ -20,7 +20,7 @@ public class ObjectGenerator : LevelGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -31,10 +31,10 @@ public class ObjectGenerator : LevelGenerator
                 if (Mathf.Abs(posX - ix) > radiusToAvoid
                     || Mathf.Abs(posY - iy) > radiusToAvoid)
                 {
-                    LevelTileController lt = tileMap[ix, iy]?.GetComponent<LevelTileController>();
+                    LevelTile lt = tileMap[ix, iy];
                     if (lt && lt.Available)
                     {
-                        lt.tileType = tileType;
+                        lt.Content = content;
                         break;//break the while loop
                     }
                 }
@@ -42,12 +42,12 @@ public class ObjectGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }
 
-    protected bool outOfAreaToAvoid(GameObject[,] tileMap, int posX, int posY, int avoidX, int avoidY)
+    protected bool outOfAreaToAvoid(LevelTile[,] tileMap, int posX, int posY, int avoidX, int avoidY)
     {
         return Mathf.Abs(posX - avoidX) > radiusToAvoid
             || Mathf.Abs(posY - avoidY) > radiusToAvoid;

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class LevelGenerator : MonoBehaviour
 {
-    public abstract void generate(GameObject[,] tileMap);
+    public abstract void generate(LevelTile[,] tileMap);
 
-    public abstract void generatePostStart(GameObject[,] tileMap, int posX, int posY);
+    public abstract void generatePostStart(LevelTile[,] tileMap, int posX, int posY);
 
-    public abstract void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType);
+    public abstract void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content);
 
     public virtual void clearGeneratedObjects()
     {
@@ -17,11 +17,11 @@ public abstract class LevelGenerator : MonoBehaviour
 
 
 
-    protected static int gridWidth(GameObject[,] tileMap)
+    protected static int gridWidth(LevelTile[,] tileMap)
     {
         return tileMap.GetLength(0);
     }
-    protected static int gridHeight(GameObject[,] tileMap)
+    protected static int gridHeight(LevelTile[,] tileMap)
     {
         return tileMap.GetLength(1);
     }
@@ -34,7 +34,7 @@ public abstract class LevelGenerator : MonoBehaviour
     /// <param name="posX"></param>
     /// <param name="posY"></param>
     /// <param name="range"></param>
-    protected static bool containsLand(GameObject[,] tiles, int posX, int posY, int range)
+    protected static bool containsLand(LevelTile[,] tiles, int posX, int posY, int range)
     {
         return landCount(tiles, posX, posY, range) > 0;
     }
@@ -47,7 +47,7 @@ public abstract class LevelGenerator : MonoBehaviour
     /// <param name="posY"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    protected static int landCount(GameObject[,] tileMap, int posX, int posY, int range)
+    protected static int landCount(LevelTile[,] tileMap, int posX, int posY, int range)
     {
         int count = 0;
         for (int x = posX - range; x <= posX + range; x++)
@@ -73,7 +73,7 @@ public abstract class LevelGenerator : MonoBehaviour
     /// <param name="posX"></param>
     /// <param name="posY"></param>
     /// <returns></returns>
-    protected static bool inBounds(GameObject[,] tileMap, int posX, int posY)
+    protected static bool inBounds(LevelTile[,] tileMap, int posX, int posY)
     {
         return posX >= 0 && posX < tileMap.GetLength(0)
             && posY >= 0 && posY < tileMap.GetLength(1);

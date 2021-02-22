@@ -27,7 +27,7 @@ public class RiverGenerator : LevelGenerator
     [Header("Start Edge")]
     public Edge startEdge;
 
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         for (int n = 0; n < streamCount; n++)
         {
@@ -103,11 +103,11 @@ public class RiverGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         throw new System.NotImplementedException();
     }
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }

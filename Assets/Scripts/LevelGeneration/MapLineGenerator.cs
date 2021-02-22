@@ -36,12 +36,12 @@ public class MapLineGenerator : LevelGenerator
         return LevelManager.getWorldPos(mapPath[pointIndex]);
     }
 
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         int curX = posX;
         int curY = posY;
@@ -114,7 +114,7 @@ public class MapLineGenerator : LevelGenerator
             }
             //Test to see if the path is acceptable
             Vector2 theSpot = mapPath[mapPath.Count - 1];
-            LevelTileController spotTile = tileMap[(int)theSpot.x, (int)theSpot.y]?.GetComponent<LevelTileController>();
+            LevelTile spotTile = tileMap[(int)theSpot.x, (int)theSpot.y];
             //If the spot is on land
             if (spotTile != null
                 //And the spot is not a treasure, mine, or map fragment
@@ -190,10 +190,10 @@ public class MapLineGenerator : LevelGenerator
                 {
                     if (tileMap[x, y])
                     {
-                        LevelTileController lt = tileMap[x, y].GetComponent<LevelTileController>();
+                        LevelTile lt = tileMap[x, y];
                         if (lt.Available)
                         {
-                            lt.tileType = LevelTileController.TileType.RESERVED;
+                            lt.Locked = true;
                         }
                     }
                 }
@@ -204,9 +204,9 @@ public class MapLineGenerator : LevelGenerator
         Managers.Start.transform.position = LevelManager.getWorldPos(posX, posY);
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
-        if (tileType == LevelTileController.TileType.MAP)
+        if (content == LevelTile.Contents.MAP)
         {
             mapLineSegmentRevealedCount++;
             onMapSegmentRevealed?.Invoke(this, mapLineSegmentRevealedCount);

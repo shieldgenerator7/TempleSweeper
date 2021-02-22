@@ -89,7 +89,7 @@ public class MapLineUpdater : MonoBehaviour
                 Vector2 size = CurrentLineSR.size;
                 size.x = Mathf.MoveTowards(size.x, targetSize.x, speed * Time.deltaTime);
                 Vector2 endPos = LastRevealedSpot;
-                LevelTileController lt = LevelManager.getTile(endPos);
+                LevelTile lt = LevelManager.getTile(endPos);
                 if (!lt || lt.Revealed)
                 {
                     CurrentLineSR.size = size;

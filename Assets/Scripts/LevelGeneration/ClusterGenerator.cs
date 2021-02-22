@@ -5,9 +5,9 @@ using UnityEngine;
 public class ClusterGenerator : ObjectGenerator
 {//2019-06-17: copied from ObjectGenerator
 
-    public List<LevelTileController.TileType> rings;
+    public List<LevelTile.Contents> rings;
 
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         throw new System.NotImplementedException();
     }
@@ -19,7 +19,7 @@ public class ClusterGenerator : ObjectGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -30,10 +30,10 @@ public class ClusterGenerator : ObjectGenerator
                 int radius = rings.Count;
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
-                    LevelTileController lt = tileMap[rx, ry]?.GetComponent<LevelTileController>();
+                    LevelTile lt = tileMap[rx, ry];
                     if (lt && lt.Available)
                     {
-                        lt.tileType = rings[0];
+                        lt.Content = rings[0];
                         for (int r = 1; r < radius; r++)
                         {
                             for (int ix = rx - r; ix <= rx + r; ix++)
@@ -46,10 +46,10 @@ public class ClusterGenerator : ObjectGenerator
                                         int manhattenDistance = Mathf.Abs(ix - rx) + Mathf.Abs(iy - ry);
                                         if (manhattenDistance == r)
                                         {
-                                            LevelTileController ilt = tileMap[ix, iy]?.GetComponent<LevelTileController>();
+                                            LevelTile ilt = tileMap[ix, iy];
                                             if (ilt && ilt.Available)
                                             {
-                                                ilt.tileType = rings[r];
+                                                ilt.Content = rings[r];
                                             }
                                         }
                                     }
@@ -63,7 +63,7 @@ public class ClusterGenerator : ObjectGenerator
         }
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }

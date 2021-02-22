@@ -8,7 +8,7 @@ public class WallGenerator : ObjectGenerator
     public Vector2 minSpan = new Vector2(5, 1);
     public Vector2 maxSpan = new Vector2(10, 1);
 
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         throw new System.NotImplementedException();
     }
@@ -20,7 +20,7 @@ public class WallGenerator : ObjectGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -30,11 +30,11 @@ public class WallGenerator : ObjectGenerator
                 int ry = Random.Range(0, gridHeight(tileMap));
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
-                    LevelTileController lt = tileMap[rx, ry]?.GetComponent<LevelTileController>();
+                    LevelTile lt = tileMap[rx, ry];
                     if (lt && lt.Available)
                     {
                         //Do the middle tile
-                        lt.tileType = tileType;
+                        lt.Content = content;
                         //Do the wings
                         int spanX = (int)Random.Range(minSpan.x, maxSpan.x);
                         int spanY = (int)Random.Range(minSpan.y, maxSpan.y);
@@ -48,10 +48,10 @@ public class WallGenerator : ObjectGenerator
                                 int py = iy + startY;
                                 if (inBounds(tileMap, px, py) && outOfAreaToAvoid(tileMap, px, py, posX, posY))
                                 {
-                                    LevelTileController ilt = tileMap[px, py]?.GetComponent<LevelTileController>();
+                                    LevelTile ilt = tileMap[px, py];
                                     if (ilt && ilt.Available)
                                     {
-                                        ilt.tileType = tileType;
+                                        ilt.Content = content;
                                     }
                                 }
                             }
@@ -64,7 +64,7 @@ public class WallGenerator : ObjectGenerator
         }
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }

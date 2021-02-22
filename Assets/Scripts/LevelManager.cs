@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -11,10 +12,12 @@ public class LevelManager : MonoBehaviour
     [Header("Objects")]
     public GameObject frame;
 
+    public GameObject levelTilePrefab;
+
     //
     // Runtime vars
     //
-    private GameObject[,] tileMap;//the map of tiles
+    private LevelTile[,] tileMap;//the map of tiles
     private int currentLevelIndex = 0;
     public int LevelIndex
     {
@@ -100,9 +103,9 @@ public class LevelManager : MonoBehaviour
     {
         if (instance.tileMap != null)
         {
-            foreach (GameObject go in instance.tileMap)
+            foreach (LevelTileController ltc in FindObjectsOfType<LevelTileController>())
             {
-                Destroy(go);
+                Destroy(ltc.gameObject);
             }
         }
 
@@ -128,23 +131,28 @@ public class LevelManager : MonoBehaviour
         Managers.Player.reset();
     }
 
-    public static LevelTileController getTile(Vector2 pos)
+    public static LevelTile getTile(Vector2 pos)
     {
         int xIndex = getXIndex(pos);
         int yIndex = getYIndex(pos);
         if (inBounds(xIndex, yIndex))
         {
-            return instance.tileMap[xIndex, yIndex]?.GetComponent<LevelTileController>();
+            return instance.tileMap[xIndex, yIndex];
         }
         else
         {
             return null;//index out of bounds, return null
         }
     }
+    public static LevelTileController getTileController(Vector2 pos)
+    {
+        LevelTile lt = getTile(pos);
+        return FindObjectsOfType<LevelTileController>().First(ltc => ltc.LevelTile == lt);
+    }
 
-    public LevelTileController StartTile
+    public LevelTile StartTile
         => getTile(Managers.Start.transform.position);
-    public LevelTileController XTile
+    public LevelTile XTile
         => getTile(FindObjectOfType<MapLineUpdater>().LastRevealedSpot);
 
     private static int getXIndex(Vector2 pos)
@@ -208,26 +216,24 @@ public class LevelManager : MonoBehaviour
     {
         int width = level.gridWidth;
         int height = level.gridHeight;
-        GameObject[,] tiles = new GameObject[width, height];
+        tileMap = new LevelTile[width, height];
         foreach (LevelGenerator lgen in level.levelGenerators)
         {
-            lgen.generate(tiles);
+            lgen.generate(tileMap);
         }
         //generateFill(levelTilePrefab, tiles, width, height);
-        tileMap = new GameObject[width, height];
         for (int xi = 0; xi < width; xi++)
         {
             for (int yi = 0; yi < height; yi++)
             {
-                GameObject prefab = tiles[xi, yi];
-                if (prefab == null)
+                if (tileMap[xi, yi] == null)
                 {
                     //skip empty space
                     continue;
                 }
-                GameObject go = GameObject.Instantiate(prefab);
+                GameObject go = GameObject.Instantiate(levelTilePrefab);
                 go.transform.position = new Vector2(xi - width / 2, yi - height / 2);
-                tileMap[xi, yi] = go;
+                go.GetComponent<LevelTileController>().LevelTile = tileMap[xi, yi];
                 go.GetComponent<LevelTileController>().indexX = xi;
                 go.GetComponent<LevelTileController>().indexY = yi;
                 go.transform.parent = transform;
@@ -250,11 +256,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void generatePostItemReveal(LevelTileController.TileType tileType)
+    private void generatePostItemReveal(LevelTile.Contents content)
     {
         foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
-            lgen.generatePostReveal(tileMap, tileType);
+            lgen.generatePostReveal(tileMap, content);
         }
     }
 
@@ -324,7 +330,7 @@ public class LevelManager : MonoBehaviour
         {
             return;
         }
-        LevelTileController lt = getTile(tapPos);
+        LevelTileController lt = getTileController(tapPos);
         if (lt != null)
         {
             //If it's revealed
@@ -388,12 +394,12 @@ public class LevelManager : MonoBehaviour
                 {
                     Managers.Effect.highlightChange(lt);
                 }
-                LevelTileController.TileType revealedItem = LevelTileController.TileType.EMPTY;
+                LevelTile.Contents revealedItem = LevelTile.Contents.NONE;
                 bool shouldRevealBoard = false;
                 bool prevRevealed = lt.Revealed;
                 if (lt.tileType == LevelTileController.TileType.TRAP)
                 {
-                    revealedItem = LevelTileController.TileType.TRAP;
+                    revealedItem = LevelTile.Contents.TRAP;
                     if (!Managers.Player.takeHit())
                     {
                         shouldRevealBoard = true;
@@ -401,7 +407,7 @@ public class LevelManager : MonoBehaviour
                 }
                 if (lt.tileType == LevelTileController.TileType.TREASURE)
                 {
-                    revealedItem = LevelTileController.TileType.TREASURE;
+                    revealedItem = LevelTile.Contents.TREASURE;
                     Managers.Player.findTrophy();
                 }
                 if (!LevelTileController.empty(revealedItem))
@@ -426,7 +432,7 @@ public class LevelManager : MonoBehaviour
                     {
                         lt.Activated = true;
                         Managers.Effect.highlightChange(lt);
-                        generatePostItemReveal(LevelTileController.TileType.MAP);
+                        generatePostItemReveal(LevelTile.Contents.MAP);
                     }
                 }
             }
@@ -438,7 +444,7 @@ public class LevelManager : MonoBehaviour
         {
             return;
         }
-        LevelTileController lt = getTile(flagPos);
+        LevelTileController lt = getTileController(flagPos);
         if (lt != null && !lt.Revealed)
         {
             lt.Flagged = !lt.Flagged;
@@ -455,7 +461,7 @@ public class LevelManager : MonoBehaviour
     }
     public void processHoldGesture(Vector2 holdPos, bool finished)
     {
-        LevelTileController lt = getTile(holdPos);
+        LevelTileController lt = getTileController(holdPos);
         if (!lt)
         {
             //don't process empty spaces
@@ -496,17 +502,17 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void revealBoard()
     {
-        foreach (GameObject go in tileMap)
+        foreach (LevelTileController ltc in FindObjectsOfType<LevelTileController>())
         {
-            LevelTileController lt = go?.GetComponent<LevelTileController>();
+            LevelTile lt = ltc.LevelTile;
             if (lt && !lt.Revealed)
             {
-                if (lt.tileType == LevelTileController.TileType.TREASURE
-                    || lt.tileType == LevelTileController.TileType.TRAP
-                    || lt.tileType == LevelTileController.TileType.MAP)
+                if (lt.Content == LevelTile.Contents.TREASURE
+                    || lt.Content == LevelTile.Contents.TRAP
+                    || lt.Content == LevelTile.Contents.MAP)
                 {
                     lt.Revealed = true;
-                    Managers.Effect.highlightChange(lt);
+                    Managers.Effect.highlightChange(ltc);
                 }
             }
         }
@@ -604,10 +610,11 @@ public class LevelManager : MonoBehaviour
                 {
                     if (i != lt.indexX || j != lt.indexY)
                     {
-                        GameObject tile = instance.tileMap[i, j];
+                        LevelTileController tile = FindObjectsOfType<LevelTileController>()
+                            .First(ltc => ltc.LevelTile == instance.tileMap[i, j]);
                         if (tile != null)
                         {
-                            surroundingTiles.Add(tile.GetComponent<LevelTileController>());
+                            surroundingTiles.Add(tile);
                         }
                     }
                 }
@@ -665,7 +672,7 @@ public class LevelManager : MonoBehaviour
             float randomX = Random.Range(-size.x / 2, size.x / 2) + pos.x;
             float randomY = Random.Range(-size.y / 2, size.y / 2) + pos.y;
             Vector2 randomPos = new Vector2(randomX, randomY);
-            if (!getTile(randomPos).gameObject.name.Contains("water"))
+            if (getTile(randomPos).Walkable)
             {
                 GameObject go = GameObject.Instantiate(prefab);
                 go.transform.position = randomPos;

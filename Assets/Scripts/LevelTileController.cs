@@ -12,6 +12,19 @@ public class LevelTileController : MonoBehaviour
     public Sprite treasureSprite;
     public Sprite mapSprite;
 
+    private LevelTile levelTile;
+    public LevelTile LevelTile
+    {
+        get => levelTile;
+        set => levelTile = value;
+    }
+
+    private void Start()
+    {
+        levelTile.onFlaggedChanged += (flagged) => Flagged = flagged;
+        levelTile.onRevealedChanged += (revealed) => Revealed = revealed;
+    }
+
     public enum TileType
     {
         EMPTY,
@@ -70,6 +83,7 @@ public class LevelTileController : MonoBehaviour
                         contentsSR.sprite = mapSprite;
                         break;
                 }
+                Managers.Effect.highlightTile(this);
             }
             else
             {
@@ -108,6 +122,11 @@ public class LevelTileController : MonoBehaviour
         return type == TileType.EMPTY
             || type == TileType.RESERVED
             || type == TileType.MAP;
+    }
+    public static bool empty(LevelTile.Contents content)
+    {
+        return content == LevelTile.Contents.NONE
+            || content == LevelTile.Contents.MAP;
     }
 
     public bool Available => available(tileType);

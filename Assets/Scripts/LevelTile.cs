@@ -8,9 +8,9 @@ public class LevelTile
     public enum Contents
     {
         NONE,
+        TRAP,
         TREASURE,
-        MAP,
-        TRAP
+        MAP
     }
     private Contents contents = Contents.NONE;
     public Contents Content
@@ -85,4 +85,10 @@ public class LevelTile
     private bool revealed = false;
     public delegate void OnRevealedChanged(bool revealed);
     public OnRevealedChanged onRevealedChanged;
+
+    public bool Available
+        => contents == Contents.NONE && !Locked;
+
+    public static implicit operator bool(LevelTile lt)
+        => lt != null;
 }

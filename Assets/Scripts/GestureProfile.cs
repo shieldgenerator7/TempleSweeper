@@ -49,7 +49,7 @@ public class GestureProfile
         Managers.Effect.hideCursor();
         if (show)
         {
-            LevelTileController lt = LevelManager.getTile(curMPWorld);
+            LevelTileController lt = LevelManager.getTileController(curMPWorld);
             if (!lt)
             {
                 return;

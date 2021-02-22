@@ -5,13 +5,13 @@ using UnityEngine;
 public class TileTypeConverter : LevelGenerator
 {//2019-06-17: copied from ObjectGenerator
 
-    public LevelTileController.TileType fromTileType;
-    public LevelTileController.TileType toTileType;
+    public LevelTile.Contents fromContent;
+    public LevelTile.Contents toContent;
 
     public int maxConvert = -1;
     public bool randomConvert = false;
 
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         convert(tileMap);
     }
@@ -23,17 +23,17 @@ public class TileTypeConverter : LevelGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         convert(tileMap);
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
         convert(tileMap);
     }
 
-    private void convert(GameObject[,] tileMap)
+    private void convert(LevelTile[,] tileMap)
     {
         int width = gridWidth(tileMap);
         int height = gridHeight(tileMap);
@@ -44,13 +44,13 @@ public class TileTypeConverter : LevelGenerator
             {
                 for (int j = 0; j < height; j++)
                 {
-                    GameObject tile = tileMap[i, j];
+                    LevelTile tile = tileMap[i, j];
                     if (tile)
                     {
-                        LevelTileController lt = tile.GetComponent<LevelTileController>();
-                        if (lt.tileType == fromTileType)
+                        LevelTile lt = tile;
+                        if (lt.Content == fromContent)
                         {
-                            lt.tileType = toTileType;
+                            lt.Content = toContent;
                             converted++;
                             if (maxConvert > 0 && converted >= maxConvert)
                             {
@@ -69,10 +69,10 @@ public class TileTypeConverter : LevelGenerator
                 {
                     int rx = Random.Range(0, width);
                     int ry = Random.Range(0, height);
-                    LevelTileController lt = tileMap[rx, ry]?.GetComponent<LevelTileController>();
-                    if (lt && lt.tileType == fromTileType)
+                    LevelTile lt = tileMap[rx, ry];
+                    if (lt && lt.Content == fromContent)
                     {
-                        lt.tileType = toTileType;
+                        lt.Content = toContent;
                         break;
                     }
                 }

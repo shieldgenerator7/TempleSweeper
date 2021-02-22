@@ -11,17 +11,14 @@ public class IslandGenerator : LevelGenerator
     [Range(1, 8)]
     public int fillInSideCount = 5;//how many surrounding tiles are required to fill in a hole
 
-    [Header("Objects")]
-    public GameObject landPrefab;
-
-    public override void generate(GameObject[,] tileMap)
+    public override void generate(LevelTile[,] tileMap)
     {
         Vector2 min, max;
         min = max = new Vector2(gridWidth(tileMap) / 2, gridHeight(tileMap) / 2);
         //Place the first one
         if (tileMap[(int)min.x, (int)min.y] == null)
         {
-            tileMap[(int)min.x, (int)min.y] = landPrefab;
+            tileMap[(int)min.x, (int)min.y] = new LevelTile(LevelTile.Contents.NONE);
         }
         //Place the rest of them
         for (int i = 0; i < landAmount - 1; i++)
@@ -36,14 +33,13 @@ public class IslandGenerator : LevelGenerator
                 if (inBounds(tileMap, randX, randY))
                 {
                     //If the spot is empty,
-                    //or filled with something other than this land prefab,
-                    if (tileMap[randX, randY] != landPrefab)
+                    if (tileMap[randX, randY] == null)
                     {
                         //And it's next to another land,                    
                         if (containsLand(tileMap, randX, randY, maxLandDistance))
                         {
                             //Place it here
-                            tileMap[randX, randY] = landPrefab;
+                            tileMap[randX, randY] = new LevelTile(LevelTile.Contents.NONE);
                             placed = true;
                             //Update min and max
                             min.x = Mathf.Min(randX, min.x);
@@ -67,18 +63,18 @@ public class IslandGenerator : LevelGenerator
                     if (landCount(tileMap, x, y, 1) > fillInSideCount)
                     {
                         //Fill it in
-                        tileMap[x, y] = landPrefab;
+                        tileMap[x, y] = new LevelTile(LevelTile.Contents.NONE);
                     }
                 }
             }
         }
     }
 
-    public override void generatePostStart(GameObject[,] tileMap, int posX, int posY)
+    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
     {
         throw new System.NotImplementedException();
     }
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
+    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }
