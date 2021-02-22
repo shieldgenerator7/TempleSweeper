@@ -13,7 +13,7 @@ public class ItemDisplayer : MonoBehaviour
     private float scaleIncreaseRate;
     private float scalingStartTime = 0;
 
-    public LevelTile levelTile;
+    public LevelTileController levelTile;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +37,7 @@ public class ItemDisplayer : MonoBehaviour
         //Register with Level Manager
         LevelManager.FoundItem = this;
         //Get level tile
-        levelTile = GetComponentInParent<LevelTile>();
+        levelTile = GetComponentInParent<LevelTileController>();
     }
 
     // Update is called once per frame
@@ -58,7 +58,7 @@ public class ItemDisplayer : MonoBehaviour
     {
         transform.localScale = originalSize;
         GetComponent<NumberDisplayer>().displayNumber(levelTile);
-        GetComponentInParent<LevelTile>().tileType = LevelTile.TileType.EMPTY;
+        GetComponentInParent<LevelTileController>().tileType = LevelTileController.TileType.EMPTY;
         //Hide present wheel
         GetComponent<NumberDisplayer>()
             .wheelPresent.enabled = false;

@@ -6,7 +6,7 @@ public class ObjectGenerator : LevelGenerator
 {
     public int amount = 10;
     public int radiusToAvoid = 1;
-    public LevelTile.TileType tileType;
+    public LevelTileController.TileType tileType;
 
     public override void generate(GameObject[,] tileMap)
     {
@@ -31,7 +31,7 @@ public class ObjectGenerator : LevelGenerator
                 if (Mathf.Abs(posX - ix) > radiusToAvoid
                     || Mathf.Abs(posY - iy) > radiusToAvoid)
                 {
-                    LevelTile lt = tileMap[ix, iy]?.GetComponent<LevelTile>();
+                    LevelTileController lt = tileMap[ix, iy]?.GetComponent<LevelTileController>();
                     if (lt && lt.Available)
                     {
                         lt.tileType = tileType;
@@ -42,7 +42,7 @@ public class ObjectGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
     {
         throw new System.NotImplementedException();
     }

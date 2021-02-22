@@ -20,15 +20,15 @@ public class EffectManager : MonoBehaviour
 
     }
 
-    public void highlightChange(LevelTile tile)
+    public void highlightChange(LevelTileController tile)
     {
         highlightEffect(tile, changeHighlighterPrefab, changeHighlighterPool);
     }
-    public void highlightTile(LevelTile tile)
+    public void highlightTile(LevelTileController tile)
     {
         highlightEffect(tile, tileHighlighterPrefab, tileHighlighterPool);
     }
-    private void highlightEffect(LevelTile tile, GameObject prefab, List<ChangeHighlighter> pool)
+    private void highlightEffect(LevelTileController tile, GameObject prefab, List<ChangeHighlighter> pool)
     {
         //Determine position
         Vector2 position = tile.transform.position;
@@ -42,16 +42,16 @@ public class EffectManager : MonoBehaviour
         {
             switch (tile.tileType)
             {
-                case LevelTile.TileType.MAP:
+                case LevelTileController.TileType.MAP:
                     if (tile.Activated)
                     {
                         changeType = ChangeHighlighter.ChangeType.DISCOVER;
                     }
                     break;
-                case LevelTile.TileType.TREASURE:
+                case LevelTileController.TileType.TREASURE:
                     changeType = ChangeHighlighter.ChangeType.DISCOVER;
                     break;
-                case LevelTile.TileType.TRAP:
+                case LevelTileController.TileType.TRAP:
                     changeType = ChangeHighlighter.ChangeType.HIT;
                     break;
                 default: break;
@@ -71,7 +71,7 @@ public class EffectManager : MonoBehaviour
         highlighter.startEffect(position, changeType);
     }
 
-    public void moveCursor(LevelTile tile)
+    public void moveCursor(LevelTileController tile)
     {
         cursorRevealed.transform.position = tile.transform.position;
         cursorHidden.transform.position = tile.transform.position;

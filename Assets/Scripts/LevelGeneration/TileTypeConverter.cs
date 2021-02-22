@@ -5,8 +5,8 @@ using UnityEngine;
 public class TileTypeConverter : LevelGenerator
 {//2019-06-17: copied from ObjectGenerator
 
-    public LevelTile.TileType fromTileType;
-    public LevelTile.TileType toTileType;
+    public LevelTileController.TileType fromTileType;
+    public LevelTileController.TileType toTileType;
 
     public int maxConvert = -1;
     public bool randomConvert = false;
@@ -28,7 +28,7 @@ public class TileTypeConverter : LevelGenerator
         convert(tileMap);
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
     {
         convert(tileMap);
     }
@@ -47,7 +47,7 @@ public class TileTypeConverter : LevelGenerator
                     GameObject tile = tileMap[i, j];
                     if (tile)
                     {
-                        LevelTile lt = tile.GetComponent<LevelTile>();
+                        LevelTileController lt = tile.GetComponent<LevelTileController>();
                         if (lt.tileType == fromTileType)
                         {
                             lt.tileType = toTileType;
@@ -69,7 +69,7 @@ public class TileTypeConverter : LevelGenerator
                 {
                     int rx = Random.Range(0, width);
                     int ry = Random.Range(0, height);
-                    LevelTile lt = tileMap[rx, ry]?.GetComponent<LevelTile>();
+                    LevelTileController lt = tileMap[rx, ry]?.GetComponent<LevelTileController>();
                     if (lt && lt.tileType == fromTileType)
                     {
                         lt.tileType = toTileType;

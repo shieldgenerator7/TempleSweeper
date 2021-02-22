@@ -114,7 +114,7 @@ public class MapLineGenerator : LevelGenerator
             }
             //Test to see if the path is acceptable
             Vector2 theSpot = mapPath[mapPath.Count - 1];
-            LevelTile spotTile = tileMap[(int)theSpot.x, (int)theSpot.y]?.GetComponent<LevelTile>();
+            LevelTileController spotTile = tileMap[(int)theSpot.x, (int)theSpot.y]?.GetComponent<LevelTileController>();
             //If the spot is on land
             if (spotTile != null
                 //And the spot is not a treasure, mine, or map fragment
@@ -190,10 +190,10 @@ public class MapLineGenerator : LevelGenerator
                 {
                     if (tileMap[x, y])
                     {
-                        LevelTile lt = tileMap[x, y].GetComponent<LevelTile>();
+                        LevelTileController lt = tileMap[x, y].GetComponent<LevelTileController>();
                         if (lt.Available)
                         {
-                            lt.tileType = LevelTile.TileType.RESERVED;
+                            lt.tileType = LevelTileController.TileType.RESERVED;
                         }
                     }
                 }
@@ -204,9 +204,9 @@ public class MapLineGenerator : LevelGenerator
         Managers.Start.transform.position = LevelManager.getWorldPos(posX, posY);
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
     {
-        if (tileType == LevelTile.TileType.MAP)
+        if (tileType == LevelTileController.TileType.MAP)
         {
             mapLineSegmentRevealedCount++;
             onMapSegmentRevealed?.Invoke(this, mapLineSegmentRevealedCount);

@@ -30,7 +30,7 @@ public class WallGenerator : ObjectGenerator
                 int ry = Random.Range(0, gridHeight(tileMap));
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
-                    LevelTile lt = tileMap[rx, ry]?.GetComponent<LevelTile>();
+                    LevelTileController lt = tileMap[rx, ry]?.GetComponent<LevelTileController>();
                     if (lt && lt.Available)
                     {
                         //Do the middle tile
@@ -48,7 +48,7 @@ public class WallGenerator : ObjectGenerator
                                 int py = iy + startY;
                                 if (inBounds(tileMap, px, py) && outOfAreaToAvoid(tileMap, px, py, posX, posY))
                                 {
-                                    LevelTile ilt = tileMap[px, py]?.GetComponent<LevelTile>();
+                                    LevelTileController ilt = tileMap[px, py]?.GetComponent<LevelTileController>();
                                     if (ilt && ilt.Available)
                                     {
                                         ilt.tileType = tileType;
@@ -64,7 +64,7 @@ public class WallGenerator : ObjectGenerator
         }
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
     {
         throw new System.NotImplementedException();
     }

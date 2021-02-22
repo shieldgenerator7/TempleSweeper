@@ -107,7 +107,7 @@ public class RiverGenerator : LevelGenerator
     {
         throw new System.NotImplementedException();
     }
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
     {
         throw new System.NotImplementedException();
     }

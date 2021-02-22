@@ -49,14 +49,14 @@ public class GestureProfile
         Managers.Effect.hideCursor();
         if (show)
         {
-            LevelTile lt = LevelManager.getTile(curMPWorld);
+            LevelTileController lt = LevelManager.getTile(curMPWorld);
             if (!lt)
             {
                 return;
             }
             if (!lt.Revealed || lt.DetectedAny
                 || lt == Managers.Level.StartTile || (Managers.Player.completedMap() && lt == Managers.Level.XTile)
-                || (lt.tileType == LevelTile.TileType.MAP && !lt.Activated)
+                || (lt.tileType == LevelTileController.TileType.MAP && !lt.Activated)
                 )
             {
                 Managers.Effect.moveCursor(lt);

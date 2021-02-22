@@ -5,7 +5,7 @@ using UnityEngine;
 public class ClusterGenerator : ObjectGenerator
 {//2019-06-17: copied from ObjectGenerator
 
-    public List<LevelTile.TileType> rings;
+    public List<LevelTileController.TileType> rings;
 
     public override void generate(GameObject[,] tileMap)
     {
@@ -30,7 +30,7 @@ public class ClusterGenerator : ObjectGenerator
                 int radius = rings.Count;
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
-                    LevelTile lt = tileMap[rx, ry]?.GetComponent<LevelTile>();
+                    LevelTileController lt = tileMap[rx, ry]?.GetComponent<LevelTileController>();
                     if (lt && lt.Available)
                     {
                         lt.tileType = rings[0];
@@ -46,7 +46,7 @@ public class ClusterGenerator : ObjectGenerator
                                         int manhattenDistance = Mathf.Abs(ix - rx) + Mathf.Abs(iy - ry);
                                         if (manhattenDistance == r)
                                         {
-                                            LevelTile ilt = tileMap[ix, iy]?.GetComponent<LevelTile>();
+                                            LevelTileController ilt = tileMap[ix, iy]?.GetComponent<LevelTileController>();
                                             if (ilt && ilt.Available)
                                             {
                                                 ilt.tileType = rings[r];
@@ -63,7 +63,7 @@ public class ClusterGenerator : ObjectGenerator
         }
     }
 
-    public override void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType)
+    public override void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType)
     {
         throw new System.NotImplementedException();
     }

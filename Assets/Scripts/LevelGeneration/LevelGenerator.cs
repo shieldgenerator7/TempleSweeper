@@ -8,7 +8,7 @@ public abstract class LevelGenerator : MonoBehaviour
 
     public abstract void generatePostStart(GameObject[,] tileMap, int posX, int posY);
 
-    public abstract void generatePostReveal(GameObject[,] tileMap, LevelTile.TileType tileType);
+    public abstract void generatePostReveal(GameObject[,] tileMap, LevelTileController.TileType tileType);
 
     public virtual void clearGeneratedObjects()
     {
