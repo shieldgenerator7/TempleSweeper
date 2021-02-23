@@ -147,6 +147,10 @@ public class LevelManager : MonoBehaviour
     public static LevelTileController getTileController(Vector2 pos)
     {
         LevelTile lt = getTile(pos);
+        if (!lt)
+        {
+            return null;
+        }
         return FindObjectsOfType<LevelTileController>().First(ltc => ltc.LevelTile == lt);
     }
 
@@ -602,6 +606,10 @@ public class LevelManager : MonoBehaviour
     public static List<LevelTileController> getSurroundingTiles(LevelTileController lt)
     {
         List<LevelTileController> surroundingTiles = new List<LevelTileController>();
+        if (!lt)
+        {
+            return surroundingTiles;
+        }
         for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
         {
             for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
@@ -610,6 +618,10 @@ public class LevelManager : MonoBehaviour
                 {
                     if (i != lt.indexX || j != lt.indexY)
                     {
+                        if (!instance.tileMap[i, j])
+                        {
+                            continue;
+                        }
                         LevelTileController tile = FindObjectsOfType<LevelTileController>()
                             .First(ltc => ltc.LevelTile == instance.tileMap[i, j]);
                         if (tile != null)
