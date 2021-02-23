@@ -240,7 +240,6 @@ public class LevelManager : MonoBehaviour
         {
             lgen.generate(tileMap);
         }
-        //generateFill(levelTilePrefab, tiles, width, height);
         for (int xi = 0; xi < width; xi++)
         {
             for (int yi = 0; yi < height; yi++)
@@ -254,7 +253,7 @@ public class LevelManager : MonoBehaviour
                 lt.x = xi;
                 lt.y = yi;
                 GameObject go = GameObject.Instantiate(levelTilePrefab);
-                go.transform.position = new Vector2(xi - width / 2, yi - height / 2);
+                go.transform.position = getWorldPos(xi, yi);
                 go.GetComponent<LevelTileController>().LevelTile = tileMap[xi, yi];
                 go.transform.parent = transform;
             }
@@ -281,17 +280,6 @@ public class LevelManager : MonoBehaviour
         foreach (LevelGenerator lgen in Level.postRevealLevelGenerators)
         {
             lgen.generatePostReveal(tileMap, content);
-        }
-    }
-
-    private void generateFill(GameObject prefab, GameObject[,] prefabMap, int width, int height)
-    {
-        for (int xi = 0; xi < width; xi++)
-        {
-            for (int yi = 0; yi < height; yi++)
-            {
-                prefabMap[xi, yi] = prefab;
-            }
         }
     }
 
@@ -523,7 +511,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void revealBoard()
     {
-        foreach (LevelTile lt in getAllTiles(alt=>!alt.Revealed))
+        foreach (LevelTile lt in getAllTiles(alt => !alt.Revealed))
         {
             if (lt && !lt.Revealed)
             {
@@ -640,50 +628,6 @@ public class LevelManager : MonoBehaviour
                 break;//all good hear
             }
             Camera.main.orthographicSize++;
-        }
-    }
-
-    //Score
-
-    //Legacy generation methods
-    private void generateRiver(GameObject prefab, GameObject[,] prefabMap, int width, int height, int startY)
-    {
-        int currentY = startY;
-        int prevY = currentY;
-        for (int xi = 0; xi < width; xi++)
-        {
-            if (Random.Range(0, 2) > 0)
-            {
-                currentY += Random.Range(-2, 2);
-            }
-            for (int yi = prevY; yi != currentY; yi += (int)Mathf.Sign(currentY - prevY))
-            {
-                if (yi >= 0 && yi < height)
-                {
-                    prefabMap[xi, yi] = prefab;
-                }
-            }
-            if (currentY >= 0 && currentY < height)
-            {
-                prefabMap[xi, currentY] = prefab;
-            }
-            prevY = currentY;
-        }
-    }
-
-    private void generateForest(GameObject prefab, Vector2 size, Vector2 pos)
-    {
-        for (int count = 0; count < size.x * size.y / 3; count++)
-        {
-            float randomX = Random.Range(-size.x / 2, size.x / 2) + pos.x;
-            float randomY = Random.Range(-size.y / 2, size.y / 2) + pos.y;
-            Vector2 randomPos = new Vector2(randomX, randomY);
-            if (getTile(randomPos).Walkable)
-            {
-                GameObject go = GameObject.Instantiate(prefab);
-                go.transform.position = randomPos;
-                go.GetComponent<SpriteRenderer>().sortingOrder = getDisplaySortingOrder(randomPos);
-            }
         }
     }
 }
