@@ -49,12 +49,12 @@ public class GestureProfile
         Managers.Effect.hideCursor();
         if (show)
         {
-            LevelTile lt = LevelManager.getTile(curMPWorld);
+            LevelTile lt = Managers.Level.getTile(curMPWorld);
             if (!lt)
             {
                 return;
             }
-            if (!lt.Revealed || LevelManager.getDetectedCount(lt)>0
+            if (!lt.Revealed || Managers.Level.getDetectedCount(lt)>0
                 || lt == Managers.Level.StartTile || (Managers.Player.completedMap() && lt == Managers.Level.XTile)
                 || (lt.Content == LevelTile.Contents.MAP)
                 )

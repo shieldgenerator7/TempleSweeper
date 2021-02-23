@@ -56,7 +56,7 @@ public abstract class LevelGenerator : MonoBehaviour
             {
                 if (inBounds(tileMap, x, y))
                 {
-                    if (tileMap[x, y] != null)
+                    if (tileMap[x, y] != null && tileMap[x,y].Walkable)
                     {
                         count++;
                     }

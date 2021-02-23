@@ -31,7 +31,7 @@ public class EffectManager : MonoBehaviour
     private void highlightEffect(LevelTile tile, GameObject prefab, List<ChangeHighlighter> pool)
     {
         //Determine position
-        Vector2 position = LevelManager.getPosition(tile);
+        Vector2 position = Managers.Level.getPosition(tile);
         //Determine change type
         ChangeHighlighter.ChangeType changeType = ChangeHighlighter.ChangeType.NEUTRAL;
         if (tile.Flagged)
@@ -70,7 +70,7 @@ public class EffectManager : MonoBehaviour
 
     public void moveCursor(LevelTile tile)
     {
-        Vector2 position = LevelManager.getPosition(tile);
+        Vector2 position = Managers.Level.getPosition(tile);
         cursorRevealed.transform.position = position;
         cursorHidden.transform.position = position;
         cursorRevealed.gameObject.SetActive(tile.Revealed);

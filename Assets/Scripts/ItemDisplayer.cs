@@ -35,7 +35,7 @@ public class ItemDisplayer : MonoBehaviour
         GetComponent<NumberDisplayer>()
             .wheelPresent.enabled = true;
         //Register with Level Manager
-        LevelManager.FoundItem = this;
+        Managers.Level.FoundItem = this;
         //Get level tile
         levelTile = GetComponentInParent<LevelTileController>();
     }

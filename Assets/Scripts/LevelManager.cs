@@ -42,27 +42,15 @@ public class LevelManager : MonoBehaviour
     private bool usedFirstHoldFrame;
 
     private ItemDisplayer foundItem;
-    public static ItemDisplayer FoundItem
+    public ItemDisplayer FoundItem
     {
-        get { return instance.foundItem; }
-        set { instance.foundItem = value; }
+        get { return foundItem; }
+        set { foundItem = value; }
     }
-
-    private static LevelManager instance;
 
     // Use this for initialization
     void Start()
     {
-        //Singleton sorting out
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-            return;
-        }
         //Initialization stuff
         generateLevel(Level);
         updateOrthographicSize();
@@ -101,7 +89,7 @@ public class LevelManager : MonoBehaviour
     }
     public void reset(bool resetToBeginning = true)
     {
-        if (instance.tileMap != null)
+        if (tileMap != null)
         {
             foreach (LevelTileController ltc in FindObjectsOfType<LevelTileController>())
             {
@@ -127,28 +115,28 @@ public class LevelManager : MonoBehaviour
         generateLevel(Level);
 
         //Reset runtime variables
-        instance.anyRevealed = false;
+        anyRevealed = false;
         Managers.Player.reset();
     }
 
-    public static LevelTile getTile(Vector2 pos)
+    public LevelTile getTile(Vector2 pos)
     {
         int xIndex = getXIndex(pos);
         int yIndex = getYIndex(pos);
         if (inBounds(xIndex, yIndex))
         {
-            return instance.tileMap[xIndex, yIndex];
+            return tileMap[xIndex, yIndex];
         }
         else
         {
             return null;//index out of bounds, return null
         }
     }
-    public static Vector2 getPosition(LevelTile lt)
+    public Vector2 getPosition(LevelTile lt)
     {
         return getWorldPos(lt.x, lt.y);
     }
-    private static LevelTileController getTileController(LevelTile lt)
+    private LevelTileController getTileController(LevelTile lt)
     {
         return FindObjectsOfType<LevelTileController>().First(ltc => ltc.LevelTile == lt);
     }
@@ -174,61 +162,61 @@ public class LevelManager : MonoBehaviour
     public LevelTile XTile
         => getTile(FindObjectOfType<MapLineUpdater>().LastRevealedSpot);
 
-    private static int getXIndex(Vector2 pos)
+    private int getXIndex(Vector2 pos)
     {
-        return Mathf.RoundToInt(pos.x + instance.Level.gridWidth / 2);
+        return Mathf.RoundToInt(pos.x + Level.gridWidth / 2);
     }
 
-    private static int getYIndex(Vector2 pos)
+    private int getYIndex(Vector2 pos)
     {
-        return Mathf.RoundToInt(pos.y + instance.Level.gridHeight / 2);
+        return Mathf.RoundToInt(pos.y + Level.gridHeight / 2);
     }
 
-    public static Vector2 getGridPos(Vector2 worldPos)
+    public Vector2 getGridPos(Vector2 worldPos)
     {
         return new Vector2(getXIndex(worldPos), getYIndex(worldPos));
     }
 
-    public static Vector2 getWorldPos(Vector2 iv)
+    public  Vector2 getWorldPos(Vector2 iv)
     {
         return getWorldPos((int)iv.x, (int)iv.y);
     }
-    public static Vector2 getWorldPos(int ix, int iy)
+    public  Vector2 getWorldPos(int ix, int iy)
     {
         Vector2 pos = Vector2.zero;
-        pos.x = ix - instance.Level.gridWidth / 2;
-        pos.y = iy - instance.Level.gridHeight / 2;
+        pos.x = ix - Level.gridWidth / 2;
+        pos.y = iy - Level.gridHeight / 2;
         return pos;
     }
 
-    public static bool tapOnObject(GameObject go, Vector2 tapPos)
+    public  bool tapOnObject(GameObject go, Vector2 tapPos)
     {
         return getGridPos(go.transform.position) == getGridPos(tapPos);
     }
 
-    public static int getDisplaySortingOrder(Vector2 pos)
+    public  int getDisplaySortingOrder(Vector2 pos)
     {
-        return (int)((instance.Level.gridHeight / 2 - pos.y) * 100);
+        return (int)((Level.gridHeight / 2 - pos.y) * 100);
     }
-    public static Vector2 randomPosition()
+    public  Vector2 randomPosition()
     {
         return new Vector2(
-            Random.Range(-instance.Level.gridWidth / 2, instance.Level.gridWidth / 2) * 0.9f,
-            Random.Range(-instance.Level.gridHeight / 2, instance.Level.gridHeight / 2) * 0.9f
+            Random.Range(-Level.gridWidth / 2, Level.gridWidth / 2) * 0.9f,
+            Random.Range(-Level.gridHeight / 2, Level.gridHeight / 2) * 0.9f
             );
     }
-    public static bool inBounds(Vector2 pos)
+    public  bool inBounds(Vector2 pos)
     {
-        return pos.x > -instance.Level.gridWidth / 2 * 0.99f
-            && pos.x < instance.Level.gridWidth / 2 * 0.99f
-            && pos.y > -instance.Level.gridHeight / 2 * 0.99f
-            && pos.y < instance.Level.gridHeight / 2 * 0.99f;
+        return pos.x > -Level.gridWidth / 2 * 0.99f
+            && pos.x < Level.gridWidth / 2 * 0.99f
+            && pos.y > -Level.gridHeight / 2 * 0.99f
+            && pos.y < Level.gridHeight / 2 * 0.99f;
     }
 
-    public static bool inBounds(int ix, int iy)
+    public bool inBounds(int ix, int iy)
     {
-        return ix >= 0 && ix < instance.tileMap.GetLength(0)
-            && iy >= 0 && iy < instance.tileMap.GetLength(1);
+        return ix >= 0 && ix < tileMap.GetLength(0)
+            && iy >= 0 && iy < tileMap.GetLength(1);
     }
 
     private void generateLevel(Level level)
@@ -440,7 +428,7 @@ public class LevelManager : MonoBehaviour
                         Managers.Effect.highlightChange(lt);
                         lt.Content = LevelTile.Contents.NONE;
                         Managers.Player.MapFoundCount++;
-                        LevelManager.getTileController(lt).contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                        getTileController(lt).contentsSR.gameObject.AddComponent<ItemDisplayer>();
                         generatePostItemReveal(LevelTile.Contents.MAP);
                     }
                 }
@@ -545,7 +533,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="tileType"></param>
     /// <param name="notTheType">True to get the amount that is NOT the given type</param>
     /// <returns></returns>
-    public static int getAdjacentCount(LevelTile lt, LevelTile.Contents content, bool notTheContent = false)
+    public int getAdjacentCount(LevelTile lt, LevelTile.Contents content, bool notTheContent = false)
     {
         return getSurroundingTiles(lt).Count(slt => (slt.Content == content) != notTheContent);
     }
@@ -557,7 +545,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="lt"></param>
     /// <param name="notFlagged">True to get the amount that is NOT flagged</param>
     /// <returns></returns>
-    public static int getAdjacentFlagCount(LevelTile lt, bool notFlagged = false)
+    public int getAdjacentFlagCount(LevelTile lt, bool notFlagged = false)
     {
         return getSurroundingTiles(lt).Count(slt => (slt.Flagged == true) != notFlagged);
     }
@@ -569,7 +557,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="lt"></param>
     /// <param name="notRevealed">True to get the amount that is NOT revealed</param>
     /// <returns></returns>
-    public static int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
+    public  int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
     {
         return getSurroundingTiles(lt).Count(slt => (slt.Revealed == true) != notRevealed);
     }
@@ -580,7 +568,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public static List<LevelTile> getSurroundingTiles(LevelTile lt)
+    public List<LevelTile> getSurroundingTiles(LevelTile lt)
     {
         List<LevelTile> surroundingTiles = new List<LevelTile>();
         if (!lt)
@@ -595,7 +583,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (i != lt.x || j != lt.y)
                     {
-                        LevelTile tile = instance.tileMap[i, j];
+                        LevelTile tile = tileMap[i, j];
                         if (tile != null)
                         {
                             surroundingTiles.Add(tile);
@@ -612,7 +600,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public static int getDetectedCount(LevelTile lt)
+    public int getDetectedCount(LevelTile lt)
     {
         return getSurroundingTiles(lt).Count(slt => slt.Detectable);
     }
