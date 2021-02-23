@@ -50,7 +50,6 @@ public class GestureProfile
         if (show)
         {
             LevelTile lt = LevelManager.getTile(curMPWorld);
-            LevelTileController ltc = LevelManager.getTileController(lt);
             if (!lt)
             {
                 return;
@@ -60,7 +59,7 @@ public class GestureProfile
                 || (lt.Content == LevelTile.Contents.MAP)
                 )
             {
-                Managers.Effect.moveCursor(ltc);
+                Managers.Effect.moveCursor(lt);
             }
         }
     }

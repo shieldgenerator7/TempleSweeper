@@ -20,27 +20,27 @@ public class EffectManager : MonoBehaviour
 
     }
 
-    public void highlightChange(LevelTileController tile)
+    public void highlightChange(LevelTile tile)
     {
         highlightEffect(tile, changeHighlighterPrefab, changeHighlighterPool);
     }
-    public void highlightTile(LevelTileController tile)
+    public void highlightTile(LevelTile tile)
     {
         highlightEffect(tile, tileHighlighterPrefab, tileHighlighterPool);
     }
-    private void highlightEffect(LevelTileController tile, GameObject prefab, List<ChangeHighlighter> pool)
+    private void highlightEffect(LevelTile tile, GameObject prefab, List<ChangeHighlighter> pool)
     {
         //Determine position
-        Vector2 position = tile.transform.position;
+        Vector2 position = LevelManager.getPosition(tile);
         //Determine change type
         ChangeHighlighter.ChangeType changeType = ChangeHighlighter.ChangeType.NEUTRAL;
-        if (tile.LevelTile.Flagged)
+        if (tile.Flagged)
         {
             changeType = ChangeHighlighter.ChangeType.WARN;
         }
-        else if (tile.LevelTile.Revealed)
+        else if (tile.Revealed)
         {
-            switch (tile.LevelTile.Content)
+            switch (tile.Content)
             {
                 case LevelTile.Contents.MAP:
                     changeType = ChangeHighlighter.ChangeType.DISCOVER;
@@ -68,12 +68,13 @@ public class EffectManager : MonoBehaviour
         highlighter.startEffect(position, changeType);
     }
 
-    public void moveCursor(LevelTileController tile)
+    public void moveCursor(LevelTile tile)
     {
-        cursorRevealed.transform.position = tile.transform.position;
-        cursorHidden.transform.position = tile.transform.position;
-        cursorRevealed.gameObject.SetActive(tile.LevelTile.Revealed);
-        cursorHidden.gameObject.SetActive(!tile.LevelTile.Revealed);
+        Vector2 position = LevelManager.getPosition(tile);
+        cursorRevealed.transform.position = position;
+        cursorHidden.transform.position = position;
+        cursorRevealed.gameObject.SetActive(tile.Revealed);
+        cursorHidden.gameObject.SetActive(!tile.Revealed);
     }
     public void hideCursor()
     {

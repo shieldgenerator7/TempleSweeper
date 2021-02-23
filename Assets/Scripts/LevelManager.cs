@@ -144,7 +144,11 @@ public class LevelManager : MonoBehaviour
             return null;//index out of bounds, return null
         }
     }
-    public static LevelTileController getTileController(LevelTile lt)
+    public static Vector2 getPosition(LevelTile lt)
+    {
+        return getWorldPos(lt.x, lt.y);
+    }
+    private static LevelTileController getTileController(LevelTile lt)
     {
         return FindObjectsOfType<LevelTileController>().First(ltc => ltc.LevelTile == lt);
     }
@@ -349,7 +353,6 @@ public class LevelManager : MonoBehaviour
         LevelTile lt = getTile(tapPos);
         if (lt != null)
         {
-            LevelTileController ltc = getTileController(lt);
             //If it's revealed
             if (lt.Revealed)
             {
@@ -393,7 +396,7 @@ public class LevelManager : MonoBehaviour
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
                             //Flag it
-                            processFlagGesture(getTileController(neighbor).transform.position);
+                            processFlagGesture(getPosition(neighbor));
                         }
                     }
                 }
@@ -408,7 +411,7 @@ public class LevelManager : MonoBehaviour
                 }
                 if ((!lt.Revealed) || getDetectedCount(lt) > 0)
                 {
-                    Managers.Effect.highlightChange(ltc);
+                    Managers.Effect.highlightChange(lt);
                 }
                 LevelTile.Contents revealedItem = LevelTile.Contents.NONE;
                 bool shouldRevealBoard = false;
@@ -426,10 +429,10 @@ public class LevelManager : MonoBehaviour
                     revealedItem = LevelTile.Contents.TREASURE;
                     Managers.Player.findTrophy();
                 }
-                if (revealedItem == LevelTile.Contents.TRAP || revealedItem== LevelTile.Contents.TREASURE)
+                if (revealedItem == LevelTile.Contents.TRAP || revealedItem == LevelTile.Contents.TREASURE)
                 {
                     lt.Revealed = true;
-                    Managers.Effect.highlightChange(ltc);
+                    Managers.Effect.highlightChange(lt);
                     if (shouldRevealBoard)
                     {
                         revealBoard();
@@ -446,10 +449,10 @@ public class LevelManager : MonoBehaviour
                     //but not activated yet
                     if (prevRevealed)
                     {
-                        Managers.Effect.highlightChange(ltc);
+                        Managers.Effect.highlightChange(lt);
                         lt.Content = LevelTile.Contents.NONE;
                         Managers.Player.MapFoundCount++;
-                        ltc.contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                        LevelManager.getTileController(lt).contentsSR.gameObject.AddComponent<ItemDisplayer>();
                         generatePostItemReveal(LevelTile.Contents.MAP);
                     }
                 }
@@ -465,9 +468,8 @@ public class LevelManager : MonoBehaviour
         LevelTile lt = getTile(flagPos);
         if (lt != null && !lt.Revealed)
         {
-            LevelTileController ltc = getTileController(lt);
             lt.Flagged = !lt.Flagged;
-            Managers.Effect.highlightChange(ltc);
+            Managers.Effect.highlightChange(lt);
             //Update flag counters (fc)
             foreach (LevelTile fc in getSurroundingTiles(lt))
             {
@@ -486,7 +488,6 @@ public class LevelManager : MonoBehaviour
             //don't process empty spaces
             return;
         }
-        LevelTileController ltc = getTileController(lt);
         if (!usedFirstHoldFrame)
         {
             usedFirstHoldFrame = true;
@@ -498,10 +499,10 @@ public class LevelManager : MonoBehaviour
             }
             else
             {
-                Managers.Effect.highlightChange(ltc);
+                Managers.Effect.highlightChange(lt);
             }
         }
-        frame.transform.position = ltc.transform.position;
+        frame.transform.position = getPosition(lt);
         if (finished)
         {
             usedFirstHoldFrame = false;
@@ -522,9 +523,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void revealBoard()
     {
-        foreach (LevelTileController ltc in FindObjectsOfType<LevelTileController>())
+        foreach (LevelTile lt in getAllTiles(alt=>!alt.Revealed))
         {
-            LevelTile lt = ltc.LevelTile;
             if (lt && !lt.Revealed)
             {
                 if (lt.Content == LevelTile.Contents.TREASURE
@@ -532,7 +532,7 @@ public class LevelManager : MonoBehaviour
                     || lt.Content == LevelTile.Contents.MAP)
                 {
                     lt.Revealed = true;
-                    Managers.Effect.highlightChange(ltc);
+                    Managers.Effect.highlightChange(lt);
                 }
             }
         }

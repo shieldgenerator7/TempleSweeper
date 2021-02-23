@@ -56,7 +56,7 @@ public class LevelTileController : MonoBehaviour
                     contentsSR.sprite = mapSprite;
                     break;
             }
-            Managers.Effect.highlightTile(this);
+            Managers.Effect.highlightTile(levelTile);
         }
         else
         {
