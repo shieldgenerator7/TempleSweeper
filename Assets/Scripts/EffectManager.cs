@@ -40,15 +40,15 @@ public class EffectManager : MonoBehaviour
         }
         else if (tile.LevelTile.Revealed)
         {
-            switch (tile.tileType)
+            switch (tile.LevelTile.Content)
             {
-                case LevelTileController.TileType.MAP:
+                case LevelTile.Contents.MAP:
                     changeType = ChangeHighlighter.ChangeType.DISCOVER;
                     break;
-                case LevelTileController.TileType.TREASURE:
+                case LevelTile.Contents.TREASURE:
                     changeType = ChangeHighlighter.ChangeType.DISCOVER;
                     break;
-                case LevelTileController.TileType.TRAP:
+                case LevelTile.Contents.TRAP:
                     changeType = ChangeHighlighter.ChangeType.HIT;
                     break;
                 default: break;

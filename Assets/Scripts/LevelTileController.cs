@@ -21,120 +21,46 @@ public class LevelTileController : MonoBehaviour
 
     private void Start()
     {
-        levelTile.onFlaggedChanged += (flagged) => Flagged = flagged;
-        levelTile.onRevealedChanged += (revealed) => Revealed = revealed;
+        levelTile.onFlaggedChanged += updateFlagged;
+        levelTile.onRevealedChanged += updateRevealed;
     }
 
-    public enum TileType
+    private void updateFlagged(bool flagged)
     {
-        EMPTY,
-        TRAP,
-        TREASURE,
-        MAP,
-        RESERVED//empty, but not able to be assigned to anything
-    };
+        GetComponentInChildren<FlagDisplayer>().showFlag(flagged);
+    }
 
-    public TileType tileType = TileType.EMPTY;
-    public int indexX, indexY;//its index in the grid
-
-    /// <summary>
-    /// When flagged, a tile cannot be revealed
-    /// </summary>
-    private bool flagged = false;
-    private bool Flagged
+    private void updateRevealed(bool revealed)
     {
-        get { return flagged; }
-        set
+        if (revealed)
         {
-            flagged = value;
-            GetComponentInChildren<FlagDisplayer>().showFlag(flagged);
+            //Destroy the cover
+            Destroy(cover);
+            //Show the contents
+            switch (levelTile.Content)
+            {
+                case LevelTile.Contents.NONE:
+                    numberDisplayer.displayNumber(this);
+                    break;
+                case LevelTile.Contents.TRAP:
+                    contentsSR.sprite = trapSprite;
+                    contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                    levelTile.Content = LevelTile.Contents.NONE;
+                    break;
+                case LevelTile.Contents.TREASURE:
+                    contentsSR.sprite = treasureSprite;
+                    contentsSR.gameObject.AddComponent<ItemDisplayer>();
+                    levelTile.Content = LevelTile.Contents.NONE;
+                    break;
+                case LevelTile.Contents.MAP:
+                    contentsSR.sprite = mapSprite;
+                    break;
+            }
+            Managers.Effect.highlightTile(this);
+        }
+        else
+        {
+            throw new System.InvalidOperationException("Cannot unreveal tile!");
         }
     }
-
-    private bool revealed = false;
-    private bool Revealed
-    {
-        get { return revealed; }
-        set
-        {
-            revealed = value;
-            if (revealed)
-            {
-                //Destroy the cover
-                Destroy(cover);
-                //Show the contents
-                switch (tileType)
-                {
-                    case TileType.RESERVED:
-                    case TileType.EMPTY:
-                        numberDisplayer.displayNumber(this);
-                        break;
-                    case TileType.TRAP:
-                        contentsSR.sprite = trapSprite;
-                        contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                        tileType = TileType.EMPTY;
-                        break;
-                    case TileType.TREASURE:
-                        contentsSR.sprite = treasureSprite;
-                        contentsSR.gameObject.AddComponent<ItemDisplayer>();
-                        tileType = TileType.EMPTY;
-                        break;
-                    case TileType.MAP:
-                        contentsSR.sprite = mapSprite;
-                        break;
-                }
-                Managers.Effect.highlightTile(this);
-            }
-            else
-            {
-                throw new System.InvalidOperationException("Cannot unreveal tile!");
-            }
-        }
-    }
-
-    private bool activated = false;
-    private bool Activated
-    {
-        get { return activated; }
-        set
-        {
-            activated = value;
-            if (activated)
-            {
-                if (tileType != TileType.MAP)
-                {
-                    throw new System.InvalidOperationException("Cannot activate non-map tile! tile type: " + tileType);
-                }
-                Managers.Player.MapFoundCount++;
-                contentsSR.gameObject.AddComponent<ItemDisplayer>();
-            }
-            else
-            {
-                throw new System.InvalidOperationException("Cannot unactivate tile!");
-            }
-        }
-    }
-
-    public bool Empty => empty(tileType);
-
-    public static bool empty(TileType type)
-    {
-        return type == TileType.EMPTY
-            || type == TileType.RESERVED
-            || type == TileType.MAP;
-    }
-    public static bool empty(LevelTile.Contents content)
-    {
-        return content == LevelTile.Contents.NONE
-            || content == LevelTile.Contents.MAP;
-    }
-
-    public bool Available => available(tileType);
-
-    public static bool available(TileType type)
-    {
-        return type == TileType.EMPTY;
-    }
-
-    public bool DetectedAny => numberDisplayer.DetectedCount > 0;
 }

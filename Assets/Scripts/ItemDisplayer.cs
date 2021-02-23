@@ -58,7 +58,7 @@ public class ItemDisplayer : MonoBehaviour
     {
         transform.localScale = originalSize;
         GetComponent<NumberDisplayer>().displayNumber(levelTile);
-        GetComponentInParent<LevelTileController>().tileType = LevelTileController.TileType.EMPTY;
+        GetComponentInParent<LevelTileController>().LevelTile.Content = LevelTile.Contents.NONE;
         //Hide present wheel
         GetComponent<NumberDisplayer>()
             .wheelPresent.enabled = false;
