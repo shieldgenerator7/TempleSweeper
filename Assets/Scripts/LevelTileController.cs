@@ -41,7 +41,7 @@ public class LevelTileController : MonoBehaviour
     /// When flagged, a tile cannot be revealed
     /// </summary>
     private bool flagged = false;
-    public bool Flagged
+    private bool Flagged
     {
         get { return flagged; }
         set
@@ -52,7 +52,7 @@ public class LevelTileController : MonoBehaviour
     }
 
     private bool revealed = false;
-    public bool Revealed
+    private bool Revealed
     {
         get { return revealed; }
         set
@@ -93,7 +93,7 @@ public class LevelTileController : MonoBehaviour
     }
 
     private bool activated = false;
-    public bool Activated
+    private bool Activated
     {
         get { return activated; }
         set

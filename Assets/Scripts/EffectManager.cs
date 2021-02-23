@@ -34,19 +34,16 @@ public class EffectManager : MonoBehaviour
         Vector2 position = tile.transform.position;
         //Determine change type
         ChangeHighlighter.ChangeType changeType = ChangeHighlighter.ChangeType.NEUTRAL;
-        if (tile.Flagged)
+        if (tile.LevelTile.Flagged)
         {
             changeType = ChangeHighlighter.ChangeType.WARN;
         }
-        else if (tile.Revealed)
+        else if (tile.LevelTile.Revealed)
         {
             switch (tile.tileType)
             {
                 case LevelTileController.TileType.MAP:
-                    if (tile.Activated)
-                    {
-                        changeType = ChangeHighlighter.ChangeType.DISCOVER;
-                    }
+                    changeType = ChangeHighlighter.ChangeType.DISCOVER;
                     break;
                 case LevelTileController.TileType.TREASURE:
                     changeType = ChangeHighlighter.ChangeType.DISCOVER;
@@ -75,8 +72,8 @@ public class EffectManager : MonoBehaviour
     {
         cursorRevealed.transform.position = tile.transform.position;
         cursorHidden.transform.position = tile.transform.position;
-        cursorRevealed.gameObject.SetActive(tile.Revealed);
-        cursorHidden.gameObject.SetActive(!tile.Revealed);
+        cursorRevealed.gameObject.SetActive(tile.LevelTile.Revealed);
+        cursorHidden.gameObject.SetActive(!tile.LevelTile.Revealed);
     }
     public void hideCursor()
     {

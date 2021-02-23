@@ -30,17 +30,15 @@ public class NumberDisplayer : MonoBehaviour
             return;
         }
         gameObject.SetActive(true);
-        detectedCount = LevelManager.getAdjacentCount(levelTile, LevelTileController.TileType.EMPTY, true);
-        detectedCount -= LevelManager.getAdjacentCount(levelTile, LevelTileController.TileType.MAP);
-        detectedCount -= LevelManager.getAdjacentCount(levelTile, LevelTileController.TileType.RESERVED);
+        detectedCount = LevelManager.getDetectedCount(levelTile.LevelTile);
         if (detectedCount == 0)
         {
             gameObject.SetActive(false);
             return;
         }
-        int flagCount = LevelManager.getAdjacentFlagCount(levelTile);
+        int flagCount = LevelManager.getAdjacentFlagCount(levelTile.LevelTile);
         displayNumber(detectedCount, flagCount);
-        if (LevelManager.getAdjacentCount(levelTile, LevelTileController.TileType.TREASURE) > 0)
+        if (LevelManager.getAdjacentCount(levelTile.LevelTile, LevelTile.Contents.TREASURE) > 0)
         {
             GetComponent<SpriteRenderer>().color = treasureColor;
         }

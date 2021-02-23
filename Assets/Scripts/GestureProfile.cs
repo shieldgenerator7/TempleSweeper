@@ -49,17 +49,18 @@ public class GestureProfile
         Managers.Effect.hideCursor();
         if (show)
         {
-            LevelTileController lt = LevelManager.getTileController(curMPWorld);
+            LevelTile lt = LevelManager.getTile(curMPWorld);
+            LevelTileController ltc = LevelManager.getTileController(lt);
             if (!lt)
             {
                 return;
             }
-            if (!lt.Revealed || lt.DetectedAny
+            if (!lt.Revealed || LevelManager.getDetectedCount(lt)>0
                 || lt == Managers.Level.StartTile || (Managers.Player.completedMap() && lt == Managers.Level.XTile)
-                || (lt.tileType == LevelTileController.TileType.MAP && !lt.Activated)
+                || (lt.Content == LevelTile.Contents.MAP)
                 )
             {
-                Managers.Effect.moveCursor(lt);
+                Managers.Effect.moveCursor(ltc);
             }
         }
     }

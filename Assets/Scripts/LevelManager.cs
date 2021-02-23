@@ -144,14 +144,25 @@ public class LevelManager : MonoBehaviour
             return null;//index out of bounds, return null
         }
     }
-    public static LevelTileController getTileController(Vector2 pos)
+    public static LevelTileController getTileController(LevelTile lt)
     {
-        LevelTile lt = getTile(pos);
-        if (!lt)
-        {
-            return null;
-        }
         return FindObjectsOfType<LevelTileController>().First(ltc => ltc.LevelTile == lt);
+    }
+
+    public List<LevelTile> getAllTiles(System.Predicate<LevelTile> condition)
+    {
+        List<LevelTile> tiles = new List<LevelTile>();
+        for (int i = 0; i <= tileMap.GetLength(0); i++)
+        {
+            for (int j = 0; j <= tileMap.GetLength(0); j++)
+            {
+                if (condition(tileMap[i, j]))
+                {
+                    tiles.Add(tileMap[i, j]);
+                }
+            }
+        }
+        return tiles;
     }
 
     public LevelTile StartTile
@@ -230,16 +241,17 @@ public class LevelManager : MonoBehaviour
         {
             for (int yi = 0; yi < height; yi++)
             {
+                LevelTile lt = tileMap[xi, yi];
                 if (tileMap[xi, yi] == null)
                 {
                     //skip empty space
                     continue;
                 }
+                lt.x = xi;
+                lt.y = yi;
                 GameObject go = GameObject.Instantiate(levelTilePrefab);
                 go.transform.position = new Vector2(xi - width / 2, yi - height / 2);
                 go.GetComponent<LevelTileController>().LevelTile = tileMap[xi, yi];
-                go.GetComponent<LevelTileController>().indexX = xi;
-                go.GetComponent<LevelTileController>().indexY = yi;
                 go.transform.parent = transform;
             }
         }
@@ -284,13 +296,13 @@ public class LevelManager : MonoBehaviour
         if (foundItem && Managers.Player.Alive)
         {
             recalculateNumbers();
-            LevelTileController foundLT = foundItem.levelTile;
-            if (foundLT.tileType != LevelTileController.TileType.MAP)
+            LevelTile foundLT = foundItem.levelTile.LevelTile;
+            if (foundLT.Content != LevelTile.Contents.MAP)
             {
                 //Reveal the found LT
                 revealTile(foundLT, true);
                 //Reveal the tiles around the found LT
-                foreach (LevelTileController levelTile in getSurroundingTiles(foundLT))
+                foreach (LevelTile levelTile in getSurroundingTiles(foundLT))
                 {
                     if (levelTile.Revealed)
                     {
@@ -334,30 +346,30 @@ public class LevelManager : MonoBehaviour
         {
             return;
         }
-        LevelTileController lt = getTileController(tapPos);
+        LevelTile lt = getTile(tapPos);
         if (lt != null)
         {
+            LevelTileController ltc = getTileController(lt);
             //If it's revealed
             if (lt.Revealed)
             {
                 //Auto-Reveal
                 //If the count of surrounding flags equals
                 //the count of surrounding trap tiles,
-                int itemCount = getAdjacentCount(lt, LevelTileController.TileType.TRAP);
-                itemCount += getAdjacentCount(lt, LevelTileController.TileType.TREASURE);
-                if (lt.Empty && lt.tileType != LevelTileController.TileType.MAP &&
+                int itemCount = getDetectedCount(lt);
+                if (!lt.Detectable && lt.Content != LevelTile.Contents.MAP &&
                     getAdjacentFlagCount(lt) == itemCount)
                 {
                     //Reveal the surrounding non-flagged tiles
-                    foreach (LevelTileController neighbor in getSurroundingTiles(lt))
+                    foreach (LevelTile neighbor in getSurroundingTiles(lt))
                     {
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
-                            if (neighbor.tileType == LevelTileController.TileType.TRAP)
+                            if (neighbor.Content == LevelTile.Contents.TRAP)
                             {
                                 Managers.Player.takeHit();
                             }
-                            if (neighbor.tileType == LevelTileController.TileType.TREASURE)
+                            if (neighbor.Content == LevelTile.Contents.TREASURE)
                             {
                                 Managers.Player.findTrophy();
                             }
@@ -372,16 +384,16 @@ public class LevelManager : MonoBehaviour
                 //Auto-Flag
                 //If the count of surrounding unrevealed tiles equals
                 //the count of surrounding trap tiles,
-                if (lt.Empty && lt.tileType != LevelTileController.TileType.MAP &&
+                if (!lt.Detectable && lt.Content != LevelTile.Contents.MAP &&
                     getAdjacentRevealedCount(lt, true) == itemCount)
                 {
                     //Flag the surrounding non-revealed tiles
-                    foreach (LevelTileController neighbor in getSurroundingTiles(lt))
+                    foreach (LevelTile neighbor in getSurroundingTiles(lt))
                     {
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
                             //Flag it
-                            processFlagGesture(neighbor.transform.position);
+                            processFlagGesture(getTileController(neighbor).transform.position);
                         }
                     }
                 }
@@ -394,14 +406,14 @@ public class LevelManager : MonoBehaviour
                     generateLevelPostTap(tapPos);
                     anyRevealed = true;
                 }
-                if ((!lt.Revealed) || lt.DetectedAny)
+                if ((!lt.Revealed) || getDetectedCount(lt) > 0)
                 {
-                    Managers.Effect.highlightChange(lt);
+                    Managers.Effect.highlightChange(ltc);
                 }
                 LevelTile.Contents revealedItem = LevelTile.Contents.NONE;
                 bool shouldRevealBoard = false;
                 bool prevRevealed = lt.Revealed;
-                if (lt.tileType == LevelTileController.TileType.TRAP)
+                if (lt.Content == LevelTile.Contents.TRAP)
                 {
                     revealedItem = LevelTile.Contents.TRAP;
                     if (!Managers.Player.takeHit())
@@ -409,15 +421,15 @@ public class LevelManager : MonoBehaviour
                         shouldRevealBoard = true;
                     }
                 }
-                if (lt.tileType == LevelTileController.TileType.TREASURE)
+                if (lt.Content == LevelTile.Contents.TREASURE)
                 {
                     revealedItem = LevelTile.Contents.TREASURE;
                     Managers.Player.findTrophy();
                 }
-                if (!LevelTileController.empty(revealedItem))
+                if (revealedItem == LevelTile.Contents.TRAP || revealedItem== LevelTile.Contents.TREASURE)
                 {
                     lt.Revealed = true;
-                    Managers.Effect.highlightChange(lt);
+                    Managers.Effect.highlightChange(ltc);
                     if (shouldRevealBoard)
                     {
                         revealBoard();
@@ -428,14 +440,16 @@ public class LevelManager : MonoBehaviour
                 {
                     revealTile(lt);
                 }
-                if (lt.tileType == LevelTileController.TileType.MAP)
+                if (lt.Content == LevelTile.Contents.MAP)
                 {
                     //if it's already been revealed
                     //but not activated yet
-                    if (prevRevealed && !lt.Activated)
+                    if (prevRevealed)
                     {
-                        lt.Activated = true;
-                        Managers.Effect.highlightChange(lt);
+                        Managers.Effect.highlightChange(ltc);
+                        lt.Content = LevelTile.Contents.NONE;
+                        Managers.Player.MapFoundCount++;
+                        ltc.contentsSR.gameObject.AddComponent<ItemDisplayer>();
                         generatePostItemReveal(LevelTile.Contents.MAP);
                     }
                 }
@@ -448,29 +462,31 @@ public class LevelManager : MonoBehaviour
         {
             return;
         }
-        LevelTileController lt = getTileController(flagPos);
+        LevelTile lt = getTile(flagPos);
         if (lt != null && !lt.Revealed)
         {
+            LevelTileController ltc = getTileController(lt);
             lt.Flagged = !lt.Flagged;
-            Managers.Effect.highlightChange(lt);
+            Managers.Effect.highlightChange(ltc);
             //Update flag counters (fc)
-            foreach (LevelTileController fc in getSurroundingTiles(lt))
+            foreach (LevelTile fc in getSurroundingTiles(lt))
             {
                 if (fc.Revealed)
                 {
-                    fc.numberDisplayer.displayNumber();
+                    getTileController(fc).numberDisplayer.displayNumber();
                 }
             }
         }
     }
     public void processHoldGesture(Vector2 holdPos, bool finished)
     {
-        LevelTileController lt = getTileController(holdPos);
+        LevelTile lt = getTile(holdPos);
         if (!lt)
         {
             //don't process empty spaces
             return;
         }
+        LevelTileController ltc = getTileController(lt);
         if (!usedFirstHoldFrame)
         {
             usedFirstHoldFrame = true;
@@ -482,10 +498,10 @@ public class LevelManager : MonoBehaviour
             }
             else
             {
-                Managers.Effect.highlightChange(lt);
+                Managers.Effect.highlightChange(ltc);
             }
         }
-        frame.transform.position = lt.transform.position;
+        frame.transform.position = ltc.transform.position;
         if (finished)
         {
             usedFirstHoldFrame = false;
@@ -493,7 +509,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void revealTile(LevelTileController lt, bool forceReveal = false)
+    private void revealTile(LevelTile lt, bool forceReveal = false)
     {
         if ((!lt.Revealed || forceReveal) && !lt.Flagged)
         {
@@ -541,18 +557,9 @@ public class LevelManager : MonoBehaviour
     /// <param name="tileType"></param>
     /// <param name="notTheType">True to get the amount that is NOT the given type</param>
     /// <returns></returns>
-    public static int getAdjacentCount(LevelTileController lt, LevelTileController.TileType tileType, bool notTheType = false)
+    public static int getAdjacentCount(LevelTile lt, LevelTile.Contents content, bool notTheContent = false)
     {
-        int count = 0;
-        foreach (LevelTileController levelTile in getSurroundingTiles(lt))
-        {
-            if ((levelTile.tileType == tileType)
-                != notTheType)
-            {
-                count++;
-            }
-        }
-        return count;
+        return getSurroundingTiles(lt).Count(slt => (slt.Content == content) != notTheContent);
     }
 
     /// <summary>
@@ -562,18 +569,9 @@ public class LevelManager : MonoBehaviour
     /// <param name="lt"></param>
     /// <param name="notFlagged">True to get the amount that is NOT flagged</param>
     /// <returns></returns>
-    public static int getAdjacentFlagCount(LevelTileController lt, bool notFlagged = false)
+    public static int getAdjacentFlagCount(LevelTile lt, bool notFlagged = false)
     {
-        int count = 0;
-        foreach (LevelTileController levelTile in getSurroundingTiles(lt))
-        {
-            if ((levelTile.Flagged == true)
-                != notFlagged)
-            {
-                count++;
-            }
-        }
-        return count;
+        return getSurroundingTiles(lt).Count(slt => (slt.Flagged == true) != notFlagged);
     }
 
     /// <summary>
@@ -583,18 +581,9 @@ public class LevelManager : MonoBehaviour
     /// <param name="lt"></param>
     /// <param name="notRevealed">True to get the amount that is NOT revealed</param>
     /// <returns></returns>
-    public static int getAdjacentRevealedCount(LevelTileController lt, bool notRevealed = false)
+    public static int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
     {
-        int count = 0;
-        foreach (LevelTileController levelTile in getSurroundingTiles(lt))
-        {
-            if ((levelTile.Revealed == true)
-                != notRevealed)
-            {
-                count++;
-            }
-        }
-        return count;
+        return getSurroundingTiles(lt).Count(slt => (slt.Revealed == true) != notRevealed);
     }
 
     /// <summary>
@@ -603,27 +592,22 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public static List<LevelTileController> getSurroundingTiles(LevelTileController lt)
+    public static List<LevelTile> getSurroundingTiles(LevelTile lt)
     {
-        List<LevelTileController> surroundingTiles = new List<LevelTileController>();
+        List<LevelTile> surroundingTiles = new List<LevelTile>();
         if (!lt)
         {
             return surroundingTiles;
         }
-        for (int i = lt.indexX - 1; i <= lt.indexX + 1; i++)
+        for (int i = lt.x - 1; i <= lt.x + 1; i++)
         {
-            for (int j = lt.indexY - 1; j <= lt.indexY + 1; j++)
+            for (int j = lt.y - 1; j <= lt.y + 1; j++)
             {
                 if (inBounds(i, j))
                 {
-                    if (i != lt.indexX || j != lt.indexY)
+                    if (i != lt.x || j != lt.y)
                     {
-                        if (!instance.tileMap[i, j])
-                        {
-                            continue;
-                        }
-                        LevelTileController tile = FindObjectsOfType<LevelTileController>()
-                            .First(ltc => ltc.LevelTile == instance.tileMap[i, j]);
+                        LevelTile tile = instance.tileMap[i, j];
                         if (tile != null)
                         {
                             surroundingTiles.Add(tile);
@@ -633,6 +617,16 @@ public class LevelManager : MonoBehaviour
             }
         }
         return surroundingTiles;
+    }
+
+    /// <summary>
+    /// Returns count of detectable tiles around the given tile
+    /// </summary>
+    /// <param name="lt"></param>
+    /// <returns></returns>
+    public static int getDetectedCount(LevelTile lt)
+    {
+        return getSurroundingTiles(lt).Count(slt => slt.Detectable);
     }
 
     public void updateOrthographicSize()

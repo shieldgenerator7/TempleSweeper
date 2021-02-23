@@ -35,6 +35,8 @@ public class LevelTile
     /// </summary>
     public bool Walkable = false;
 
+    public int x, y;
+
     public LevelTile()
     {
         contents = Contents.NONE;
@@ -88,6 +90,10 @@ public class LevelTile
 
     public bool Available
         => contents == Contents.NONE && !Locked;
+
+    public bool Detectable
+        => contents == Contents.TRAP
+        || contents == Contents.TREASURE;
 
     public static implicit operator bool(LevelTile lt)
         => lt != null;

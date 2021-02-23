@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DebugHelper : MonoBehaviour
 {
-    public LevelTileController.TileType selectType;
+    public LevelTile.Contents selectContent;
     public Color highlightColor = Color.blue;
 
     /// <summary>
@@ -14,7 +14,7 @@ public class DebugHelper : MonoBehaviour
     {
         foreach (LevelTileController lt in FindObjectsOfType<LevelTileController>())
         {
-            if (lt.tileType == selectType)
+            if (lt.LevelTile.Content == selectContent)
             {
                 if (lt.cover)
                 {
@@ -29,9 +29,9 @@ public class DebugHelper : MonoBehaviour
     /// </summary>
     public void revealAll()
     {
-        foreach (LevelTileController lt in FindObjectsOfType<LevelTileController>())
+        foreach (LevelTile lt in Managers.Level.getAllTiles(alt => alt.Content == selectContent))
         {
-            if (lt.tileType == selectType)
+            if (lt.Content == selectContent)
             {
                 lt.Revealed = true;
             }
