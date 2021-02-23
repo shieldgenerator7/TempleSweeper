@@ -148,9 +148,13 @@ public class LevelManager : MonoBehaviour
         {
             for (int j = 0; j <= tileMap.GetLength(0); j++)
             {
-                if (condition(tileMap[i, j]))
+                if (inBounds(i, j))
                 {
-                    tiles.Add(tileMap[i, j]);
+                    LevelTile lt = tileMap[i, j];
+                    if (lt && condition(lt))
+                    {
+                        tiles.Add(lt);
+                    }
                 }
             }
         }
@@ -177,11 +181,11 @@ public class LevelManager : MonoBehaviour
         return new Vector2(getXIndex(worldPos), getYIndex(worldPos));
     }
 
-    public  Vector2 getWorldPos(Vector2 iv)
+    public Vector2 getWorldPos(Vector2 iv)
     {
         return getWorldPos((int)iv.x, (int)iv.y);
     }
-    public  Vector2 getWorldPos(int ix, int iy)
+    public Vector2 getWorldPos(int ix, int iy)
     {
         Vector2 pos = Vector2.zero;
         pos.x = ix - Level.gridWidth / 2;
@@ -189,23 +193,23 @@ public class LevelManager : MonoBehaviour
         return pos;
     }
 
-    public  bool tapOnObject(GameObject go, Vector2 tapPos)
+    public bool tapOnObject(GameObject go, Vector2 tapPos)
     {
         return getGridPos(go.transform.position) == getGridPos(tapPos);
     }
 
-    public  int getDisplaySortingOrder(Vector2 pos)
+    public int getDisplaySortingOrder(Vector2 pos)
     {
         return (int)((Level.gridHeight / 2 - pos.y) * 100);
     }
-    public  Vector2 randomPosition()
+    public Vector2 randomPosition()
     {
         return new Vector2(
             Random.Range(-Level.gridWidth / 2, Level.gridWidth / 2) * 0.9f,
             Random.Range(-Level.gridHeight / 2, Level.gridHeight / 2) * 0.9f
             );
     }
-    public  bool inBounds(Vector2 pos)
+    public bool inBounds(Vector2 pos)
     {
         return pos.x > -Level.gridWidth / 2 * 0.99f
             && pos.x < Level.gridWidth / 2 * 0.99f
@@ -557,7 +561,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="lt"></param>
     /// <param name="notRevealed">True to get the amount that is NOT revealed</param>
     /// <returns></returns>
-    public  int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
+    public int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
     {
         return getSurroundingTiles(lt).Count(slt => (slt.Revealed == true) != notRevealed);
     }

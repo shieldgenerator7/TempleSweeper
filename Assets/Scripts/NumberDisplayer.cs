@@ -14,6 +14,7 @@ public class NumberDisplayer : MonoBehaviour
     public Image wheelFlagged;
     public Image wheelPresent;
 
+    [SerializeField]
     private int detectedCount;
     public int DetectedCount => detectedCount;
 

@@ -36,6 +36,7 @@ public class LevelTile
     public bool Walkable = false;
 
     public int x, y;
+    public Terrain terrain;
 
     public LevelTile()
     {

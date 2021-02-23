@@ -6,6 +6,7 @@ public class LevelTileController : MonoBehaviour
 {//2018-01-02: copied from WolfSim.LevelTile
 
     public GameObject cover;
+    public GameObject background;
     public SpriteRenderer contentsSR;
     public NumberDisplayer numberDisplayer;
     public Sprite trapSprite;
@@ -23,6 +24,8 @@ public class LevelTileController : MonoBehaviour
     {
         levelTile.onFlaggedChanged += updateFlagged;
         levelTile.onRevealedChanged += updateRevealed;
+        cover.GetComponent<SpriteRenderer>().sprite = levelTile.terrain.cover;
+        background.GetComponent<SpriteRenderer>().sprite = levelTile.terrain.background;
     }
 
     private void updateFlagged(bool flagged)
