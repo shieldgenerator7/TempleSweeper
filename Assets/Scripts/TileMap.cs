@@ -16,6 +16,7 @@ public class TileMap
         this.width = width;
         this.height = height;
         this.size = new Vector2Int(width, height);
+        tileMap = new LevelTile[width, height];
         //Fill in map with water
         for (int i = 0; i < width; i++)
         {
@@ -73,7 +74,7 @@ public class TileMap
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public List<LevelTile> getSurroundingTiles(Vector2Int pos)
+    public List<LevelTile> getSurroundingLandTiles(Vector2Int pos)
     {
         List<LevelTile> surroundingTiles = new List<LevelTile>();
         for (int i = pos.x - 1; i <= pos.x + 1; i++)
@@ -84,7 +85,11 @@ public class TileMap
                 {
                     if (i != pos.x || j != pos.y)
                     {
-                        surroundingTiles.Add(tileMap[i, j]);
+                        LevelTile tile = tileMap[i, j];
+                        if (tile.Walkable)
+                        {
+                            surroundingTiles.Add(tile);
+                        }
                     }
                 }
             }
@@ -102,7 +107,7 @@ public class TileMap
     /// <returns></returns>
     public int getAdjacentCount(Vector2Int pos, LevelTile.Contents content, bool notTheContent = false)
     {
-        return getSurroundingTiles(pos).Count(
+        return getSurroundingLandTiles(pos).Count(
             slt => (slt.Content == content) != notTheContent
             );
     }
@@ -116,7 +121,7 @@ public class TileMap
     /// <returns></returns>
     public int getAdjacentFlagCount(Vector2Int pos, bool notFlagged = false)
     {
-        return getSurroundingTiles(pos).Count(
+        return getSurroundingLandTiles(pos).Count(
             slt => (slt.Flagged == true) != notFlagged
             );
     }
@@ -130,7 +135,7 @@ public class TileMap
     /// <returns></returns>
     public int getAdjacentRevealedCount(Vector2Int pos, bool notRevealed = false)
     {
-        return getSurroundingTiles(pos).Count(slt => (slt.Revealed == true) != notRevealed);
+        return getSurroundingLandTiles(pos).Count(slt => (slt.Revealed == true) != notRevealed);
     }
 
     /// <summary>
@@ -139,7 +144,7 @@ public class TileMap
     /// <param name="lt"></param>
     /// <returns></returns>
     public int getDetectedCount(Vector2Int pos)
-        => getSurroundingTiles(pos).Count(slt => slt.Detectable);
+        => getSurroundingLandTiles(pos).Count(slt => slt.Detectable);
 
     /// <summary>
     /// Returns true if there is a non-null cell around the given position in the given range
