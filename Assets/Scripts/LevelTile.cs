@@ -35,7 +35,15 @@ public class LevelTile
     /// </summary>
     public bool Walkable = false;
 
-    public int x, y;
+    private Vector2Int pos;
+    public int x { get => pos.x; set => pos.x = value; }
+    public int y { get => pos.y; set => pos.y = value; }
+    public Vector2Int Position
+    {
+        get => pos;
+        set => pos = value;
+    }
+
     public Terrain terrain;
 
     public LevelTile()

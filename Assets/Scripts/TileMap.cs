@@ -23,7 +23,7 @@ public class TileMap
     {
         get
         {
-            if (inBounds(x, x))
+            if (inBounds(x, y))
             {
                 return tileMap[x, y];
             }
@@ -62,6 +62,10 @@ public class TileMap
         => x >= 0 && x < width
         && y >= 0 && y < height;
 
+    public bool inBounds(Vector2Int pos)
+        => pos.x >= 0 && pos.x < width
+        && pos.y >= 0 && pos.y < height;
+
 
     /// <summary>
     /// Returns a list of all 8 tiles that surround the given coordinate. 
@@ -69,16 +73,16 @@ public class TileMap
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public List<LevelTile> getSurroundingTiles(int x, int y)
+    public List<LevelTile> getSurroundingTiles(Vector2Int pos)
     {
         List<LevelTile> surroundingTiles = new List<LevelTile>();
-        for (int i = x - 1; i <= x + 1; i++)
+        for (int i = pos.x - 1; i <= pos.x + 1; i++)
         {
-            for (int j = y - 1; j <= y + 1; j++)
+            for (int j = pos.y - 1; j <= pos.y + 1; j++)
             {
                 if (inBounds(i, j))
                 {
-                    if (i != x || j != y)
+                    if (i != pos.x || j != pos.y)
                     {
                         LevelTile tile = tileMap[i, j];
                         if (tile != null)
@@ -100,9 +104,9 @@ public class TileMap
     /// <param name="tileType"></param>
     /// <param name="notTheType">True to get the amount that is NOT the given type</param>
     /// <returns></returns>
-    public int getAdjacentCount(int x, int y, LevelTile.Contents content, bool notTheContent = false)
+    public int getAdjacentCount(Vector2Int pos, LevelTile.Contents content, bool notTheContent = false)
     {
-        return getSurroundingTiles(x, y).Count(
+        return getSurroundingTiles(pos).Count(
             slt => (slt.Content == content) != notTheContent
             );
     }
@@ -114,9 +118,9 @@ public class TileMap
     /// <param name="lt"></param>
     /// <param name="notFlagged">True to get the amount that is NOT flagged</param>
     /// <returns></returns>
-    public int getAdjacentFlagCount(int x, int y, bool notFlagged = false)
+    public int getAdjacentFlagCount(Vector2Int pos, bool notFlagged = false)
     {
-        return getSurroundingTiles(x, y).Count(
+        return getSurroundingTiles(pos).Count(
             slt => (slt.Flagged == true) != notFlagged
             );
     }
@@ -128,9 +132,9 @@ public class TileMap
     /// <param name="lt"></param>
     /// <param name="notRevealed">True to get the amount that is NOT revealed</param>
     /// <returns></returns>
-    public int getAdjacentRevealedCount(int x, int y, bool notRevealed = false)
+    public int getAdjacentRevealedCount(Vector2Int pos, bool notRevealed = false)
     {
-        return getSurroundingTiles(x, y).Count(slt => (slt.Revealed == true) != notRevealed);
+        return getSurroundingTiles(pos).Count(slt => (slt.Revealed == true) != notRevealed);
     }
 
     /// <summary>
@@ -138,8 +142,8 @@ public class TileMap
     /// </summary>
     /// <param name="lt"></param>
     /// <returns></returns>
-    public int getDetectedCount(int x, int y)
-        => getSurroundingTiles(x, y).Count(slt => slt.Detectable);
+    public int getDetectedCount(Vector2Int pos)
+        => getSurroundingTiles(pos).Count(slt => slt.Detectable);
 
     /// <summary>
     /// Returns true if there is a non-null cell around the given position in the given range
@@ -149,9 +153,9 @@ public class TileMap
     /// <param name="posX"></param>
     /// <param name="posY"></param>
     /// <param name="range"></param>
-    public bool containsLand(int x, int y, int range)
+    public bool containsLand(Vector2Int pos, int range)
     {
-        return landCount(x, y, range) > 0;
+        return landCount(pos, range) > 0;
     }
 
     /// <summary>
@@ -163,12 +167,12 @@ public class TileMap
     /// <param name="posY"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public int landCount(int x, int y, int range)
+    public int landCount(Vector2Int pos, int range)
     {
         int count = 0;
-        for (int i = x - range; i <= x + range; i++)
+        for (int i = pos.x - range; i <= pos.x + range; i++)
         {
-            for (int j = y - range; j <= y + range; j++)
+            for (int j = pos.y - range; j <= pos.y + range; j++)
             {
                 if (inBounds(i, j))
                 {

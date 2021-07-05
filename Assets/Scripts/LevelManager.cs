@@ -257,7 +257,7 @@ public class LevelManager : MonoBehaviour
                 //Reveal the found LT
                 revealTile(foundLT, true);
                 //Reveal the tiles around the found LT
-                foreach (LevelTile levelTile in tileMap.getSurroundingTiles(foundLT.x, foundLT.y))
+                foreach (LevelTile levelTile in tileMap.getSurroundingTiles(foundLT.Position))
                 {
                     if (levelTile.Revealed)
                     {
@@ -310,12 +310,12 @@ public class LevelManager : MonoBehaviour
                 //Auto-Reveal
                 //If the count of surrounding flags equals
                 //the count of surrounding trap tiles,
-                int itemCount = tileMap.getDetectedCount(lt.x, lt.y);
+                int itemCount = tileMap.getDetectedCount(lt.Position);
                 if (!lt.Detectable && lt.Content != LevelTile.Contents.MAP &&
-                    tileMap.getAdjacentFlagCount(lt.x, lt.y) == itemCount)
+                    tileMap.getAdjacentFlagCount(lt.Position) == itemCount)
                 {
                     //Reveal the surrounding non-flagged tiles
-                    foreach (LevelTile neighbor in tileMap.getSurroundingTiles(lt.x, lt.y))
+                    foreach (LevelTile neighbor in tileMap.getSurroundingTiles(lt.Position))
                     {
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
@@ -339,10 +339,10 @@ public class LevelManager : MonoBehaviour
                 //If the count of surrounding unrevealed tiles equals
                 //the count of surrounding trap tiles,
                 if (!lt.Detectable && lt.Content != LevelTile.Contents.MAP &&
-                    tileMap.getAdjacentRevealedCount(lt.x, lt.y, true) == itemCount)
+                    tileMap.getAdjacentRevealedCount(lt.Position, true) == itemCount)
                 {
                     //Flag the surrounding non-revealed tiles
-                    foreach (LevelTile neighbor in tileMap.getSurroundingTiles(lt.x, lt.y))
+                    foreach (LevelTile neighbor in tileMap.getSurroundingTiles(lt.Position))
                     {
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
@@ -360,7 +360,7 @@ public class LevelManager : MonoBehaviour
                     generateLevelPostTap(tapPos);
                     anyRevealed = true;
                 }
-                if ((!lt.Revealed) || tileMap.getDetectedCount(lt.x, lt.y) > 0)
+                if ((!lt.Revealed) || tileMap.getDetectedCount(lt.Position) > 0)
                 {
                     Managers.Effect.highlightChange(lt);
                 }
@@ -422,7 +422,7 @@ public class LevelManager : MonoBehaviour
             lt.Flagged = !lt.Flagged;
             Managers.Effect.highlightChange(lt);
             //Update flag counters (fc)
-            foreach (LevelTile fc in tileMap.getSurroundingTiles(lt.x, lt.y))
+            foreach (LevelTile fc in tileMap.getSurroundingTiles(lt.Position))
             {
                 if (fc.Revealed)
                 {

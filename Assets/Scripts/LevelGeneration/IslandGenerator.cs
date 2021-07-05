@@ -29,14 +29,15 @@ public class IslandGenerator : LevelGenerator
                 //Randomize new position
                 int randX = Random.Range((int)min.x - 1, (int)max.x + 2);
                 int randY = Random.Range((int)min.y - 1, (int)max.y + 2);
+                Vector2Int randPos = new Vector2Int(randX, randY);
                 //If the position is valid,
-                if (tileMap.inBounds(randX, randY))
+                if (tileMap.inBounds(randPos))
                 {
                     //If the spot is empty,
-                    if (tileMap[randX, randY] == null)
+                    if (tileMap[randPos] == null)
                     {
                         //And it's next to another land,                    
-                        if (tileMap.containsLand(randX, randY, maxLandDistance))
+                        if (tileMap.containsLand(randPos, maxLandDistance))
                         {
                             //Place it here
                             tileMap[randX, randY] = new LevelTile(LevelTile.Contents.NONE);
@@ -52,18 +53,21 @@ public class IslandGenerator : LevelGenerator
             }
         }
         //Fill in holes
+        Vector2Int pos = Vector2Int.zero;
         for (int x = (int)min.x; x <= max.x; x++)
         {
             for (int y = (int)min.y; y <= max.y; y++)
             {
+                pos.x = x;
+                pos.y = y;
                 //If it's an empty spot,
-                if (tileMap[x, y] == null)
+                if (tileMap[pos] == null)
                 {
                     //And it's surrounded on most sides
-                    if (tileMap.landCount(x, y, 1) > fillInSideCount)
+                    if (tileMap.landCount(pos, 1) > fillInSideCount)
                     {
                         //Fill it in
-                        tileMap[x, y] = new LevelTile(LevelTile.Contents.NONE);
+                        tileMap[pos] = new LevelTile(LevelTile.Contents.NONE);
                     }
                 }
             }

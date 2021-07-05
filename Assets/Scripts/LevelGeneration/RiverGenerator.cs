@@ -82,20 +82,23 @@ public class RiverGenerator : LevelGenerator
             }
         }
         //Fill in holes
+        Vector2Int pos = Vector2Int.zero;
         for (int x = minX - 1; x <= maxX + 1; x++)
         {
             for (int y = minY - 1; y <= maxY + 1; y++)
             {
-                if (tileMap.inBounds(x, y))
+                pos.x = x;
+                pos.y = y;
+                if (tileMap.inBounds(pos))
                 {
                     //If it's not an empty spot,
-                    if (tileMap[x, y])
+                    if (tileMap[pos])
                     {
                         //And it's surrounded on most sides
-                        if (tileMap.landCount(x, y, 1) < fillInRiverCount)
+                        if (tileMap.landCount(pos, 1) < fillInRiverCount)
                         {
                             //Fill it in
-                            tileMap[x, y] = null;
+                            tileMap[pos] = null;
                         }
                     }
                 }
