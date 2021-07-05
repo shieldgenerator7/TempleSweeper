@@ -28,7 +28,7 @@ public class NumberDisplayer : MonoBehaviour
     }
     public void displayNumber()
     {
-        if (levelTile == null)
+        if (!levelTile.LevelTile.Walkable)
         {
             return;
         }

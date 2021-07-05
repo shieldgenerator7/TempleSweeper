@@ -15,12 +15,18 @@ public class LevelTile
     private Contents contents = Contents.NONE;
     public Contents Content
     {
-        get => contents;
+        get => (Walkable)
+            ? contents
+            : Contents.NONE;
         set
         {
             if (!Locked)
             {
                 contents = value;
+                if (contents != Contents.NONE)
+                {
+                    Walkable = true;
+                }
             }
         }
     }
@@ -64,7 +70,9 @@ public class LevelTile
     /// </summary>
     public bool Flagged
     {
-        get => flagged;
+        get => (Walkable)
+            ? flagged
+            : false;
         set
         {
             if (!revealed)
@@ -83,7 +91,9 @@ public class LevelTile
     /// </summary>
     public bool Revealed
     {
-        get => revealed;
+        get => (Walkable)
+            ? revealed
+            : true;
         set
         {
             if (!flagged)
@@ -98,12 +108,9 @@ public class LevelTile
     public OnRevealedChanged onRevealedChanged;
 
     public bool Available
-        => contents == Contents.NONE && !Locked;
+        => contents == Contents.NONE && !Locked && Walkable;
 
     public bool Detectable
-        => contents == Contents.TRAP
-        || contents == Contents.TREASURE;
-
-    public static implicit operator bool(LevelTile lt)
-        => lt != null;
+        => Content == Contents.TRAP
+        || Content == Contents.TREASURE;
 }

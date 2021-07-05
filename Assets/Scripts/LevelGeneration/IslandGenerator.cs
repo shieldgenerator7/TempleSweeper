@@ -16,9 +16,9 @@ public class IslandGenerator : LevelGenerator
         Vector2 min, max;
         min = max = new Vector2(tileMap.width / 2, tileMap.height / 2);
         //Place the first one
-        if (tileMap[(int)min.x, (int)min.y] == null)
+        if (!tileMap[(int)min.x, (int)min.y].Walkable)
         {
-            tileMap[(int)min.x, (int)min.y] = new LevelTile(LevelTile.Contents.NONE);
+            tileMap[(int)min.x, (int)min.y].Walkable = true;
         }
         //Place the rest of them
         for (int i = 0; i < landAmount - 1; i++)
@@ -34,13 +34,13 @@ public class IslandGenerator : LevelGenerator
                 if (tileMap.inBounds(randPos))
                 {
                     //If the spot is empty,
-                    if (tileMap[randPos] == null)
+                    if (!tileMap[randPos].Walkable)
                     {
                         //And it's next to another land,                    
                         if (tileMap.containsLand(randPos, maxLandDistance))
                         {
                             //Place it here
-                            tileMap[randX, randY] = new LevelTile(LevelTile.Contents.NONE);
+                            tileMap[randX, randY].Walkable = true;
                             placed = true;
                             //Update min and max
                             min.x = Mathf.Min(randX, min.x);
@@ -61,13 +61,13 @@ public class IslandGenerator : LevelGenerator
                 pos.x = x;
                 pos.y = y;
                 //If it's an empty spot,
-                if (tileMap[pos] == null)
+                if (!tileMap[pos].Walkable)
                 {
                     //And it's surrounded on most sides
                     if (tileMap.landCount(pos, 1) > fillInSideCount)
                     {
                         //Fill it in
-                        tileMap[pos] = new LevelTile(LevelTile.Contents.NONE);
+                        tileMap[pos].Walkable = true;
                     }
                 }
             }

@@ -16,7 +16,14 @@ public class TileMap
         this.width = width;
         this.height = height;
         this.size = new Vector2Int(width, height);
-        tileMap = new LevelTile[this.width, this.height];
+        //Fill in map with water
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                this[i, j] = new LevelTile();
+            }
+        }
     }
 
     public LevelTile this[int x, int y]
@@ -32,31 +39,24 @@ public class TileMap
                 return null;
             }
         }
-        set
+        private set
         {
-            if (tileMap[x, y])
-            {
-                tileList.Remove(tileMap[x, y]);
-            }
             LevelTile tile = value;
+            tile.x = x;
+            tile.y = y;
             tileMap[x, y] = tile;
-            if (tile)
-            {
-                tile.x = x;
-                tile.y = y;
-                tileList.Add(tile);
-            }
+            tileList.Add(tile);
         }
     }
 
     public LevelTile this[Vector2Int pos]
     {
         get => this[pos.x, pos.y];
-        set => this[pos.x, pos.y] = value;
+        private set => this[pos.x, pos.y] = value;
     }
 
     public List<LevelTile> getTiles(System.Predicate<LevelTile> condition)
-        => tileList.FindAll(tile => tile && condition(tile));
+        => tileList.FindAll(tile => condition(tile));
 
     public bool inBounds(int x, int y)
         => x >= 0 && x < width
@@ -84,11 +84,7 @@ public class TileMap
                 {
                     if (i != pos.x || j != pos.y)
                     {
-                        LevelTile tile = tileMap[i, j];
-                        if (tile != null)
-                        {
-                            surroundingTiles.Add(tile);
-                        }
+                        surroundingTiles.Add(tileMap[i, j]);
                     }
                 }
             }
@@ -176,7 +172,7 @@ public class TileMap
             {
                 if (inBounds(i, j))
                 {
-                    if (tileMap[i, j] != null && tileMap[i, j].Walkable)
+                    if (tileMap[i, j].Walkable)
                     {
                         count++;
                     }

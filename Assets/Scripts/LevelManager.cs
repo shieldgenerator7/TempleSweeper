@@ -199,16 +199,18 @@ public class LevelManager : MonoBehaviour
         int width = level.gridWidth;
         int height = level.gridHeight;
         tileMap = new TileMap(width, height);
+        //Generate level
         foreach (LevelGenerator lgen in level.levelGenerators)
         {
             lgen.generate(tileMap);
         }
+        //Instantiate GameObjects
         for (int xi = 0; xi < width; xi++)
         {
             for (int yi = 0; yi < height; yi++)
             {
                 LevelTile lt = tileMap[xi, yi];
-                if (lt == null)
+                if (!lt.Walkable)
                 {
                     //skip empty space
                     continue;
@@ -302,7 +304,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         LevelTile lt = getTile(tapPos);
-        if (lt != null)
+        if (lt != null && lt.Walkable)
         {
             //If it's revealed
             if (lt.Revealed)
@@ -417,7 +419,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         LevelTile lt = getTile(flagPos);
-        if (lt != null && !lt.Revealed)
+        if (!lt.Revealed)
         {
             lt.Flagged = !lt.Flagged;
             Managers.Effect.highlightChange(lt);
@@ -434,7 +436,7 @@ public class LevelManager : MonoBehaviour
     public void processHoldGesture(Vector2 holdPos, bool finished)
     {
         LevelTile lt = getTile(holdPos);
-        if (!lt)
+        if (lt != null)
         {
             //don't process empty spaces
             return;
@@ -476,7 +478,7 @@ public class LevelManager : MonoBehaviour
     {
         foreach (LevelTile lt in tileMap.getTiles(alt => !alt.Revealed))
         {
-            if (lt && !lt.Revealed)
+            if (lt.Walkable && !lt.Revealed)
             {
                 if (lt.Content == LevelTile.Contents.TREASURE
                     || lt.Content == LevelTile.Contents.TRAP

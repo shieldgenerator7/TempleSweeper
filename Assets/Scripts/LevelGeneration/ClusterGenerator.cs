@@ -31,7 +31,7 @@ public class ClusterGenerator : ObjectGenerator
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
                     LevelTile lt = tileMap[rx, ry];
-                    if (lt && lt.Available)
+                    if (lt.Available)
                     {
                         lt.Content = rings[0];
                         for (int r = 1; r < radius; r++)
@@ -47,7 +47,7 @@ public class ClusterGenerator : ObjectGenerator
                                         if (manhattenDistance == r)
                                         {
                                             LevelTile ilt = tileMap[ix, iy];
-                                            if (ilt && ilt.Available)
+                                            if (ilt.Available)
                                             {
                                                 ilt.Content = rings[r];
                                             }

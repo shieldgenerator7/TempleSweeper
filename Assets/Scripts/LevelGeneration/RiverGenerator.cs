@@ -60,7 +60,7 @@ public class RiverGenerator : LevelGenerator
             }
             int px = startX;
             int py = startY;
-            tileMap[px, py] = null;
+            tileMap[px, py].Walkable = false;
             while (px != endX && py != endY)
             {
                 //Update px and/or py
@@ -78,7 +78,7 @@ public class RiverGenerator : LevelGenerator
                 //Make this grid cell a river cell
                 px = Mathf.Clamp(px, minX, maxX);
                 py = Mathf.Clamp(py, minY, maxY);
-                tileMap[px, py] = null;
+                tileMap[px, py].Walkable = false;
             }
         }
         //Fill in holes
@@ -92,13 +92,13 @@ public class RiverGenerator : LevelGenerator
                 if (tileMap.inBounds(pos))
                 {
                     //If it's not an empty spot,
-                    if (tileMap[pos])
+                    if (tileMap[pos].Walkable)
                     {
                         //And it's surrounded on most sides
                         if (tileMap.landCount(pos, 1) < fillInRiverCount)
                         {
                             //Fill it in
-                            tileMap[pos] = null;
+                            tileMap[pos].Walkable = false;
                         }
                     }
                 }

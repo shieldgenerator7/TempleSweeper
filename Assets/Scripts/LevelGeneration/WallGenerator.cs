@@ -31,7 +31,7 @@ public class WallGenerator : ObjectGenerator
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
                     LevelTile lt = tileMap[rx, ry];
-                    if (lt && lt.Available)
+                    if (lt.Available)
                     {
                         //Do the middle tile
                         lt.Content = content;
@@ -49,7 +49,7 @@ public class WallGenerator : ObjectGenerator
                                 if (tileMap.inBounds(px, py) && outOfAreaToAvoid(tileMap, px, py, posX, posY))
                                 {
                                     LevelTile ilt = tileMap[px, py];
-                                    if (ilt && ilt.Available)
+                                    if (ilt.Available)
                                     {
                                         ilt.Content = content;
                                     }

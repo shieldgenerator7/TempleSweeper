@@ -44,10 +44,9 @@ public class TileTypeConverter : LevelGenerator
             {
                 for (int j = 0; j < height; j++)
                 {
-                    LevelTile tile = tileMap[i, j];
-                    if (tile)
+                    LevelTile lt = tileMap[i, j];
+                    if (lt.Walkable)
                     {
-                        LevelTile lt = tile;
                         if (lt.Content == fromContent)
                         {
                             lt.Content = toContent;
@@ -70,7 +69,7 @@ public class TileTypeConverter : LevelGenerator
                     int rx = Random.Range(0, width);
                     int ry = Random.Range(0, height);
                     LevelTile lt = tileMap[rx, ry];
-                    if (lt && lt.Content == fromContent)
+                    if (lt.Walkable && lt.Content == fromContent)
                     {
                         lt.Content = toContent;
                         break;

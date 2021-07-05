@@ -90,7 +90,7 @@ public class MapLineUpdater : MonoBehaviour
                 size.x = Mathf.MoveTowards(size.x, targetSize.x, speed * Time.deltaTime);
                 Vector2 endPos = LastRevealedSpot;
                 LevelTile lt = Managers.Level.getTile(endPos);
-                if (!lt || lt.Revealed)
+                if (!lt.Walkable || lt.Revealed)
                 {
                     CurrentLineSR.size = size;
                     if (okToMoveCamera && okToMoveCameraEver)

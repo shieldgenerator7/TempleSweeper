@@ -50,7 +50,7 @@ public class GestureProfile
         if (show)
         {
             LevelTile lt = Managers.Level.getTile(curMPWorld);
-            if (!lt)
+            if (lt != null)
             {
                 return;
             }

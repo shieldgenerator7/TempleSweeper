@@ -78,7 +78,7 @@ public class MapLineGenerator : LevelGenerator
                         (newX != prevX && newY != prevY)
                         && (newX != curX || newY != curY)
                         && tileMap.inBounds(newX, newY)
-                        && (!checkWater || tileMap[newX, newY] != null)
+                        && (!checkWater || tileMap[newX, newY].Walkable)
                     )
                     {
                         bool hallClear = true;
@@ -115,10 +115,8 @@ public class MapLineGenerator : LevelGenerator
             //Test to see if the path is acceptable
             Vector2 theSpot = mapPath[mapPath.Count - 1];
             LevelTile spotTile = tileMap[(int)theSpot.x, (int)theSpot.y];
-            //If the spot is on land
-            if (spotTile != null
-                //And the spot is not a treasure, mine, or map fragment
-                && spotTile.Available)
+            //If the spot is on land and the spot is not a treasure, mine, or map fragment
+            if (spotTile.Available)
             {
                 bool noOverlap = true;
                 //Check to make sure the spot is not on another point of the line
@@ -188,13 +186,10 @@ public class MapLineGenerator : LevelGenerator
             {
                 for (int y = ry; y != ry2 + iy; y += iy)
                 {
-                    if (tileMap[x, y])
+                    LevelTile lt = tileMap[x, y];
+                    if (lt.Available)
                     {
-                        LevelTile lt = tileMap[x, y];
-                        if (lt.Available)
-                        {
-                            lt.Locked = true;
-                        }
+                        lt.Locked = true;
                     }
                 }
             }
