@@ -11,7 +11,7 @@ public class TileTypeConverter : LevelGenerator
     public int maxConvert = -1;
     public bool randomConvert = false;
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
         convert(tileMap);
     }
@@ -23,20 +23,20 @@ public class TileTypeConverter : LevelGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         convert(tileMap);
     }
 
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         convert(tileMap);
     }
 
-    private void convert(LevelTile[,] tileMap)
+    private void convert(TileMap tileMap)
     {
-        int width = gridWidth(tileMap);
-        int height = gridHeight(tileMap);
+        int width = tileMap.width;
+        int height = tileMap.height;
         if (!randomConvert)
         {
             int converted = 0;

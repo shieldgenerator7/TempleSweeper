@@ -54,7 +54,7 @@ public class GestureProfile
             {
                 return;
             }
-            if (!lt.Revealed || Managers.Level.getDetectedCount(lt)>0
+            if (!lt.Revealed || Managers.Level.TileMap.getDetectedCount(lt.x, lt.y) > 0
                 || lt == Managers.Level.StartTile || (Managers.Player.completedMap() && lt == Managers.Level.XTile)
                 || (lt.Content == LevelTile.Contents.MAP)
                 )

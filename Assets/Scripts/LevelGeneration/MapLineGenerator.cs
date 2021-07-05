@@ -36,12 +36,12 @@ public class MapLineGenerator : LevelGenerator
         return Managers.Level.getWorldPos(mapPath[pointIndex]);
     }
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         int curX = posX;
         int curY = posY;
@@ -77,7 +77,7 @@ public class MapLineGenerator : LevelGenerator
                     if (
                         (newX != prevX && newY != prevY)
                         && (newX != curX || newY != curY)
-                        && inBounds(tileMap, newX, newY)
+                        && tileMap.inBounds(newX, newY)
                         && (!checkWater || tileMap[newX, newY] != null)
                     )
                     {
@@ -204,7 +204,7 @@ public class MapLineGenerator : LevelGenerator
         Managers.Start.transform.position = Managers.Level.getWorldPos(posX, posY);
     }
 
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         if (content == LevelTile.Contents.MAP)
         {

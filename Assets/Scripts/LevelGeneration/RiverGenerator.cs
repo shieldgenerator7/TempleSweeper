@@ -27,7 +27,7 @@ public class RiverGenerator : LevelGenerator
     [Header("Start Edge")]
     public Edge startEdge;
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
         for (int n = 0; n < streamCount; n++)
         {
@@ -86,13 +86,13 @@ public class RiverGenerator : LevelGenerator
         {
             for (int y = minY - 1; y <= maxY + 1; y++)
             {
-                if (inBounds(tileMap, x, y))
+                if (tileMap.inBounds(x, y))
                 {
                     //If it's not an empty spot,
-                    if (tileMap[x, y] != null)
+                    if (tileMap[x, y])
                     {
                         //And it's surrounded on most sides
-                        if (landCount(tileMap, x, y, 1) < fillInRiverCount)
+                        if (tileMap.landCount(x, y, 1) < fillInRiverCount)
                         {
                             //Fill it in
                             tileMap[x, y] = null;
@@ -103,11 +103,11 @@ public class RiverGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         throw new System.NotImplementedException();
     }
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }

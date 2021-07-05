@@ -13,6 +13,7 @@ public class LevelTileController : MonoBehaviour
     public Sprite treasureSprite;
     public Sprite mapSprite;
 
+    [SerializeField]
     private LevelTile levelTile;
     public LevelTile LevelTile
     {

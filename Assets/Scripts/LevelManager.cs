@@ -17,7 +17,9 @@ public class LevelManager : MonoBehaviour
     //
     // Runtime vars
     //
-    private LevelTile[,] tileMap;//the map of tiles
+    private TileMap tileMap;
+    public TileMap TileMap => tileMap;
+
     private int currentLevelIndex = 0;
     public int LevelIndex
     {
@@ -123,14 +125,7 @@ public class LevelManager : MonoBehaviour
     {
         int xIndex = getXIndex(pos);
         int yIndex = getYIndex(pos);
-        if (inBounds(xIndex, yIndex))
-        {
-            return tileMap[xIndex, yIndex];
-        }
-        else
-        {
-            return null;//index out of bounds, return null
-        }
+        return tileMap[xIndex, yIndex];
     }
     public Vector2 getPosition(LevelTile lt)
     {
@@ -141,25 +136,7 @@ public class LevelManager : MonoBehaviour
         return FindObjectsOfType<LevelTileController>().First(ltc => ltc.LevelTile == lt);
     }
 
-    public List<LevelTile> getAllTiles(System.Predicate<LevelTile> condition)
-    {
-        List<LevelTile> tiles = new List<LevelTile>();
-        for (int i = 0; i <= tileMap.GetLength(0); i++)
-        {
-            for (int j = 0; j <= tileMap.GetLength(0); j++)
-            {
-                if (inBounds(i, j))
-                {
-                    LevelTile lt = tileMap[i, j];
-                    if (lt && condition(lt))
-                    {
-                        tiles.Add(lt);
-                    }
-                }
-            }
-        }
-        return tiles;
-    }
+
 
     public LevelTile StartTile
         => getTile(Managers.Start.transform.position);
@@ -217,17 +194,11 @@ public class LevelManager : MonoBehaviour
             && pos.y < Level.gridHeight / 2 * 0.99f;
     }
 
-    public bool inBounds(int ix, int iy)
-    {
-        return ix >= 0 && ix < tileMap.GetLength(0)
-            && iy >= 0 && iy < tileMap.GetLength(1);
-    }
-
     private void generateLevel(Level level)
     {
         int width = level.gridWidth;
         int height = level.gridHeight;
-        tileMap = new LevelTile[width, height];
+        tileMap = new TileMap(width, height);
         foreach (LevelGenerator lgen in level.levelGenerators)
         {
             lgen.generate(tileMap);
@@ -237,7 +208,7 @@ public class LevelManager : MonoBehaviour
             for (int yi = 0; yi < height; yi++)
             {
                 LevelTile lt = tileMap[xi, yi];
-                if (tileMap[xi, yi] == null)
+                if (lt == null)
                 {
                     //skip empty space
                     continue;
@@ -246,7 +217,7 @@ public class LevelManager : MonoBehaviour
                 lt.y = yi;
                 GameObject go = GameObject.Instantiate(levelTilePrefab);
                 go.transform.position = getWorldPos(xi, yi);
-                go.GetComponent<LevelTileController>().LevelTile = tileMap[xi, yi];
+                go.GetComponent<LevelTileController>().LevelTile = lt;
                 go.transform.parent = transform;
             }
         }
@@ -286,7 +257,7 @@ public class LevelManager : MonoBehaviour
                 //Reveal the found LT
                 revealTile(foundLT, true);
                 //Reveal the tiles around the found LT
-                foreach (LevelTile levelTile in getSurroundingTiles(foundLT))
+                foreach (LevelTile levelTile in tileMap.getSurroundingTiles(foundLT.x, foundLT.y))
                 {
                     if (levelTile.Revealed)
                     {
@@ -339,12 +310,12 @@ public class LevelManager : MonoBehaviour
                 //Auto-Reveal
                 //If the count of surrounding flags equals
                 //the count of surrounding trap tiles,
-                int itemCount = getDetectedCount(lt);
+                int itemCount = tileMap.getDetectedCount(lt.x, lt.y);
                 if (!lt.Detectable && lt.Content != LevelTile.Contents.MAP &&
-                    getAdjacentFlagCount(lt) == itemCount)
+                    tileMap.getAdjacentFlagCount(lt.x, lt.y) == itemCount)
                 {
                     //Reveal the surrounding non-flagged tiles
-                    foreach (LevelTile neighbor in getSurroundingTiles(lt))
+                    foreach (LevelTile neighbor in tileMap.getSurroundingTiles(lt.x, lt.y))
                     {
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
@@ -368,10 +339,10 @@ public class LevelManager : MonoBehaviour
                 //If the count of surrounding unrevealed tiles equals
                 //the count of surrounding trap tiles,
                 if (!lt.Detectable && lt.Content != LevelTile.Contents.MAP &&
-                    getAdjacentRevealedCount(lt, true) == itemCount)
+                    tileMap.getAdjacentRevealedCount(lt.x, lt.y, true) == itemCount)
                 {
                     //Flag the surrounding non-revealed tiles
-                    foreach (LevelTile neighbor in getSurroundingTiles(lt))
+                    foreach (LevelTile neighbor in tileMap.getSurroundingTiles(lt.x, lt.y))
                     {
                         if (!neighbor.Flagged && !neighbor.Revealed)
                         {
@@ -389,7 +360,7 @@ public class LevelManager : MonoBehaviour
                     generateLevelPostTap(tapPos);
                     anyRevealed = true;
                 }
-                if ((!lt.Revealed) || getDetectedCount(lt) > 0)
+                if ((!lt.Revealed) || tileMap.getDetectedCount(lt.x, lt.y) > 0)
                 {
                     Managers.Effect.highlightChange(lt);
                 }
@@ -451,7 +422,7 @@ public class LevelManager : MonoBehaviour
             lt.Flagged = !lt.Flagged;
             Managers.Effect.highlightChange(lt);
             //Update flag counters (fc)
-            foreach (LevelTile fc in getSurroundingTiles(lt))
+            foreach (LevelTile fc in tileMap.getSurroundingTiles(lt.x, lt.y))
             {
                 if (fc.Revealed)
                 {
@@ -503,7 +474,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void revealBoard()
     {
-        foreach (LevelTile lt in getAllTiles(alt => !alt.Revealed))
+        foreach (LevelTile lt in tileMap.getTiles(alt => !alt.Revealed))
         {
             if (lt && !lt.Revealed)
             {
@@ -527,86 +498,6 @@ public class LevelManager : MonoBehaviour
         {
             nd.displayNumber();
         }
-    }
-
-    /// <summary>
-    /// Returns the number of tiles of the given type are surrounding the given tile,
-    /// not including the tile itself
-    /// </summary>
-    /// <param name="lt"></param>
-    /// <param name="tileType"></param>
-    /// <param name="notTheType">True to get the amount that is NOT the given type</param>
-    /// <returns></returns>
-    public int getAdjacentCount(LevelTile lt, LevelTile.Contents content, bool notTheContent = false)
-    {
-        return getSurroundingTiles(lt).Count(slt => (slt.Content == content) != notTheContent);
-    }
-
-    /// <summary>
-    /// Returns the number of flagged tiles that are surrounding the given tile,
-    /// not including the tile itself
-    /// </summary>
-    /// <param name="lt"></param>
-    /// <param name="notFlagged">True to get the amount that is NOT flagged</param>
-    /// <returns></returns>
-    public int getAdjacentFlagCount(LevelTile lt, bool notFlagged = false)
-    {
-        return getSurroundingTiles(lt).Count(slt => (slt.Flagged == true) != notFlagged);
-    }
-
-    /// <summary>
-    /// Returns the number of revealed tiles that are surrounding the given tile,
-    /// not including the tile itself
-    /// </summary>
-    /// <param name="lt"></param>
-    /// <param name="notRevealed">True to get the amount that is NOT revealed</param>
-    /// <returns></returns>
-    public int getAdjacentRevealedCount(LevelTile lt, bool notRevealed = false)
-    {
-        return getSurroundingTiles(lt).Count(slt => (slt.Revealed == true) != notRevealed);
-    }
-
-    /// <summary>
-    /// Returns a list of all 8 tiles that surround the given tile. 
-    /// Note that tiles on the edge have less than 8 surrounding tiles.
-    /// </summary>
-    /// <param name="lt"></param>
-    /// <returns></returns>
-    public List<LevelTile> getSurroundingTiles(LevelTile lt)
-    {
-        List<LevelTile> surroundingTiles = new List<LevelTile>();
-        if (!lt)
-        {
-            return surroundingTiles;
-        }
-        for (int i = lt.x - 1; i <= lt.x + 1; i++)
-        {
-            for (int j = lt.y - 1; j <= lt.y + 1; j++)
-            {
-                if (inBounds(i, j))
-                {
-                    if (i != lt.x || j != lt.y)
-                    {
-                        LevelTile tile = tileMap[i, j];
-                        if (tile != null)
-                        {
-                            surroundingTiles.Add(tile);
-                        }
-                    }
-                }
-            }
-        }
-        return surroundingTiles;
-    }
-
-    /// <summary>
-    /// Returns count of detectable tiles around the given tile
-    /// </summary>
-    /// <param name="lt"></param>
-    /// <returns></returns>
-    public int getDetectedCount(LevelTile lt)
-    {
-        return getSurroundingTiles(lt).Count(slt => slt.Detectable);
     }
 
     public void updateOrthographicSize()

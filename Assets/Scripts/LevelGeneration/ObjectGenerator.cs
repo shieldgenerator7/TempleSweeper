@@ -8,7 +8,7 @@ public class ObjectGenerator : LevelGenerator
     public int radiusToAvoid = 1;
     public LevelTile.Contents content;
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
         throw new System.NotImplementedException();
     }
@@ -20,14 +20,14 @@ public class ObjectGenerator : LevelGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         for (int i = 0; i < amount; i++)
         {
             while (true)//loop until broken out of
             {
-                int ix = Random.Range(0, gridWidth(tileMap));
-                int iy = Random.Range(0, gridHeight(tileMap));
+                int ix = Random.Range(0, tileMap.width);
+                int iy = Random.Range(0, tileMap.height);
                 if (Mathf.Abs(posX - ix) > radiusToAvoid
                     || Mathf.Abs(posY - iy) > radiusToAvoid)
                 {
@@ -42,12 +42,12 @@ public class ObjectGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }
 
-    protected bool outOfAreaToAvoid(LevelTile[,] tileMap, int posX, int posY, int avoidX, int avoidY)
+    protected bool outOfAreaToAvoid(TileMap tileMap, int posX, int posY, int avoidX, int avoidY)
     {
         return Mathf.Abs(posX - avoidX) > radiusToAvoid
             || Mathf.Abs(posY - avoidY) > radiusToAvoid;

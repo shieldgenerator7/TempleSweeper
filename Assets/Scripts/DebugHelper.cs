@@ -29,7 +29,7 @@ public class DebugHelper : MonoBehaviour
     /// </summary>
     public void revealAll()
     {
-        foreach (LevelTile lt in Managers.Level.getAllTiles(alt => alt.Content == selectContent))
+        foreach (LevelTile lt in Managers.Level.TileMap.getTiles(alt => alt.Content == selectContent))
         {
             if (lt.Content == selectContent)
             {

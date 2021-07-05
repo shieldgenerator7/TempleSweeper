@@ -8,7 +8,7 @@ public class WallGenerator : ObjectGenerator
     public Vector2 minSpan = new Vector2(5, 1);
     public Vector2 maxSpan = new Vector2(10, 1);
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
         throw new System.NotImplementedException();
     }
@@ -20,14 +20,14 @@ public class WallGenerator : ObjectGenerator
     /// <param name="tileMap">The tilemap to edit</param>
     /// <param name="posX">Index to Avoid X</param>
     /// <param name="posY">Index to Avoid Y</param>
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         for (int i = 0; i < amount; i++)
         {
             while (true)//loop until broken out of
             {
-                int rx = Random.Range(0, gridWidth(tileMap));
-                int ry = Random.Range(0, gridHeight(tileMap));
+                int rx = Random.Range(0, tileMap.width);
+                int ry = Random.Range(0, tileMap.height);
                 if (outOfAreaToAvoid(tileMap, rx, ry, posX, posY))
                 {
                     LevelTile lt = tileMap[rx, ry];
@@ -46,7 +46,7 @@ public class WallGenerator : ObjectGenerator
                             {
                                 int px = ix + startX;
                                 int py = iy + startY;
-                                if (inBounds(tileMap, px, py) && outOfAreaToAvoid(tileMap, px, py, posX, posY))
+                                if (tileMap.inBounds(px, py) && outOfAreaToAvoid(tileMap, px, py, posX, posY))
                                 {
                                     LevelTile ilt = tileMap[px, py];
                                     if (ilt && ilt.Available)
@@ -64,7 +64,7 @@ public class WallGenerator : ObjectGenerator
         }
     }
 
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }

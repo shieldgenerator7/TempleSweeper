@@ -11,10 +11,10 @@ public class IslandGenerator : LevelGenerator
     [Range(1, 8)]
     public int fillInSideCount = 5;//how many surrounding tiles are required to fill in a hole
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
         Vector2 min, max;
-        min = max = new Vector2(gridWidth(tileMap) / 2, gridHeight(tileMap) / 2);
+        min = max = new Vector2(tileMap.width / 2, tileMap.height / 2);
         //Place the first one
         if (tileMap[(int)min.x, (int)min.y] == null)
         {
@@ -30,13 +30,13 @@ public class IslandGenerator : LevelGenerator
                 int randX = Random.Range((int)min.x - 1, (int)max.x + 2);
                 int randY = Random.Range((int)min.y - 1, (int)max.y + 2);
                 //If the position is valid,
-                if (inBounds(tileMap, randX, randY))
+                if (tileMap.inBounds(randX, randY))
                 {
                     //If the spot is empty,
                     if (tileMap[randX, randY] == null)
                     {
                         //And it's next to another land,                    
-                        if (containsLand(tileMap, randX, randY, maxLandDistance))
+                        if (tileMap.containsLand(randX, randY, maxLandDistance))
                         {
                             //Place it here
                             tileMap[randX, randY] = new LevelTile(LevelTile.Contents.NONE);
@@ -60,7 +60,7 @@ public class IslandGenerator : LevelGenerator
                 if (tileMap[x, y] == null)
                 {
                     //And it's surrounded on most sides
-                    if (landCount(tileMap, x, y, 1) > fillInSideCount)
+                    if (tileMap.landCount(x, y, 1) > fillInSideCount)
                     {
                         //Fill it in
                         tileMap[x, y] = new LevelTile(LevelTile.Contents.NONE);
@@ -70,11 +70,11 @@ public class IslandGenerator : LevelGenerator
         }
     }
 
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         throw new System.NotImplementedException();
     }
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }

@@ -8,9 +8,9 @@ public class TerrainDecorator : LevelGenerator
     public Terrain terrain;
     public int count = -1;//-1 to paint all land
 
-    public override void generate(LevelTile[,] tileMap)
+    public override void generate(TileMap tileMap)
     {
-        List<LevelTile> tiles = Managers.Level.getAllTiles(lt => lt.Walkable);
+        List<LevelTile> tiles = Managers.Level.TileMap.getTiles(lt => lt.Walkable);
         if (count < 0)
         {
             tiles.ForEach(lt => lt.terrain = terrain);
@@ -26,12 +26,12 @@ public class TerrainDecorator : LevelGenerator
         }
     }
 
-    public override void generatePostReveal(LevelTile[,] tileMap, LevelTile.Contents content)
+    public override void generatePostReveal(TileMap tileMap, LevelTile.Contents content)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void generatePostStart(LevelTile[,] tileMap, int posX, int posY)
+    public override void generatePostStart(TileMap tileMap, int posX, int posY)
     {
         throw new System.NotImplementedException();
     }

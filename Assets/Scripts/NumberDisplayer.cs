@@ -16,7 +16,8 @@ public class NumberDisplayer : MonoBehaviour
 
     [SerializeField]
     private int detectedCount;
-    public int DetectedCount => detectedCount;
+    [SerializeField]
+    private int flagCount;
 
     private LevelTileController levelTile;
 
@@ -25,21 +26,22 @@ public class NumberDisplayer : MonoBehaviour
         levelTile = parent;
         displayNumber();
     }
-    public void displayNumber() { 
+    public void displayNumber()
+    {
         if (levelTile == null)
         {
             return;
         }
         gameObject.SetActive(true);
-        detectedCount = Managers.Level.getDetectedCount(levelTile.LevelTile);
+        detectedCount = Managers.Level.TileMap.getDetectedCount(levelTile.LevelTile.x, levelTile.LevelTile.y);
         if (detectedCount == 0)
         {
             gameObject.SetActive(false);
             return;
         }
-        int flagCount = Managers.Level.getAdjacentFlagCount(levelTile.LevelTile);
+        flagCount = Managers.Level.TileMap.getAdjacentFlagCount(levelTile.LevelTile.x, levelTile.LevelTile.y);
         displayNumber(detectedCount, flagCount);
-        if (Managers.Level.getAdjacentCount(levelTile.LevelTile, LevelTile.Contents.TREASURE) > 0)
+        if (Managers.Level.TileMap.getAdjacentCount(levelTile.LevelTile.x, levelTile.LevelTile.y, LevelTile.Contents.TREASURE) > 0)
         {
             GetComponent<SpriteRenderer>().color = treasureColor;
         }
