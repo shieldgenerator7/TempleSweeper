@@ -41,28 +41,18 @@ public class LevelTile
     /// </summary>
     public bool Walkable = false;
 
-    private Vector2Int pos;
-    public int x { get => pos.x; set => pos.x = value; }
-    public int y { get => pos.y; set => pos.y = value; }
-    public Vector2Int Position
-    {
-        get => pos;
-        set => pos = value;
-    }
+    public int x { get => Position.x; }
+    public int y { get => Position.y; }
+    public readonly Vector2Int Position;
 
     public Terrain terrain;
 
-    public LevelTile()
+    public LevelTile(int x, int y)
     {
-        contents = Contents.NONE;
-        Locked = false;
-        Walkable = false;
-    }
-    public LevelTile(Contents content, bool locked = false)
-    {
-        this.contents = content;
-        this.Locked = locked;
-        this.Walkable = true;
+        this.Position = new Vector2Int(x, y);
+        this.contents = Contents.NONE;
+        this.Locked = false;
+        this.Walkable = false;
     }
 
     /// <summary>

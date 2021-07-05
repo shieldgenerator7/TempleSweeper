@@ -205,24 +205,14 @@ public class LevelManager : MonoBehaviour
             lgen.generate(tileMap);
         }
         //Instantiate GameObjects
-        for (int xi = 0; xi < width; xi++)
-        {
-            for (int yi = 0; yi < height; yi++)
+        tileMap.getTiles(tile => tile.Walkable)
+            .ForEach(tile =>
             {
-                LevelTile lt = tileMap[xi, yi];
-                if (!lt.Walkable)
-                {
-                    //skip empty space
-                    continue;
-                }
-                lt.x = xi;
-                lt.y = yi;
                 GameObject go = GameObject.Instantiate(levelTilePrefab);
-                go.transform.position = getWorldPos(xi, yi);
-                go.GetComponent<LevelTileController>().LevelTile = lt;
+                go.transform.position = getWorldPos(tile.x, tile.y);
+                go.GetComponent<LevelTileController>().LevelTile = tile;
                 go.transform.parent = transform;
-            }
-        }
+            });
     }
 
     /// <summary>

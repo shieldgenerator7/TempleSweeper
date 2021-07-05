@@ -22,7 +22,7 @@ public class TileMap
         {
             for (int j = 0; j < height; j++)
             {
-                this[i, j] = new LevelTile();
+                this[i, j] = new LevelTile(i, j);
             }
         }
     }
@@ -43,8 +43,6 @@ public class TileMap
         private set
         {
             LevelTile tile = value;
-            tile.x = x;
-            tile.y = y;
             tileMap[x, y] = tile;
             tileList.Add(tile);
         }
