@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerCharacter : MonoBehaviour
 {
+    public delegate void OnStatChanged(int stat);
 
     private int health = 3;
     public int Health
@@ -14,11 +15,11 @@ public class PlayerCharacter : MonoBehaviour
         {
             //Set the new health value
             health = Mathf.Clamp(value, 0, startHealth);
-            //Update health bar
-            healthBar.updateDisplay(health);
+            onHealthChanged?.Invoke(health);
         }
     }
     public int startHealth = 3;
+    public event OnStatChanged onHealthChanged;
 
     private int trophiesFound = 0;
     public int TrophiesFound
@@ -27,11 +28,11 @@ public class PlayerCharacter : MonoBehaviour
         set
         {
             trophiesFound = Mathf.Clamp(value, 0, goalTrophyCount);
-            treasureBar.updateDisplay(trophiesFound);
-            crateBar.updateDisplay(goalTrophyCount);
+            onTrophiesFoundChanged?.Invoke(trophiesFound);
         }
     }
     public int goalTrophyCount = 10;
+    public event OnStatChanged onTrophiesFoundChanged;
 
     public int goalMapCount = 10;
     private int mapFoundCount = 0;
@@ -41,14 +42,10 @@ public class PlayerCharacter : MonoBehaviour
         set
         {
             mapFoundCount = Mathf.Clamp(value, 0, goalMapCount);
-            mapBar.updateDisplay(mapFoundCount);
+            onMapFoundCountChanged?.Invoke(mapFoundCount);
         }
     }
-
-    public DisplayBar healthBar;
-    public DisplayBar treasureBar;
-    public DisplayBar crateBar;
-    public DisplayBar mapBar;
+    public event OnStatChanged onMapFoundCountChanged;
 
     private void Start()
     {
@@ -114,8 +111,5 @@ public class PlayerCharacter : MonoBehaviour
         Health = startHealth;
         TrophiesFound = 0;
         MapFoundCount = 0;
-        crateBar.reposition(0);
-        treasureBar.reposition(0);
-        mapBar.reposition(1);
     }
 }
