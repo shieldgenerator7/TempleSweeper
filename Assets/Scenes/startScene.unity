@@ -1647,10 +1647,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1469628419}
   - component: {fileID: 1469628418}
-  - component: {fileID: 1469628420}
-  - component: {fileID: 1469628421}
-  - component: {fileID: 1469628422}
-  - component: {fileID: 1469628423}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -1687,66 +1683,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1469628420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469628417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa147a32d66fd9e478aadca777a136d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: {fileID: 2062776162}
-  spacing: {x: 0, y: 0}
-  direction: 1
---- !u!114 &1469628421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469628417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa147a32d66fd9e478aadca777a136d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: {fileID: 1852100505}
-  spacing: {x: 0, y: 0}
-  direction: 0
---- !u!114 &1469628422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469628417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa147a32d66fd9e478aadca777a136d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: {fileID: 2018190593}
-  spacing: {x: 0, y: 0}
-  direction: 0
---- !u!114 &1469628423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469628417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa147a32d66fd9e478aadca777a136d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: {fileID: 1023398308}
-  spacing: {x: 0, y: 0}
-  direction: 0
 --- !u!1 &1597562132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1844,6 +1780,9 @@ MonoBehaviour:
   treasureBar: {fileID: 1597562135}
   crateBar: {fileID: 1597562134}
   mapBar: {fileID: 1597562133}
+  desiredWidth: 1920
+  desiredHeight: 1080
+  buttonSpacing: 55
 --- !u!4 &1597562138
 Transform:
   m_ObjectHideFlags: 0

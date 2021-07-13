@@ -9,6 +9,14 @@ public class DisplayBarManager : MonoBehaviour
     public DisplayBar crateBar;
     public DisplayBar mapBar;
 
+    [Header("Buttons")]
+    [SerializeField]
+    private int desiredWidth = 1920;
+    [SerializeField]
+    private int desiredHeight = 1080;
+    public float buttonSpacing = 55;
+    private float originalSpacing;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +36,34 @@ public class DisplayBarManager : MonoBehaviour
         //Map found
         Managers.Player.onMapFoundCountChanged += (mapFoundCount) => mapBar.updateDisplay(mapFoundCount);
         //Call delegates
-        Managers.Player.reset();
+        updateDisplayBars();
+
+        //Screen size
+        originalSpacing = buttonSpacing;
+    }
+
+    public void updateDisplayBars()
+    {
+        healthBar.updateDisplay(Managers.Player.Health);
+        treasureBar.updateDisplay(Managers.Player.TrophiesFound);
+        crateBar.updateDisplay(Managers.Player.goalTrophyCount);
+        mapBar.updateDisplay(Managers.Player.MapFoundCount);
+    }
+
+    public void updateScreenConstants(int width, int height)
+    {
+        int dim;
+        int desiredDim;
+        if (width > height)
+        {
+            dim = width;
+            desiredDim = desiredWidth;
+        }
+        else
+        {
+            dim = height;
+            desiredDim = desiredHeight;
+        }
+        buttonSpacing = originalSpacing * dim / desiredDim;
     }
 }

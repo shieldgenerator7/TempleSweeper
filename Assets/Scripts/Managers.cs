@@ -94,6 +94,19 @@ public class Managers : MonoBehaviour
         }
     }
 
+    private DisplayBarManager displayBarManager;
+    public static DisplayBarManager Display
+    {
+        get
+        {
+            if (instance.displayBarManager == null)
+            {
+                instance.displayBarManager = FindObjectOfType<DisplayBarManager>();
+            }
+            return instance.displayBarManager;
+        }
+    }
+
     private static Managers instance;
     private void Awake()
     {

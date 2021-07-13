@@ -14,19 +14,20 @@ public class DisplayBar : MonoBehaviour
         {
             if (spacing == Vector2.zero)
             {
+                float buttonSpacing = Managers.Display.buttonSpacing;
                 switch (direction)
                 {
                     case Direction.LEFT:
-                        spacing.x = -seed.rectTransform.rect.width;
+                        spacing.x = -buttonSpacing;
                         break;
                     case Direction.RIGHT:
-                        spacing.x = seed.rectTransform.rect.width;
+                        spacing.x = buttonSpacing;
                         break;
                     case Direction.UP:
-                        spacing.y = seed.rectTransform.rect.height;
+                        spacing.y = buttonSpacing;
                         break;
                     case Direction.DOWN:
-                        spacing.y = -seed.rectTransform.rect.height;
+                        spacing.y = -buttonSpacing;
                         break;
                 }
             }
