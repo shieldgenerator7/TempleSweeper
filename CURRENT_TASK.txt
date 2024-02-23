@@ -1,0 +1,1 @@
+fixing bug where UI displays incorrectly at different resolutions (copying code from Stonicorn Worlds)

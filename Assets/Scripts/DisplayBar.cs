@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DisplayBar : MonoBehaviour
 {
     public Image seed;
+    public bool DEBUG = false;
     [SerializeField]
     private Vector2 spacing = Vector2.zero;
     public Vector2 Spacing
@@ -52,6 +53,8 @@ public class DisplayBar : MonoBehaviour
     public Direction direction;
 
     private List<Image> barIcons = new List<Image>();
+    private int row;
+    private int statValue;
 
     /// <summary>
     /// Updates the display to the stat value
@@ -59,6 +62,7 @@ public class DisplayBar : MonoBehaviour
     /// <param name="stat"></param>
     public void updateDisplay(int statValue)
     {
+        this.statValue = statValue;
         //Clear the bar if the stat is zero
         if (statValue <= 0)
         {
@@ -100,12 +104,32 @@ public class DisplayBar : MonoBehaviour
     /// <param name="row">Row 0 is the first row.</param>
     public void reposition(int row)
     {
+        this.row = row;
         Rect rect = seed.rectTransform.rect;
         rect.y = seed.rectTransform.rect.height * row + 10;
         seed.rectTransform.anchoredPosition = new Vector2(
             seed.rectTransform.anchoredPosition.x,
             ((seed.rectTransform.rect.height * row) + (10 * (row + 1))) * -1
             );
+    }
+
+    public void reupdate()
+    {
+        reposition(this.row);
+        updateDisplay(this.statValue);
+        if (DEBUG)
+        {
+            Debug.Log("image transform localScale: " + barIcons[0].transform.localScale);
+            Debug.Log("image rectTransform sizeDelta: " + barIcons[0].rectTransform.sizeDelta);
+            Debug.Log("image rectTransform rect size: (" + barIcons[0].rectTransform.rect.width + ", " + barIcons[0].rectTransform.rect.height + ")");
+            Debug.Log("image flexible size: (" + barIcons[0].flexibleWidth + ", " + barIcons[0].flexibleHeight + ")");
+            Debug.Log("image min size: (" + barIcons[0].minWidth + ", " + barIcons[0].minHeight + ")");
+            Debug.Log("image preferred size: (" + barIcons[0].preferredWidth + ", " + barIcons[0].preferredHeight + ")");
+            Debug.Log("canvas scaleFactor: " + FindObjectOfType<Canvas>().scaleFactor);
+            Debug.Log("canvas transform localScale: " + FindObjectOfType<Canvas>().transform.localScale);
+            Debug.Log("canvas rectTransform localScale: " + FindObjectOfType<Canvas>().GetComponent<RectTransform>().localScale);
+
+        }
     }
 
 }

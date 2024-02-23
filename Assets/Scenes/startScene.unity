@@ -1717,6 +1717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: {fileID: 1023398308}
+  DEBUG: 0
   spacing: {x: 0, y: 0}
   direction: 0
 --- !u!114 &1597562134
@@ -1732,6 +1733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: {fileID: 2018190593}
+  DEBUG: 0
   spacing: {x: 0, y: 0}
   direction: 0
 --- !u!114 &1597562135
@@ -1747,6 +1749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: {fileID: 1852100505}
+  DEBUG: 0
   spacing: {x: 0, y: 0}
   direction: 0
 --- !u!114 &1597562136
@@ -1762,6 +1765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: {fileID: 2062776162}
+  DEBUG: 0
   spacing: {x: 0, y: 0}
   direction: 1
 --- !u!114 &1597562137

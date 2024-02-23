@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {//2018-01-22: copied from Stonicorn.CameraController
@@ -11,14 +12,16 @@ public class CameraController : MonoBehaviour
     public float autoMoveThreshold = 0.2f;//what percentage of half the screen a tap needs to be in to auto-move the screen
     public float moveSpeed = 3;//how fast it moves when automoving
     public float autoMoveLockThreshold = 0.5f;//how far the camera has to be from its target to lock gesture control (implemented in GestureProfile)
+
+    public CanvasScaler canvasScaler;
     private float scale = 1;//scale used to determine orthographicSize, independent of (landscape or portrait) orientation
     private Camera cam;
     private float zoomStartTime = 0.0f;//when the zoom last started
     private float startZoomScale;//the orthographicsize at the start and end of a zoom
     private Vector3 targetPosition;
 
-    private int prevScreenWidth;
-    private int prevScreenHeight;
+    private int pixelWidth;
+    private int pixelHeight;
 
     struct ScalePoint
     {
@@ -60,12 +63,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (prevScreenHeight != Screen.height || prevScreenWidth != Screen.width)
-        {
-            prevScreenWidth = Screen.width;
-            prevScreenHeight = Screen.height;
-            updateOrthographicSize();
-        }
+        checkScreenSize();
         if (zoomStartTime != 0)
         {
             zoomToScalePoint();
@@ -203,4 +201,28 @@ public class CameraController : MonoBehaviour
         Vector3 screenPoint = cam.WorldToViewportPoint(position);
         return screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
     }
+
+    void checkScreenSize()
+    {
+        int spw = Camera.main.scaledPixelWidth;
+        int sph = Camera.main.scaledPixelHeight;
+        if (pixelWidth != spw || pixelHeight != sph)
+        {
+            pixelWidth = spw;
+            pixelHeight = sph;
+            updateOrthographicSize();
+            canvasScaler.matchWidthOrHeight = (pixelWidth > pixelHeight) ? 0 : 1;
+            Managers.Display.updateScreenConstants(pixelWidth, pixelHeight);
+            foreach (DisplayBar db in FindObjectsOfType<DisplayBar>())
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    db.reupdate();
+                }
+            }
+            onScreenSizeChanged?.Invoke(pixelWidth, pixelHeight);
+        }
+    }
+    public delegate void OnScreenSizeChanged(int width, int height);
+    public event OnScreenSizeChanged onScreenSizeChanged;
 }
