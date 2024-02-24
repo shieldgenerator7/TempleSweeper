@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "ClusterGenerator", menuName = "Level/Generator/Cluster")]
 public class ClusterGenerator : ObjectGenerator
 {//2019-06-17: copied from ObjectGenerator
 

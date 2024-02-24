@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "RiverGenerator", menuName = "Level/Generator/River")]
 public class RiverGenerator : LevelGenerator
 {//2019-06-17: copied from IslandGenerator
     public int streamCount = 2;

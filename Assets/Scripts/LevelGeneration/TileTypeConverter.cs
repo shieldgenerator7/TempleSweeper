@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "TileTypeConverter", menuName = "Level/Converter/TileType")]
 public class TileTypeConverter : LevelGenerator
 {//2019-06-17: copied from ObjectGenerator
 

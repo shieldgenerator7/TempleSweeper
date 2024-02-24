@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class LevelGenerator : MonoBehaviour
+public abstract class LevelGenerator : ScriptableObject
 {
     public abstract void generate(TileMap tileMap);
 

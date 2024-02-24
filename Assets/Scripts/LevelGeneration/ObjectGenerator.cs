@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "ObjectGenerator", menuName = "Level/Generator/Object")]
 public class ObjectGenerator : LevelGenerator
 {
     public int amount = 10;

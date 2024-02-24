@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "WallGenerator", menuName = "Level/Generator/Wall")]
 public class WallGenerator : ObjectGenerator
 {//2019-06-17: copied from ObjectGenerator
 

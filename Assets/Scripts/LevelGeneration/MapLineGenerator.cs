@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "MapLineGenerator", menuName = "Level/Generator/MapLine")]
 public class MapLineGenerator : LevelGenerator
 {
     [Header("Settings")]

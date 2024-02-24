@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level : MonoBehaviour
+[CreateAssetMenu(fileName = "Level", menuName = "Level/Level")]
+public class Level : ScriptableObject
 {
     [Header("Settings")]
     public int gridHeight = 16;//how many tiles across

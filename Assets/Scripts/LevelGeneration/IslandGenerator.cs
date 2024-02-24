@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "IslandGenerator", menuName = "Level/Generator/Island")]
 public class IslandGenerator : LevelGenerator
 {
     [Header("Settings")]
